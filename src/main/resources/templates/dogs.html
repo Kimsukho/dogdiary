@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<body>
+<div layout:fragment="content">
+    <section>
+        <h2>반려견 관리</h2>
+        <button onclick="location.href='/dogs/add'">+ 반려견 등록</button>
+
+        <!-- 반려견 목록 -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>나이</th>
+                    <th>품종</th>
+                    <th>등록일</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="dog : ${dogs}">
+                    <td th:text="${dog.name}">이름</td>
+                    <td th:text="${dog.breed}">품종</td>
+                    <td th:text="${dog.age}">나이</td>
+                    <td th:text="${dog.gender}">성별</td>
+                    <td>
+                        <a th:href="@{/dogs/edit/{id}(id=${dog.id})}">수정</a>
+                        <a th:href="@{/dogs/delete/{id}(id=${dog.id})}">삭제</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

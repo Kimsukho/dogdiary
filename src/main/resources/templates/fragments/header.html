@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Head -->
+<header th:fragment="headerFragment"> 
+    <div class="header">
+        <h1>🐶 댕댕이 일지</h1>
+        <nav>
+            <a th:href="@{/dashboard}">대시보드</a>
+            <a th:href="@{/profile}">내 정보</a>
+            <a th:href="@{/logout}">로그아웃</a>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>통계</title></head>
+<body>
+<div th:replace="layout/main-layout :: content">
+    <section>
+        <h2>통계</h2>
+        <p>여기에 차트/그래프 (예: Chart.js) 연동</p>
+        <div>
+            <canvas id="walkChart"></canvas>
+            <canvas id="hospitalChart"></canvas>
+        </div>
+    </section>
+</div>
+</body>
+</html>

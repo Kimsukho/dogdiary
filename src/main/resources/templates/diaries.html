@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<body>
+<div layout:fragment="content">
+    <section>
+        <h2>일지 관리</h2>
+        <button onclick="location.href='/diaries/add'">+ 새 일지 작성</button>
+
+        <!-- 일지 목록 -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>작성일</th>
+                    <th>반려견</th>
+                    <th>내용</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="diary : ${diaries}">
+                    <td th:text="${diary.title}">제목</td>
+                    <td th:text="${#temporals.format(diary.createdAt, 'yyyy-MM-dd')}">2025-08-20</td>
+                    <td th:text="${diary.dog.name}">강아지</td>
+                    <td th:text="${diary.summary}">내용</td>
+                    <td>
+                        <a th:href="@{/diaries/edit/{id}(id=${diary.id})}">수정</a>
+                        <a th:href="@{/diaries/delete/{id}(id=${diary.id})}">삭제</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

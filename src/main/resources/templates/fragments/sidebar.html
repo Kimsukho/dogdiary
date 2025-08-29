@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar">
+    <div class="sidebar">
+        <ul>
+            <li><a th:href="@{/dashboard}">📊 대시보드</a></li>
+            <li><a th:href="@{/dogs}">🐕 반려견 관리</a></li>
+            <li><a th:href="@{/diaries}">📔 일지 관리</a></li>
+            <!-- <li><a th:href="@{/statistics}">📈 통계</a></li> -->
+            <li><a th:href="@{/settings}">⚙ 설정</a></li>
+        </ul>
+    </div>
+</aside>
+</body>
+</html>
