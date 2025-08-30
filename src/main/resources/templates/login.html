@@ -1,11 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<!-- <link rel="icon" href="/asset/favicon.ico"/> -->
+	 <link rel="icon" href="/favicon.png" type="image/png">
+	 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"> -->
+	<title th:text="${pageTitle} ?: '댕댕이 일지'">댕댕이 일지</title>
+	<link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" th:href="@{/css/loginStyle.css}">
 </head>
 <body>
-Hello World!
-<span th:text="#{title}"></span>
+	<div id="container" class="container">
+	    <div class="row">
+	      <div class="col align-items-center flex-col sign-up">
+	        <div class="form-wrapper align-items-center">
+	          <div class="form sign-up">
+	            <div class="input-group">
+	              <i class='bx bxs-user'></i>
+	              <input type="text" placeholder="Username">
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bx-mail-send'></i>
+	              <input type="email" placeholder="Email">
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bxs-lock-alt'></i>
+	              <input type="password" placeholder="Password">
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bxs-lock-alt'></i>
+	              <input type="password" placeholder="Confirm password">
+	            </div>
+	            <button>
+	              Sign up
+	            </button>
+	            <p>
+	              <span>
+	                Already have an account?
+	              </span>
+	              <b onclick="toggle()" class="pointer">
+	                Sign in here
+	              </b>
+	            </p>
+	          </div>
+	        </div>
+	      
+	      </div>
+		  
+	      <div class="col align-items-center flex-col sign-in">
+			<div class="form-wrapper align-items-center">
+				<h1 style="margin-bottom: 5%; color: #4EA685">
+					Login
+				</h1>
+			</div>
+	        <div class="form-wrapper align-items-center">
+	          <div class="form sign-in">
+	            <div class="input-group">
+	              <i class='bx bxs-user'></i>
+	              <input type="text" placeholder="ID">
+	            </div>
+	            <div class="input-group">
+	              <i class='bx bxs-lock-alt'></i>
+	              <input type="password" placeholder="Password">
+	            </div>
+	            <button>
+	              Sign in
+	            </button>
+	            <p>
+	              <b>
+	                Forgot password?
+	              </b>
+	            </p>
+	            <p>
+	              <span>
+	                Don't have an account?
+	              </span>
+	              <b onclick="toggle()" class="pointer">
+	                Sign up here
+	              </b>
+	            </p>
+	          </div>
+	        </div>
+	        <div class="form-wrapper">
+	    
+	        </div>
+	      </div>
+	    </div>
+	    <div class="row content-row">
+	      <!-- SIGN IN CONTENT -->
+	      <div class="col align-items-center flex-col">
+	        <div class="text sign-in">
+	          <h2>
+	            Welcome!
+				<br>
+				Dog Diary🐶
+	          </h2>
+	  
+	        </div>
+	        <div class="img sign-in">
+	    
+	        </div>
+	      </div>
+	      <div class="col align-items-center flex-col">
+	        <div class="img sign-up">
+	        
+	        </div>
+	        <div class="text sign-up">
+	          <h2>
+	            Join with us
+	          </h2>
+	  
+	        </div>
+	      </div>
+	    </div>
+	    
+    	<script>
+			let container = document.getElementById('container')
+		
+			toggle = () => {
+			  container.classList.toggle('sign-in')
+			  container.classList.toggle('sign-up')
+			}
+		
+			setTimeout(() => {
+				  container.classList.add('sign-in')
+			}, 200)
+	
+		</script>
+  </div>
 </body>
 </html>

@@ -24,7 +24,8 @@ public class DefaultController {
 	}
 	
 	@GetMapping("/login")
-	public String login() {
+	public String login(Model model) {
+		model.addAttribute("pageTitle", "댕댕이 일지");
 		return "login";
 	}
 	
