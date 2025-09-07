@@ -6,77 +6,108 @@
 	 <link rel="icon" href="/favicon.png" type="image/png">
 	 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"> -->
 	<title th:text="${pageTitle} ?: '댕댕이 일지'">댕댕이 일지</title>
-	<link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+	<!-- <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css"> -->
 	<link rel="stylesheet" th:href="@{/css/loginStyle.css}">
 </head>
 <body>
 	<div id="container" class="container">
-	    <div class="row">
-	      <div class="col align-items-center flex-col sign-up">
-	        <div class="form-wrapper align-items-center">
+	    <div class="row">	      
+	      <!-- 회원가입 -->
+	      <div id="signUp" class="col align-items-center flex-col sign-up">
+				<div class="form-wrapper align-items-center">
+						<!-- <h1 style="margin-bottom: 5%; color: #4EA685">
+							회원가입
+						</h1> -->
 	          <div class="form sign-up">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="Username">
+	              <input type="text" placeholder="아이디">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bx-mail-send'></i>
-	              <input type="email" placeholder="Email">
+	              <input type="email" placeholder="이메일">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password">
+	              <input type="password" placeholder="비밀번호">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Confirm password">
+	              <input type="password" placeholder="비밀번호 재확인">
 	            </div>
 	            <button>
-	              Sign up
+	              회원가입
 	            </button>
 	            <p>
 	              <span>
-	                Already have an account?
+	                이미 계정이 있으신가요?
 	              </span>
-	              <b onclick="toggle()" class="pointer">
-	                Sign in here
+	              <b onclick="backToLogin()" class="pointer">
+	                로그인
 	              </b>
 	            </p>
 	          </div>
 	        </div>
-	      
 	      </div>
-		  
-	      <div class="col align-items-center flex-col sign-in">
-			<div class="form-wrapper align-items-center">
-				<h1 style="margin-bottom: 5%; color: #4EA685">
-					Login
-				</h1>
+
+				<!--  비밀번호변경 -->
+				<div id="forgotPwd" class="col align-items-center flex-col forgot-pwd">
+					<div class="form-wrapper align-items-center">
+					<!-- <h1 style="margin-bottom: 5%; color: #4EA685">
+						비밀번호 재설정
+					</h1> -->
+					<div class="form forgot-pwd">
+						<div class="input-group">
+							<i class='bx bxs-user'></i>
+							<input type="text" placeholder="아이디">
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input type="password" placeholder="현재 비밀번호">
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input type="password" placeholder="새 비밀번호">
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input type="password" placeholder="새 비밀번호 확인">
+						</div>
+						<button>비밀번호 변경하기</button>
+						<p>
+							<span>이미 계정이 있으신가요?</span>
+							<b onclick="backToLogin()" class="pointer">로그인</b>
+						</p>
+					</div>
+				</div>
 			</div>
-	        <div class="form-wrapper align-items-center">
+		
+		  <!-- 로그인 -->
+			<div id="signIn" class="col align-items-center flex-col sign-in">
+				<div class="form-wrapper align-items-center">
 	          <div class="form sign-in">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="ID">
+	              <input type="text" placeholder="아이디">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="Password">
+	              <input type="password" placeholder="비밀번호">
 	            </div>
 	            <button>
-	              Sign in
+	              로그인
 	            </button>
 	            <p>
-	              <b>
-	                Forgot password?
+	              <b onclick="forgotPwd()" class="pointer">
+	                비밀번호를 잊으셨나요?
 	              </b>
 	            </p>
 	            <p>
 	              <span>
-	                Don't have an account?
+	                계정이 없으신가요?
 	              </span>
 	              <b onclick="toggle()" class="pointer">
-	                Sign up here
+	                가입하기
 	              </b>
 	            </p>
 	          </div>
@@ -86,14 +117,16 @@
 	        </div>
 	      </div>
 	    </div>
+
+			<!-- 초록색 부분 -->
 	    <div class="row content-row">
 	      <!-- SIGN IN CONTENT -->
 	      <div class="col align-items-center flex-col">
 	        <div class="text sign-in">
 	          <h2>
 	            Welcome!
-				<br>
-				Dog Diary🐶
+							<br>
+							Dog Diary🐶
 	          </h2>
 	  
 	        </div>
@@ -107,26 +140,56 @@
 	        </div>
 	        <div class="text sign-up">
 	          <h2>
-	            Join with us
+	            Join with us😺
 	          </h2>
 	  
 	        </div>
 	      </div>
+
+				<div class="col align-items-center flex-col">
+					<div class="img forgot-pwd">
+						<!-- 비밀번호 재설정 관련 이미지 (선택사항) -->
+					</div>
+					<div class="text forgot-pwd">
+						<h2>
+							Reset your <br>
+							password 🔑
+						</h2>
+						<p>
+							새 비밀번호를 입력하고 계정을 안전하게 지키세요.
+						</p>
+					</div>
+				</div>
+
 	    </div>
 	    
     	<script>
-			let container = document.getElementById('container')
+		  let container = document.getElementById('container');
 		
-			toggle = () => {
-			  container.classList.toggle('sign-in')
-			  container.classList.toggle('sign-up')
+			function toggle() {
+				container.classList.remove('forgot-pwd'); // 비번재설정 모드 해제
+				container.classList.toggle('sign-in');
+				container.classList.toggle('sign-up');
+			}
+
+			function forgotPwd() {
+				container.classList.remove('sign-in');
+				container.classList.remove('sign-up');
+				container.classList.add('forgot-pwd');
+			}
+
+			function backToLogin() {
+				container.classList.remove('sign-up');
+				container.classList.remove('forgot-pwd');
+				container.classList.add('sign-in');
 			}
 		
-			setTimeout(() => {
-				  container.classList.add('sign-in')
-			}, 200)
-	
+		  // 초기 상태: 로그인 화면
+		  setTimeout(() => {
+		    container.classList.add('sign-in');
+		  }, 200);
 		</script>
+
   </div>
 </body>
 </html>
