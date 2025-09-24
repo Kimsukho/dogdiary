@@ -1,25 +1,102 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
-<head th:replace="fragments/head::headFragment">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <head th:replace="fragments/head :: headFragment"></head>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
-
 <body>
-    <!-- 헤더 -->
-    <div th:replace="fragments/header::headerFragment"></div>
+    <div class="wrapper">
+        <aside th:replace="fragments/sidebar :: sidebar"></aside>
 
-    <div class="container">
-        <!-- 사이드바 -->
-        <div th:replace="fragments/sidebar::sidebar"></div>
+        <div class="main-content-wrapper" id="mainContentWrapper">
+            <header th:replace="fragments/header :: header(title=${title})"></header>
 
-        <!-- 메인 콘텐츠 -->
-        <main layout:fragment="content">
-            <!-- 페이지에서 이 부분이 대체됨 -->
-        </main>
+            <main layout:fragment="content">
+            </main>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
     </div>
 
-    <!-- 푸터 -->
-    <div th:replace="fragments/footer::footerFragment"></div>
+    <div id="toast">메시지가 여기에 표시됩니다!</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar'); // sidebar fragment에 id="sidebar"가 추가되어야 함
+
+            if (!sidebar) {
+                console.error("Sidebar element with id 'sidebar' not found. Please ensure sidebar fragment has id='sidebar'.");
+                return; // 사이드바가 없으면 더 이상 진행하지 않음
+            }
+
+            const sidebarTitle = sidebar.querySelector('.sidebar-title');
+            const sidebarCollapsedTitle = sidebar.querySelector('.sidebar-collapsed-title');
+
+            function setInitialSidebarState() {
+                if (window.innerWidth <= 1024) { // 태블릿 사이즈까지는 기본 접힘
+                    sidebar.classList.add('collapsed');
+                    if (sidebarTitle) sidebarTitle.style.display = 'none';
+                    if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'block';
+                } else {
+                    sidebar.classList.remove('collapsed');
+                    if (sidebarTitle) sidebarTitle.style.display = 'block';
+                    if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'none';
+                }
+            }
+            setInitialSidebarState();
+
+            if (sidebarToggle) { 
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('collapsed');
+                    
+                    if (sidebar.classList.contains('collapsed')) {
+                        if (sidebarTitle) sidebarTitle.style.display = 'none';
+                        if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'block';
+                    } else {
+                        if (sidebarTitle) sidebarTitle.style.display = 'block';
+                        if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'none';
+                    }
+                });
+            } else {
+                console.warn("Sidebar toggle button with id 'sidebarToggle' not found. Sidebar toggling will not work.");
+            }
+
+            function handleResize() {
+                if (window.innerWidth <= 1024) {
+                    if (!sidebar.classList.contains('collapsed')) { // 아직 접히지 않았다면
+                        sidebar.classList.add('collapsed');
+                        if (sidebarTitle) sidebarTitle.style.display = 'none';
+                        if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'block';
+                    }
+                } else { // PC 화면 이상
+                    // PC 화면에서는 기본적으로 펼쳐진 상태 (혹은 이전 상태 유지)
+                    sidebar.classList.remove('collapsed');
+                    if (sidebarTitle) sidebarTitle.style.display = 'block';
+                    if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'none';
+                }
+            }
+            window.addEventListener('resize', handleResize);
+        });
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.textContent = message;
+                toast.classList.add('reveal');
+                setTimeout(() => {
+                    toast.classList.remove('reveal');
+                }, 3000);
+            } else {
+                console.warn("Toast element with id 'toast' not found.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+           setTimeout(() => {
+               showToast('환영합니다, 사용자7714님! 😊');
+           }, 1500);
+        });
+    </script>
 </body>
 </html>

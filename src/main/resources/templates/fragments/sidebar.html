@@ -1,16 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<aside th:fragment="sidebar">
-    <div class="sidebar">
-        <ul>
-            <li><a th:href="@{/dashboard}">📊 대시보드</a></li>
-            <li><a th:href="@{/dogs}">🐕 반려견 관리</a></li>
-            <li><a th:href="@{/diaries}">📔 일지 관리</a></li>
-            <!-- <li><a th:href="@{/statistics}">📈 통계</a></li> -->
-            <li><a th:href="@{/settings}">⚙ 설정</a></li>
-        </ul>
+<aside th:fragment="sidebar" class="sidebar" id="sidebar"> <!-- id="sidebar" 추가 -->
+    <div class="sidebar-header" style="padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xxs) var(--spacing-lg); color: var(--text-light); font-weight: 600;">
+        <span class="sidebar-title" style="display: flex; align-items: center; margin-bottom: 5px;">
+            <i class="fas fa-paw" style="color: var(--primary-light-color); margin-right: 10px;"></i>
+            펫케어 시스템
+        </span>
+        <span class="sidebar-collapsed-title" style="display: none; text-align: center; margin-bottom: 5px;">
+            <i class="fas fa-paw" style="color: var(--primary-light-color); font-size: 24px;"></i>
+        </span>
     </div>
+
+    <ul>
+        <li th:classappend="${#request.requestURI == '/dashboard' ? 'active' : ''}">
+            <a th:href="@{/dashboard}">
+                <i class="fas fa-chart-line"></i>
+                <span>대시보드</span>
+            </a>
+        </li>
+        <li th:classappend="${#request.requestURI == '/dogs' ? 'active' : ''}">
+            <a th:href="@{/dogs}">
+                <i class="fas fa-dog"></i>
+                <span>반려견 관리</span>
+            </a>
+        </li>
+        <li th:classappend="${#request.requestURI == '/diaries' ? 'active' : ''}">
+            <a th:href="@{/diaries}">
+                <i class="fas fa-book-open"></i>
+                <span>일지 관리</span>
+            </a>
+        </li>
+        <!-- 통계 메뉴 (주석 처리된 부분을 되살릴 경우) -->
+        <!-- <li th:classappend="${#request.requestURI == '/statistics' ? 'active' : ''}">
+            <a th:href="@{/statistics}">
+                <i class="fas fa-chart-bar"></i>
+                <span>통계</span>
+            </a>
+        </li> -->
+        <li th:classappend="${#request.requestURI == '/settings' ? 'active' : ''}">
+            <a th:href="@{/settings}">
+                <i class="fas fa-user-cog"></i>
+                <span>설정</span>
+            </a>
+        </li>
+    </ul>
 </aside>
 </body>
 </html>

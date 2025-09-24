@@ -2,37 +2,113 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main-layout}">
+<head>
+    <title>일지 관리</title> <!-- 페이지 고유 타이틀 -->
+</head>
 <body>
-<div layout:fragment="content">
-    <section>
-        <h2>일지 관리</h2>
-        <button onclick="location.href='/diaries/add'">+ 새 일지 작성</button>
+    <div layout:fragment="content">
+        <div class="diary-page"> <!-- 일지 페이지 전체 컨테이너 -->
+            <section class="section">
+                <h3>일지 목록</h3>
+                <!-- 새 일지 작성 버튼 -->
+                <button class="diary-add-button" onclick="location.href='/diaries/add'">
+                    <i class="fas fa-plus"></i> 새 일지 작성
+                </button>
 
-        <!-- 일지 목록 -->
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>제목</th>
-                    <th>작성일</th>
-                    <th>반려견</th>
-                    <th>내용</th>
-                    <th>관리</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="diary : ${diaries}">
-                    <td th:text="${diary.title}">제목</td>
-                    <td th:text="${#temporals.format(diary.createdAt, 'yyyy-MM-dd')}">2025-08-20</td>
-                    <td th:text="${diary.dog.name}">강아지</td>
-                    <td th:text="${diary.summary}">내용</td>
-                    <td>
-                        <a th:href="@{/diaries/edit/{id}(id=${diary.id})}">수정</a>
-                        <a th:href="@{/diaries/delete/{id}(id=${diary.id})}">삭제</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-</div>
+                <!-- 일지 목록 테이블 -->
+                <div class="diary-table-container">
+                    <table class="diary-table">
+                        <thead>
+                            <tr>
+                                <th class="col-title">제목</th>
+                                <th class="col-date">작성일</th>
+                                <th class="col-pet">반려견</th>
+                                <th class="col-content">내용</th>
+                                <th class="col-actions">관리</th> <!-- 수정/삭제 등의 액션 컬럼 추가 -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Thymeleaf로 반복 처리될 일지 데이터 예시 -->
+                            <tr>
+                                <td class="col-title">오늘은 코코와 산책했어요</td>
+                                <td class="col-date">2025-09-24</td>
+                                <td class="col-pet">코코</td>
+                                <td class="col-content">오후에 코코와 함께 집 앞 공원으로 산책을 다녀왔어요. 날씨가 너무 좋아서 기분이 좋았고, 코코도 신나게 뛰어다녔답니다.</td>
+                                <td class="col-actions">
+                                    <a href="/diaries/1/edit" class="action-link" title="수정"><i class="fas fa-edit"></i></a>
+                                    <a href="/diaries/1/delete" class="action-link" title="삭제"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">건강 검진 결과</td>
+                                <td class="col-date">2025-09-20</td>
+                                <td class="col-pet">몽실이</td>
+                                <td class="col-content">몽실이의 정기 건강 검진을 다녀왔어요. 다행히 특별한 이상은 없다고 합니다. 앞으로도 건강하게 자라줬으면 좋겠네요.</td>
+                                <td class="col-actions">
+                                    <a href="/diaries/2/edit" class="action-link" title="수정"><i class="fas fa-edit"></i></a>
+                                    <a href="/diaries/2/delete" class="action-link" title="삭제"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">새로운 장난감</td>
+                                <td class="col-date">2025-09-18</td>
+                                <td class="col-pet">코코</td>
+                                <td class="col-content">코코에게 새로운 삑삑이 장난감을 사줬는데 너무 좋아해요. 하루 종일 가지고 놀아서 다 닳을 것 같네요!</td>
+                                <td class="col-actions">
+                                    <a href="/diaries/3/edit" class="action-link" title="수정"><i class="fas fa-edit"></i></a>
+                                    <a href="/diaries/3/delete" class="action-link" title="삭제"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            <!-- 더 많은 일지 데이터를 th:each를 사용하여 반복할 수 있습니다 -->
+                            <tr>
+                                <td class="col-title">훈련일지: 앉아 훈련</td>
+                                <td class="col-date">2025-09-15</td>
+                                <td class="col-pet">몽실이</td>
+                                <td class="col-content">오늘 몽실이와 앉아 훈련을 진행했어요. 간식을 이용해서 유도했더니 몇 번만에 성공! 칭찬해주니 더 적극적이네요.</td>
+                                <td class="col-actions">
+                                    <a href="/diaries/4/edit" class="action-link" title="수정"><i class="fas fa-edit"></i></a>
+                                    <a href="/diaries/4/delete" class="action-link" title="삭제"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">산책하다가 친구 만남</td>
+                                <td class="col-date">2025-09-12</td>
+                                <td class="col-pet">코코</td>
+                                <td class="col-content">오랜만에 코코 산책시키는데 푸들 친구를 만났어요. 서로 냄새 맡고 꼬리 흔들면서 잘 놀아서 보기에 좋았답니다. 다음에도 만났으면 좋겠어요.</td>
+                                <td class="col-actions">
+                                    <a href="/diaries/5/edit" class="action-link" title="수정"><i class="fas fa-edit"></i></a>
+                                    <a href="/diaries/5/delete" class="action-link" title="삭제"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">오늘의 간식은 고구마</td>
+                                <td class="col-date">2025-09-10</td>
+                                <td class="col-pet">몽실이</td>
+                                <td class="col-content">삶은 고구마를 잘라서 간식으로 줬는데 정말 맛있게 먹네요. 간식 줄 때는 항상 조절해서 줘야겠어요.</td>
+                                <td class="col-actions">
+                                    <a href="/diaries/6/edit" class="action-link" title="수정"><i class="fas fa-edit"></i></a>
+                                    <a href="/diaries/6/delete" class="action-link" title="삭제"><i class="fas fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 스크롤 테스트를 위해 임시로 콘텐츠를 더 추가합니다. -->
+                <div style="height: 300px; background-color: #f9f9f9; padding: var(--spacing-lg); margin-top: var(--spacing-lg); border: 1px dashed #ccc;">
+                    <p>이 영역이 추가되어 스크롤이 발생할 수 있도록 충분한 높이를 가집니다.</p>
+                    <p>실제 콘텐츠가 충분히 많아지면 이 임시 영역은 제거하시면 됩니다.</p>
+                    <p>일지 관리 페이지는 반려견의 일상, 건강 상태, 특이 사항 등을 기록하는 데 큰 도움이 됩니다.</p>
+                    <p>정기적인 기록은 반려견의 패턴을 이해하고, 문제 발생 시 수의사에게 정확한 정보를 제공하는 데 필수적입니다.</p>
+                    <p>반려견과의 소중한 추억을 사진과 함께 기록해보세요. 📸</p>
+                    <p>스크롤 테스트를 위한 추가 문단...</p>
+                    <p>Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- 각 페이지에 특화된 스크립트가 있다면 이곳에 추가합니다. -->
+    <th:block layout:fragment="script">
+        <!-- diary.html에만 필요한 추가 스크립트가 있다면 여기에 작성합니다. -->
+    </th:block>
 </body>
 </html>

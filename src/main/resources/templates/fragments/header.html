@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<!-- Head -->
-<header th:fragment="headerFragment"> 
-    <div class="header">
-        <h1>🐶 댕댕이 일지</h1>
-        <nav>
-            <a th:href="@{/dashboard}">대시보드</a>
-            <a th:href="@{/profile}">내 정보</a>
-            <a th:href="@{/logout}">로그아웃</a>
-        </nav>
+<header th:fragment="header" class="header">
+    <div class="header-left"> <!-- 햄버거 버튼과 타이틀을 묶는 컨테이너 -->
+        <button id="sidebarToggle" class="sidebar-toggle-button">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="header-page-title" th:text="${title != null ? title : '펫케어 시스템 관리'}">펫케어 시스템 관리</h1>
     </div>
+    <nav class="header-nav"> <!-- navigation 메뉴를 묶는 컨테이너 -->
+        <a href="#"><i class="fas fa-bell"></i> 알림</a>
+        <a th:href="@{/profile}"><i class="fas fa-user-circle"></i> 프로필</a>
+        <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
+    </nav>
 </header>
 </body>
 </html>

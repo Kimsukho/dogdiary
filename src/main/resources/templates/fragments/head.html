@@ -4,15 +4,25 @@
     <!-- Head -->
     <th:block th:fragment="headFragment">
         <head>
-            <meta charset="utf-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             
-		    <title th:text="${pageTitle} ?: '댕댕이 일지'">댕댕이 일지</title>
+		    <title th:text="${pageTitle} ?: '펫케어 시스템'">펫케어 시스템</title>
 		    
             <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
             <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
             <link th:href="@{/bootstrap/css/sb-admin-2.min.css}" rel="stylesheet" />
 			<link rel="stylesheet" th:href="@{/css/style.css}">
-        </head>
+			<link rel="stylesheet" th:href="@{/css/main.css}">
+            <!-- Toastr -->
+            <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+            <script src="js/plugins/toastr/toastr.min.js"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            
+    <!-- Font Awesome 아이콘 사용을 위한 CDN -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+            
+    </head>
     </th:block>
 </html>

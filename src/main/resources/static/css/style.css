@@ -1,15 +1,60 @@
 /* ------------------------------
-   공통
+   공통 & 기본 설정
 ------------------------------ */
+:root {
+    /* Primary Color Palette */
+    --primary-color: #4EA685; /* 기존 유지 */
+    --primary-light-color: #79D1A7; /* 더 밝은 primary */
+    --primary-dark-color: #3B8268;  /* 더 어두운 primary */
+
+    /* Neutral & Accent Colors */
+    --font-color : #333;
+    --background-light: #fefefe;
+    --background-dark: #f0f4f7;
+    --text-dark: #2c3e50; /* 어두운 텍스트 */
+    --text-light: #ecf0f1; /* 밝은 텍스트 */
+    --gray-light: #e0e0e0;
+    --gray-medium: #bdc3c7;
+    --card-background: #ffffff;
+    --border-color: #e0e0e0;
+
+    /* Spacing */
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    --spacing-xl: 30px;
+
+    /* Font Sizes */
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+    font-family: 'Segoe UI', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif; /* 폰트 우선순위 조정 및 대체 폰트 추가 */
+    background-color: var(--background-dark); /* 전체 배경을 좀 더 부드러운 회색 톤으로 변경 */
+    color: var(--text-dark); /* 기본 텍스트 색상 */
+    line-height: 1.6; /* 행간 추가로 가독성 향상 */
+    -webkit-font-smoothing: antialiased; /* 폰트 안티앨리어싱 */
+    -moz-osx-font-smoothing: grayscale; /* 폰트 안티앨리어싱 */
 }
 
 a {
     text-decoration: none;
+    color: var(--primary-color); /* 링크 색상도 primary로 통일 */
+    transition: color 0.2s ease-in-out; /* 호버 시 부드러운 변화 */
+}
+
+a:hover {
+    color: var(--primary-dark-color);
 }
 
 .container {
@@ -18,115 +63,234 @@ a {
 }
 
 /* ------------------------------
-   헤더
+   헤더 (Header)
+   - 좀 더 간결하고 현대적인 디자인으로 변경
+   - 그림자 효과로 깊이감 부여
 ------------------------------ */
 .header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px 20px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: var(--spacing-md) var(--spacing-lg); /* 패딩 조정 */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: var(--shadow-sm); /* 아래쪽으로 부드러운 그림자 추가 */
+    z-index: 10; /* 다른 요소 위로 올라오도록 설정 */
 }
 
 .header h1 {
     margin: 0;
-    font-size: 22px;
+    font-size: var(--font-size-xl); /* 헤더 제목 크기 키움 */
+    font-weight: 600; /* 폰트 굵기 조정 */
+    letter-spacing: -0.5px; /* 약간의 자간 조정 */
 }
 
 .header nav a {
-    color: white;
-    margin-left: 15px;
+    color: var(--font-color);
+    margin-left: var(--spacing-lg); /* 메뉴 간격 조정 */
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    position: relative; /* 호버 밑줄 애니메이션을 위해 */
 }
 
 .header nav a:hover {
-    text-decoration: underline;
+    color: rgb(123, 123, 123); /* 호버 시 좀 더 밝게 */
+    text-decoration: none; /* 기본 밑줄 제거 */
 }
 
+/* 호버 시 밑줄 애니메이션 효과 추가 */
+.header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; /* 링크 텍스트 아래에 위치 */
+    left: 0;
+    width: 0%; /* 초기 상태: 너비 0 */
+    height: 2px; /* 밑줄 두께 */
+    background-color: rgba(123, 123, 123,0.3);
+    transition: width 0.3s ease-in-out; /* 너비 변화에 애니메이션 */
+}
+
+.header nav a:hover::after {
+    width: 100%; /* 호버 시 너비 100% */
+}
+
+
 /* ------------------------------
-   사이드바
+   사이드바 (Sidebar)
+   - 메뉴 항목의 호버 및 활성(active) 상태 시각화 강화
+   - 아이콘을 위한 공간 고려
 ------------------------------ */
 .sidebar {
-    width: 220px;
-    background-color: #2f3e46;
-    padding: 20px 0;
+    width: 250px; /* 사이드바 너비를 약간 넓게 */
+    background-color: #2c3e50; /* 더 어두운 다크 그레이 배경 */
+    padding: var(--spacing-lg) 0;
+    box-shadow: var(--shadow-md); /* 오른쪽으로 그림자 추가 */
     min-height: 100vh;
+    display: flex; /* 메뉴 아이템 정렬을 위해 flexbox 사용 */
+    flex-direction: column;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: var(--spacing-lg) 0;
 }
 
 .sidebar ul li {
-    margin-bottom: 10px;
+    margin-bottom: 2px; /* 항목 간 간격 미세 조정 */
 }
 
 .sidebar ul li a {
-    color: #dcdcdc;
-    padding: 10px 20px;
-    display: block;
-    transition: background 0.2s;
+    color: var(--gray-medium); /* 기본 텍스트 색상을 약간 밝은 회색으로 */
+    padding: var(--spacing-sm) var(--spacing-xl); /* 패딩 조정, 아이콘 공간 고려 */
+    display: flex; /* 아이콘과 텍스트 정렬을 위해 */
+    align-items: center;
+    transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+    font-weight: 500;
+    font-size: var(--font-size-md);
 }
 
 .sidebar ul li a:hover {
-    background-color: #3b4b52;
-    color: #fff;
+    background-color: #3b4b52; /* 호버 시 배경색 */
+    color: var(--text-light); /* 호버 시 텍스트 색상 */
 }
 
+/* 활성(active) 상태의 메뉴 항목 스타일 */
+.sidebar ul li a.active {
+    background-color: var(--primary-dark-color); /* 활성 메뉴 배경 */
+    color: var(--text-light); /* 활성 메뉴 텍스트 */
+    font-weight: 600; /* 폰트 굵기 강조 */
+    border-left: 4px solid var(--primary-light-color); /* 왼쪽 테두리 추가 */
+    padding-left: calc(var(--spacing-xl) - 4px); /* 왼쪽 테두리 두께만큼 패딩 조정 */
+}
+
+/* (선택 사항: 아이콘을 사용하는 경우) */
+.sidebar ul li a i { /* Font Awesome 같은 아이콘 라이브러리를 사용하는 경우 */
+    margin-right: var(--spacing-sm);
+    font-size: var(--font-size-lg);
+}
+
+
 /* ------------------------------
-   메인 콘텐츠
+   메인 콘텐츠 (Main Content)
+   - 깨끗하고 정돈된 느낌
 ------------------------------ */
 main {
     flex: 1;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+    overflow-y: auto;
+    padding: var(--spacing-xl); /* 메인 콘텐츠 패딩 조정 */
+    background-color: var(--background-light); /* 메인 콘텐츠 배경색 */
+    box-shadow: var(--shadow-sm); /* 왼쪽에서 오는 부드러운 그림자 */
+    border-radius: 8px; /* 메인 콘텐츠 가장자리에 둥근 테두리 */
+    margin: var(--spacing-lg); /* 주변 여백 추가 */
 }
 
 /* 카드 스타일 (대시보드 통계 위젯) */
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 최소 너비 조정 */
+    gap: var(--spacing-md); /* 카드 간 간격 */
+    margin-bottom: var(--spacing-xl);
 }
 
 .card {
-    background-color: #e8f5e9;
-    padding: 15px;
+    background-color: var(--card-background); /* 카드 배경을 흰색으로 변경 */
+    padding: var(--spacing-lg);
     border-radius: 8px;
     text-align: center;
     font-weight: bold;
-    color: #4CAF50;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: var(--primary-dark-color);
+    box-shadow: var(--shadow-md); /* 카드의 그림자를 더 명확하게 */
+    border: 1px solid var(--border-color); /* 은은한 테두리 추가 */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* 호버 애니메이션 */
+    cursor: pointer; /* 클릭 가능함을 나타내는 커서 */
 }
+
+.card:hover {
+    transform: translateY(-5px); /* 호버 시 살짝 위로 */
+    box-shadow: var(--shadow-lg); /* 호버 시 그림자를 더 진하게 */
+}
+
+.card .title {
+    font-size: var(--font-size-md);
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.card .value {
+    font-size: 1.8rem; /* 값 강조 */
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
 
 /* 섹션 스타일 */
 .section {
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-md);
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
 }
 
 .section h3 {
-    margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-lg);
+    color: var(--primary-dark-color);
+    border-bottom: 2px solid var(--gray-light); /* 제목 아래 구분선 */
+    padding-bottom: var(--spacing-sm);
 }
 
 /* 리스트 스타일 (일지, 반려견 등) */
 ul {
-    padding-left: 20px;
+    padding-left: var(--spacing-lg); /* 기본 목록 들여쓰기 */
+    margin-top: 0;
 }
 
 ul li {
-    margin-bottom: 8px;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-dark);
 }
 
 /* ------------------------------
-   푸터
+   푸터 (Footer)
 ------------------------------ */
 .footer {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-light);
     text-align: center;
-    padding: 10px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-top: auto; /* 푸터가 항상 하단에 위치하도록 */
+    font-size: var(--font-size-sm);
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.05); /* 위쪽으로 그림자 */
+}
+
+/* ------------------------------
+   토스트 (Toast) 메시지
+   - 더욱 시인성 좋고 부드러운 애니메이션
+------------------------------ */
+#toast {
+    position: fixed;
+    bottom: var(--spacing-xl); /* 바닥에서 간격 조정 */
+    left: 50%;
+    transform: translate(-50%, 20px); /* 초기 위치를 조금 아래로 조정 */
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: 30px;
+    overflow: hidden;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-out, visibility 0.4s ease-out, transform 0.4s ease-out; /* 애니메이션 개선 */
+    background: rgba(44, 62, 80, 0.9); /* 어두운 배경에 약간의 투명도 */
+    color: var(--text-light);
+    z-index: 99999; /* 다른 요소보다 최상단에 */
+    box-shadow: var(--shadow-md); /* 토스트에도 그림자 추가 */
+}
+
+#toast.reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0); /* 올라오면서 나타나는 효과 */
 }

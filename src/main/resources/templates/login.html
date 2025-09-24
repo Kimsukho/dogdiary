@@ -3,21 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<!-- <link rel="icon" href="/asset/favicon.ico"/> -->
-	 <link rel="icon" href="/favicon.png" type="image/png">
+	<link rel="icon" href="/favicon.png" type="image/png">
 	 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"> -->
 	<title th:text="${pageTitle} ?: '댕댕이 일지'">댕댕이 일지</title>
 	<!-- <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css"> -->
 	<link rel="stylesheet" th:href="@{/css/loginStyle.css}">
+	<script src="http://code.jquery.com/jquery-latest.js"></script> 
 </head>
 <body>
 	<div id="container" class="container">
 	    <div class="row">	      
 	      <!-- 회원가입 -->
 	      <div id="signUp" class="col align-items-center flex-col sign-up">
-				<div class="form-wrapper align-items-center">
-						<!-- <h1 style="margin-bottom: 5%; color: #4EA685">
-							회원가입
-						</h1> -->
+					<h1 style="margin-bottom: 3%; color: #4EA685">
+						회원가입
+					</h1>
+					<div class="form-wrapper align-items-center">
 	          <div class="form sign-up">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
@@ -45,6 +46,7 @@
 	              <b onclick="backToLogin()" class="pointer">
 	                로그인
 	              </b>
+								<div id="toast"></div>
 	            </p>
 	          </div>
 	        </div>
@@ -52,10 +54,10 @@
 
 				<!--  비밀번호변경 -->
 				<div id="forgotPwd" class="col align-items-center flex-col forgot-pwd">
-					<div class="form-wrapper align-items-center">
-					<!-- <h1 style="margin-bottom: 5%; color: #4EA685">
+					<h1 style="margin-bottom: 3%; color: #4EA685">
 						비밀번호 재설정
-					</h1> -->
+					</h1>
+					<div class="form-wrapper align-items-center">
 					<div class="form forgot-pwd">
 						<div class="input-group">
 							<i class='bx bxs-user'></i>
@@ -84,17 +86,20 @@
 		
 		  <!-- 로그인 -->
 			<div id="signIn" class="col align-items-center flex-col sign-in">
+				<h1 style="margin-bottom: 3%; color: #4EA685">
+					로그인
+				</h1> 
 				<div class="form-wrapper align-items-center">
 	          <div class="form sign-in">
 	            <div class="input-group">
 	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="아이디">
+	              <input id="loginInputId" type="text" placeholder="아이디">
 	            </div>
 	            <div class="input-group">
 	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="비밀번호">
+	              <input id="loginInputPassword" type="password" placeholder="비밀번호">
 	            </div>
-	            <button>
+	            <button onclick="login()">
 	              로그인
 	            </button>
 	            <p>
@@ -182,6 +187,61 @@
 				container.classList.remove('sign-up');
 				container.classList.remove('forgot-pwd');
 				container.classList.add('sign-in');
+			}
+
+			let removeToast;
+
+			function toast(string) {
+					const toast = document.getElementById("toast");
+
+					toast.classList.contains("reveal") ?
+							(clearTimeout(removeToast), removeToast = setTimeout(function () {
+									document.getElementById("toast").classList.remove("reveal")
+							}, 1000)) :
+							removeToast = setTimeout(function () {
+									document.getElementById("toast").classList.remove("reveal")
+							}, 1000)
+					toast.classList.add("reveal"),
+							toast.innerText = string
+			}
+
+			function login() {
+				let loginId = document.getElementById("loginInputId").value;
+				let password = document.getElementById("loginInputPassword").value;
+				console.log(loginId, password);
+
+				window.location.href = '/dashboard';
+				// if(!login || !password) return;
+
+				// $.ajax({
+				// 		url: '/public/authenticate',
+				// 		method: 'POST',
+				// 		headers: {
+				// 				'Content-Type': 'application/json'
+				// 		},
+				// 		data: JSON.stringify({ username: loginId, password: password }),
+				// 		success: function(data, textStatus, jqXHR) {
+				// 				if(data.returnCode == "FAILURE") return;
+				// 		},
+				// 		error: function(err) {
+				// 				const errorMessage = '서버 오류가 발생했습니다. 다시 시도해주세요.';
+				// 				console.log(errorMessage);
+				// 		}
+				// });
+			}
+
+			function logout() {
+				$.ajax({
+						url: '/public/logout',
+						type: 'GET',
+						success: function() {
+								// 로그인 페이지로 리다이렉트
+								window.location.href = '/login';
+						},
+						error: function(err) {
+								console.log(err);
+						}
+				});
 			}
 		
 		  // 초기 상태: 로그인 화면
