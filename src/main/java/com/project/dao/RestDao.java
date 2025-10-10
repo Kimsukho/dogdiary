@@ -1,13 +1,12 @@
-package com.project.service;
+package com.project.dao;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
+import org.apache.ibatis.annotations.Mapper;
 
-
-public interface RestService {
+@Mapper
+public interface RestDao {
 	List<HashMap> getDogsByUserId(HashMap map);
 	List<HashMap> getAllDiaries(HashMap map);
 }

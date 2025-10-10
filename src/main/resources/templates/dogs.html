@@ -3,35 +3,77 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main-layout}">
 <body>
-    <div layout:fragment="content">
-        <section>
-            <button onclick="location.href='/dogs/add'">+ 반려견 등록</button>
-    
-            <!-- 반려견 목록 -->
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>나이</th>
-                        <th>품종</th>
-                        <th>등록일</th>
-                        <th>관리</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="dog : ${dogs}">
-                        <td th:text="${dog.name}">이름</td>
-                        <td th:text="${dog.breed}">품종</td>
-                        <td th:text="${dog.age}">나이</td>
-                        <td th:text="${dog.gender}">성별</td>
-                        <td>
-                            <a th:href="@{/dogs/edit/{id}(id=${dog.id})}">수정</a>
-                            <a th:href="@{/dogs/delete/{id}(id=${dog.id})}">삭제</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+<div layout:fragment="content">
+    <div class="diary-page">
+        <div class="dog-page-header">
+            <h3>내 반려견 목록</h3>
+            <button class="dog-add-button" onclick="location.href='/dogs/add'">
+                <i class="fas fa-plus"></i> 반려견 등록
+            </button>
+        </div>
+        <div class="dog-cards" id="dogCards">
+            <div id="emptyDog" class="empty-card">등록된 반려견이 없습니다.</div>
+        </div>
     </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/lib/axios/axios.min.js}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const dogCards = document.getElementById('dogCards');
+            const emptyDog = document.getElementById('emptyDog');
+
+            async function loadDogData() {
+                try {
+                    const response = await axios.get('/api/getDogsByUserId');
+                    if (response.data.returnCode === "SUCCESS") {
+                        const data = response.data.resultData;
+                        dogCards.innerHTML = '';
+
+                        if (data.length === 0) {
+                            dogCards.appendChild(emptyDog);
+                            emptyDog.style.display = 'flex';
+                        } else {
+                            data.forEach(dog => {
+                                const card = document.createElement('div');
+                                card.className = 'dog-card';
+                                card.innerHTML = `
+                                    <div class="dog-card-left">
+                                        <img src="${dog.profile_image || '/images/default-dog.png'}" alt="${dog.name}" class="dog-profile-img">
+                                    </div>
+                                    <div class="dog-card-right">
+                                        <h4>${dog.name}</h4>
+                                        <div class="dog-info">
+                                            <span>품종: ${dog.breed}</span>
+                                            <span>나이: ${dog.age || '-'}</span>
+                                            <span>성별: ${dog.gender || '-'}</span>
+                                        </div>
+                                        <div class="dog-card-actions">
+                                            <button class="edit-btn" data-id="${dog.id}" title="수정">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="delete-btn" data-id="${dog.id}" title="삭제">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                                dogCards.appendChild(card);
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('반려견 데이터 불러오기 실패:', error);
+                    dogCards.innerHTML = '';
+                    dogCards.appendChild(emptyDog);
+                    emptyDog.style.display = 'flex';
+                }
+            }
+
+            loadDogData();
+        });
+    </script>
+</th:block>
 </body>
 </html>

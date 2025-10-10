@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
     private static Collection<? extends GrantedAuthority> getAuthorities(User userInfo) {
-        List<String> roleNames = userInfo.getRoleList();
+        List<String> roleNames = userInfo.getRoleNames();
 		List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
 		if (roleNames != null) {
 			for (String role : roleNames) {

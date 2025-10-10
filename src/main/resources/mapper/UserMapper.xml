@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.dao.UserDao"> 
 
-	<!-- 사용자 이름으로 User 조회 (권한 정보 포함) -->
-    <select id="findByUsername" resultMap="userResultMap">
-        SELECT
+<mapper namespace="com.project.dao.UserDao">
+
+    <resultMap id="userResultMap" type="com.project.model.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <collection property="roles" ofType="com.project.model.Role">
+            <id property="id" column="role_id"/>
+            <result property="roleName" column="role_name"/>
+        </collection>
+    </resultMap>
+
+    <!-- username으로 사용자 조회 -->
+    <select id="findByUsername" parameterType="string" resultMap="userResultMap">
+        SELECT 
             u.id,
             u.username,
             u.password,
             u.email,
+            r.id as role_id,
             r.role_name
         FROM users u
         LEFT JOIN user_roles ur ON u.id = ur.user_id
         LEFT JOIN roles r ON ur.role_id = r.id
         WHERE u.username = #{username}
     </select>
-	
-	<!-- 사용자 이름으로 User 조회 (권한 정보 포함) -->
-    <select id="findByUsername" resultMap="userResultMap">
-        SELECT
-            u.id,
-            u.username,
-            u.password,
-            u.email,
-            r.role_name
-        FROM users u
-        LEFT JOIN user_roles ur ON u.id = ur.user_id
-        LEFT JOIN roles r ON ur.role_id = r.id
-        WHERE u.username = #{username}
-    </select>
+
 </mapper>
-

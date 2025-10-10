@@ -6,9 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
-@Mapper // MyBatis 매퍼 인터페이스
+@Mapper
 public interface UserDao {
 	public User findUserByUsername(String username);
 	public int register(HashMap<?, ?> map);

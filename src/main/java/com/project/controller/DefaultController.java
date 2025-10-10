@@ -2,14 +2,19 @@ package com.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.project.model.User;
 import com.project.service.RestService;
+import com.project.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +24,12 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class DefaultController {
 	
-//	@Autowired
-//	private RestService service;
 
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private UserService userService;
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -76,8 +82,17 @@ public class DefaultController {
 	}
 	
 	@GetMapping("/settings")
+//	public String settings(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
 	public String settings(Model model) {
-		model.addAttribute("title", "환경설정");
-	    return "settings";
+	    // principal 또는 세션에서 사용자 정보 가져오기
+//	    User user = userService.findById(principal.getId());
+//
+//	    // 모델에 user 추가
+//	    model.addAttribute("user", user);theme
+		model.addAttribute("name", "홍길동");
+		model.addAttribute("theme", "light");
+		model.addAttribute("email", "test1234@naver.com");
+	    return "settings"; // templates/settings.html
 	}
+
 }

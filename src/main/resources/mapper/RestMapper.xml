@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.RestDao">
+	
+	<select id="getDogsByUserId" resultType="java.util.HashMap">
+		SELECT 
+            id,
+            user_id,
+            name,
+            breed,
+            age,
+            gender,
+            profile_image,
+            created_at,
+            updated_at
+        FROM dog
+        WHERE user_id = 3
+        ORDER BY created_at DESC
+	</select>
+	
+	<select id="getAllDiaries" resultType="java.util.HashMap">
+		select d.id, p.id, p.name, d.content, d.mood, d.last_updated
+		from dog p, diary d
+		where p.id = d.dog_id;
+	</select>
+	
+</mapper>
+

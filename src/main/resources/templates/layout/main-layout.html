@@ -11,9 +11,11 @@
 
         <div class="main-content-wrapper" id="mainContentWrapper">
             <header th:replace="fragments/header :: header(title=${title})"></header>
+            
+            <main layout:fragment="content"></main>
 
-            <main layout:fragment="content">
-            </main>
+            <th:block layout:fragment="script"></th:block>
+            
             <footer th:replace="fragments/footer :: footer"></footer>
         </div>
     </div>
@@ -22,6 +24,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            setTimeout(() => {
+               showToast('환영합니다, 사용자7714님! 😊');
+           }, 1500);
+
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar'); // sidebar fragment에 id="sidebar"가 추가되어야 함
 
@@ -91,12 +98,6 @@
                 console.warn("Toast element with id 'toast' not found.");
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-           setTimeout(() => {
-               showToast('환영합니다, 사용자7714님! 😊');
-           }, 1500);
-        });
     </script>
 </body>
 </html>

@@ -233,6 +233,20 @@ main {
     box-shadow: var(--shadow-sm);
 }
 
+.diary-section {
+    height: 100%;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-md);
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.diary-section h3 {
+    display: inline-block;
+    margin-right: var(--spacing-md);
+}
+
 .section h3 {
     margin-top: 0;
     margin-bottom: var(--spacing-md);
