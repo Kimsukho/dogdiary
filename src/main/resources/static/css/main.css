@@ -1254,6 +1254,13 @@ footer {
     font-size: 1.1em;
 }
 
+.dogModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index: 9999; }
+.dogModal-content { background:#fff; padding:25px; border-radius:12px; width:360px; box-shadow:0 8px 25px rgba(0,0,0,0.15); }
+.dogModal-content h3 { margin-bottom:20px; color: var(--primary-color); font-weight:600; }
+.dogModal-item { margin-bottom:15px; display:flex; flex-direction:column; }
+.dogModal-item label { margin-bottom:5px; font-weight:500; color:#333; }
+.dogModal-item input, .dogModal-item select { padding:8px 10px; border-radius:8px; border:1px solid #ccc; font-size:0.95em; }
+
 /* 설정 페이지 */
 .settings-page {
     padding: 20px;
@@ -1417,7 +1424,6 @@ footer {
     box-shadow: 0 0 5px rgba(74, 144, 226, 0.2);
 }
 
-/* ✅ 저장 버튼 */
 .profile-save-btn {
     width: 100%;
     padding: 13px;

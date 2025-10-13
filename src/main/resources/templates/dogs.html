@@ -10,14 +10,165 @@
         </div>
         <button class="dog-add-button" id="openModalBtn">반려견 등록</button>
     </div>
+
+    <!-- 등록/수정 모달 -->
+    <div id="dogModal" class="dogModal">
+        <div class="dogModal-content">
+            <h3 id="dogModalTitle">반려견 등록</h3>
+            <input type="hidden" id="dogId">
+            
+            <div class="dogModal-item">
+                <label>이름</label>
+                <input type="text" id="dogName" placeholder="반려견 이름" required>
+            </div>
+
+            <div class="dogModal-item">
+                <label>품종</label>
+                <input type="text" id="dogBreed" placeholder="품종" required>
+            </div>
+
+            <div class="dogModal-item">
+                <label>나이</label>
+                <input type="number" id="dogAge" placeholder="나이">
+            </div>
+
+            <div class="dogModal-item">
+                <label>성별</label>
+                <select id="dogGender">
+                    <option value="" selected hidden>성별 선택</option>
+                    <option value="MALE">남</option>
+                    <option value="FEMALE">여</option>
+                </select>
+            </div>
+
+            <div class="dogModal-item">
+                <label>프로필 이미지</label>
+                <input type="file" id="dogProfileImage">
+            </div>
+
+            <div class="modal-buttons">
+                <button class="button save-button" id="saveDogBtn">저장</button>
+                <button class="button close-button" id="closeDogModalBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <h3>삭제 확인</h3>
+            <p>정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</p>
+            <div class="modal-buttons">
+            <button class="button confirm-button" id="confirmDeleteBtn">삭제</button>
+            <button class="button cancel-button" id="cancelDeleteBtn">취소</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <th:block layout:fragment="script">
-    <script th:src="@{/lib/axios/axios.min.js}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const dogCards = document.getElementById('dogCards');
-            const emptyDog = document.getElementById('emptyDog');
+            const dogModal = document.getElementById("dogModal");
+            const dogModalTitle = document.getElementById("dogModalTitle");
+            const dogId = document.getElementById("dogId");
+            const dogName = document.getElementById("dogName");
+            const dogBreed = document.getElementById("dogBreed");
+            const dogAge = document.getElementById("dogAge");
+            const dogGender = document.getElementById("dogGender");
+            const dogProfileImage = document.getElementById("dogProfileImage");
+            const openModalBtn = document.getElementById("openModalBtn");
+            const closeDogModalBtn = document.getElementById("closeDogModalBtn");
+            const saveDogBtn = document.getElementById("saveDogBtn");
+            
+            const deleteBtn = document.getElementById("deleteBtn");
+            const deleteModal = document.getElementById("deleteConfirmModal");
+            const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+            const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+            
+             // 등록 버튼 클릭
+            openModalBtn.onclick = () => {
+                dogModalTitle.textContent = "반려견 등록";
+                saveDogBtn.textContent = "저장";
+                dogId.value = "";
+                dogName.value = "";
+                dogBreed.value = "";
+                dogAge.value = "";
+                dogGender.value = "";
+                dogProfileImage.value = "";
+                dogModal.style.display = "flex";
+            };
+
+            // 닫기
+            closeDogModalBtn.onclick = () => {
+                dogModal.style.display = "none";
+            };
+
+            // 수정 버튼 클릭
+            document.addEventListener("click", e => {
+                if(e.target.closest(".edit-btn")) {
+                    const card = e.target.closest(".dog-card");
+                    const id = e.target.closest(".edit-btn").dataset.id;
+                    const name = card.querySelector("h4").textContent;
+                    const breed = card.querySelector(".dog-info span:nth-child(1)").textContent.replace("품종: ","");
+                    const age = card.querySelector(".dog-info span:nth-child(2)").textContent.replace("나이: ","");
+                    const genderText = card.querySelector(".dog-info span:nth-child(3)").textContent.replace("성별: ","");
+                    const gender = genderText === "남" ? "MALE" : "FEMALE";
+
+                    dogModalTitle.textContent = "반려견 수정";
+                    saveDogBtn.textContent = "수정";
+                    dogId.value = id;
+                    dogName.value = name;
+                    dogBreed.value = breed;
+                    dogAge.value = age;
+                    dogGender.value = gender;
+                    dogModal.style.display = "flex";
+                }
+            });
+
+            // 저장 버튼 클릭 (등록/수정 구분)
+            saveDogBtn.onclick = async () => {
+                const formData = new FormData();
+                if(dogId.value) formData.append("id", dogId.value);
+                formData.append("name", dogName.value);
+                formData.append("breed", dogBreed.value);
+                formData.append("age", dogAge.value);
+                formData.append("gender", dogGender.value);
+                if(dogProfileImage.files[0]) formData.append("profile_image", dogProfileImage.files[0]);
+
+                const url = dogId.value ? "/api/updateDogById" : "/api/saveDog";
+                try {
+                    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" }});
+                    if(response.data.returnCode === "SUCCESS") {
+                        dogModal.style.display = "none";
+                        loadDogData(); // 목록 갱신
+                    } else {
+                        alert("저장 실패: " + response.data.errorMessage);
+                    }
+                } catch(err) { console.error(err); }
+            };
+
+            // 삭제 확인
+            confirmDeleteBtn.onclick = async () => {
+                // try {
+                //     const response = await axios.post("/api/deleteDogDiaryById", { id: diaryId.value });
+                //     if (response.data.returnCode === "SUCCESS") {
+                //         await loadDiaries();
+                //         renderDiaryList();
+                //         renderCalendar(selectedDate);
+                //         renderSummary(selectedDate);
+                //     } else {
+                //         alert("삭제 실패: " + response.data.errorMessage);
+                //     }
+                // } catch (e) { console.error(e); }
+                dogModal.style.display = "none";
+                deleteModal.style.display = "none";
+            };
+
+            // 취소 클릭
+            cancelDeleteBtn.onclick = () => { 
+                dogModal.style.display = "none";
+                deleteModal.style.display = "none";
+            };
 
             async function loadDogData() {
                 try {
@@ -55,6 +206,10 @@
                                     </div>
                                 `;
                                 dogCards.appendChild(card);
+                                card.querySelector('.delete-btn').onclick = async () => {
+                                    deleteModal.style.display='flex';
+                                    diaryId.value = d.id;
+                                };
                             });
                         }
                     }
