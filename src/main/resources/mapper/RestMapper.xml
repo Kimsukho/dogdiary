@@ -20,7 +20,7 @@
 	</select>
 	
 	<select id="getAllDiaries" resultType="java.util.HashMap">
-		select d.id, p.id, p.name, d.content, d.mood, d.last_updated
+		select d.id, p.id, p.name, d.content, d.mood, d.created_at
 		from dog p, diary d
 		where p.id = d.dog_id;
 	</select>

@@ -89,6 +89,7 @@ public class DefaultController {
 //
 //	    // 모델에 user 추가
 //	    model.addAttribute("user", user);theme
+		model.addAttribute("title", "설정");
 		model.addAttribute("name", "홍길동");
 		model.addAttribute("theme", "light");
 		model.addAttribute("email", "test1234@naver.com");

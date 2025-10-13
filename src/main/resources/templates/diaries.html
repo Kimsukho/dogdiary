@@ -8,81 +8,216 @@
 <body>
 <div layout:fragment="content">
     <div class="diary-page">
-        <div class="diary-page-header">
-            <h3>일지 목록</h3>
-            <button class="diary-add-button" onclick="alert('일지 작성')">
-                <i class="fas fa-plus"></i> 새 일지 작성
-            </button>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prevMonthBtn">◀</button>
+                <h3 id="currentMonth"></h3>
+                <button id="nextMonthBtn">▶</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
         </div>
 
-        <div class="diary-cards" id="diaryCards">
-            <div id="emptyCard" class="empty-card">등록된 일지가 없습니다.</div>
+        <div class="diary-content">
+            <div class="summary-container">
+                <div class="summary-item">
+                    <div class="summary-value" id="currentMonthTotalCount">0</div>
+                    <div class="summary-label" id="currentMonthLabel">0월 총 일지</div>
+                </div>
+                <div class="summary-item"><div class="summary-value" id="happyCount">0</div><div class="summary-label">😊 행복</div></div>
+                <div class="summary-item"><div class="summary-value" id="sadCount">0</div><div class="summary-label">😢 슬픔</div></div>
+                <div class="summary-item"><div class="summary-value" id="angryCount">0</div><div class="summary-label">😡 화남</div></div>
+                <div class="summary-item"><div class="summary-value" id="excitedCount">0</div><div class="summary-label">🤩 신남</div></div>
+            </div>
+
+            <div class="diary-cards" id="diaryCards">
+                <div id="emptyCard" class="empty-card">등록된 일지가 없습니다.</div>
+            </div>
         </div>
     </div>
+
+    <div id="diaryModal" class="modal">
+        <div class="modal-content">
+            <h3>일지 작성</h3>
+            <input type="text" id="diaryName" placeholder="제목" />
+            <textarea id="diaryContent" placeholder="내용"></textarea>
+            <select id="diaryMood">
+                <option value="">기분 선택</option>
+                <option value="HAPPY">행복</option>
+                <option value="SAD">슬픔</option>
+                <option value="ANGRY">화남</option>
+                <option value="EXCITED">신남</option>
+            </select>
+            <div class="modal-buttons">
+                <button id="saveDiaryBtn">저장</button>
+                <button id="closeModalBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="diary-add-button" id="openModalBtn"> +</button>
 </div>
 
 <th:block layout:fragment="script">
-    <script th:src="@{/lib/axios/axios.min.js}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const diaryCards = document.getElementById('diaryCards');
-            const emptyCard = document.getElementById('emptyCard');
+            async function init() {
+                const diaryCards = document.getElementById('diaryCards');
+                const emptyCard = document.getElementById('emptyCard');
+                const calendarGrid = document.getElementById('calendarGrid');
+                const currentMonthEl = document.getElementById('currentMonth');
 
-            // mood별 클래스 매핑
-            const moodClassMap = {
-                'HAPPY': 'mood-Happy',
-                'SAD': 'mood-Sad',
-                'ANGRY': 'mood-Angry',
-                'EXCITED': 'mood-Excited'
-            };
+                const currentMonthTotalCountEl = document.getElementById('currentMonthTotalCount');
+                const cuurentMonthLabel = document.getElementById('currentMonthLabel');
+                
+                const happyCountEl = document.getElementById('happyCount');
+                const sadCountEl = document.getElementById('sadCount');
+                const angryCountEl = document.getElementById('angryCount');
+                const excitedCountEl = document.getElementById('excitedCount');
 
-            async function loadDiaryData() {
-                try {
-                    const response = await axios.get('/api/getAllDiaries');
-                    if (response.data.returnCode === "SUCCESS") {
-                        const data = response.data.resultData;
-                        diaryCards.innerHTML = '';
+                const modal = document.getElementById('diaryModal');
+                const openModalBtn = document.getElementById('openModalBtn');
+                const closeModalBtn = document.getElementById('closeModalBtn');
+                const saveDiaryBtn = document.getElementById('saveDiaryBtn');
 
-                        if (data.length === 0) {
-                            diaryCards.appendChild(emptyCard);
-                            emptyCard.style.display = 'flex';
-                        } else {
-                            data.forEach(diary => {
-                                const moodClass = moodClassMap[diary.mood] || 'mood-';
-                                const card = document.createElement('div');
-                                card.className = 'diary-card';
-                                card.innerHTML = `
-                                    <div class="diary-card-header">${diary.name}</div>
-                                    <div class="diary-card-content">${diary.content}</div>
-                                    <div class="diary-footer">
-                                        <div class="diary-mood ${moodClass}">${diary.mood || '-'}</div>
-                                        <div class="diary-date">${new Date(diary.last_updated).toLocaleDateString('ko-KR')}</div>
-                                    </div>
-                                    <div class="diary-actions">
-                                        <button class="edit-btn" data-id="${diary.id}" title="수정">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="delete-btn" data-id="${diary.id}" title="삭제">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                `;
-                                diaryCards.appendChild(card);
-                            });
-                        }
+                const diaryName = document.getElementById('diaryName');
+                const diaryContent = document.getElementById('diaryContent');
+                const diaryMood = document.getElementById('diaryMood');
+                const modalTitle = document.getElementById('modalTitle');
+
+                let selectedDate = new Date();
+                let diaries = [];
+                let editingId = null;
+
+                const moodClassMap = { 'HAPPY':'mood-Happy','SAD':'mood-Sad','ANGRY':'mood-Angry','EXCITED':'mood-Excited' };
+
+                // 모달 열기/닫기
+                openModalBtn.onclick = () => { modal.style.display='flex'; editingId=null; modalTitle.textContent='일지 작성'; diaryName.value=''; diaryContent.value=''; diaryMood.value=''; };
+                closeModalBtn.onclick = () => { modal.style.display='none'; };
+
+                // 저장 버튼
+                saveDiaryBtn.onclick = async () => {
+                    const data = { name: diaryName.value, content: diaryContent.value, mood: diaryMood.value, date: selectedDate };
+                    if(editingId) data.id = editingId;
+                    await axios.post('/api/diaries', data);
+                    modal.style.display='none';
+                    await loadDiaries();
+                    renderCalendar(selectedDate);
+                    renderDiaryList();
+                    renderSummary(selectedDate);
+                };
+
+
+                async function loadDiaries() {
+                    try { 
+                        const res = await axios.get('/api/getAllDiaries'); 
+                        if(res.data.returnCode==='SUCCESS') diaries=res.data.resultData; 
+                    } 
+                    catch(e){ 
+                        console.error(e); 
                     }
-                } catch (error) {
-                    console.error('일지 데이터 불러오기 실패:', error);
-                    diaryCards.innerHTML = '';
-                    diaryCards.appendChild(emptyCard);
-                    emptyCard.style.display = 'flex';
                 }
+
+                function renderSummary(referenceDate){
+                    const now = selectedDate;
+                    const monthDiaries = diaries.filter(d => {
+                        const dd = new Date(d.created_at);
+                        return dd.getFullYear() === now.getFullYear() && dd.getMonth() === now.getMonth();
+                    });
+                    currentMonthTotalCountEl.textContent = monthDiaries.length;
+                    cuurentMonthLabel.textContent = `${now.getMonth() + 1}월 총 일지`;
+
+                    happyCountEl.textContent = monthDiaries.filter(d => d.mood === 'HAPPY').length;
+                    sadCountEl.textContent = monthDiaries.filter(d => d.mood === 'SAD').length;
+                    angryCountEl.textContent = monthDiaries.filter(d=>d.mood==='ANGRY').length;
+                    excitedCountEl.textContent = monthDiaries.filter(d=>d.mood==='EXCITED').length;
+                }
+
+                function renderDiaryList() {
+                    const filtered = diaries.filter(d=>new Date(d.created_at).toDateString()===selectedDate.toDateString());
+                    diaryCards.innerHTML='';
+                    if(filtered.length===0){ 
+                        diaryCards.appendChild(emptyCard); 
+                        emptyCard.style.display='flex'; 
+                    } else {
+                        filtered.forEach(d=>{
+                            const moodClass=moodClassMap[d.mood]||'';
+                            const card=document.createElement('div');
+                            card.className='diary-card';
+                            card.innerHTML=`
+                                <div class="diary-card-header">${d.name}</div>
+                                <div class="diary-card-content">${d.content}</div>
+                                <div class="diary-footer">
+                                    <div class="diary-mood ${moodClass}">${d.mood||'-'}</div>
+                                    <div>${new Date(d.created_at).toLocaleDateString('ko-KR')}</div>
+                                </div>
+                                <div class="dog-card-actions">
+                                    <button class="edit-btn" data-id="${d.id}"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn" data-id="${d.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            `;
+                            diaryCards.appendChild(card);
+                            
+                            // 수정 클릭
+                            card.querySelector('.edit-btn').onclick = () => {
+                                editingId=d.id;
+                                modal.style.display='flex';
+                                modalTitle.textContent='일지 수정';
+                                diaryName.value=d.name;
+                                diaryContent.value=d.content;
+                                diaryMood.value=d.mood;
+                            };
+                            // 삭제 클릭
+                            card.querySelector('.delete-btn').onclick = async () => {
+                                await axios.delete('/api/diaries/'+d.id);
+                                await loadDiaries();
+                                renderDiaryList();
+                                renderSummary(selectedDate);
+                                renderCalendar(selectedDate);
+                            };
+                        });
+                    }
+                }
+
+                function renderCalendar(date){
+                    const year=date.getFullYear(); const month=date.getMonth();
+                    currentMonthEl.textContent=`${year}년 ${month+1}월`;
+                    const firstDay=new Date(year,month,1).getDay();
+                    const lastDate=new Date(year,month+1,0).getDate();
+                    calendarGrid.innerHTML='';
+                    for(let i=0;i<firstDay;i++) calendarGrid.appendChild(document.createElement('div'));
+                    for(let day=1;day<=lastDate;day++){
+                        const dayEl=document.createElement('div'); dayEl.className='calendar-day'; dayEl.textContent=day;
+                        const thisDate=new Date(year,month,day);
+                        const hasDiary=diaries.some(d=>{const dd=new Date(d.created_at); return dd.getFullYear()===year && dd.getMonth()===month && dd.getDate()===day;});
+                        if(hasDiary){ const dot=document.createElement('div'); dot.className='calendar-dot'; dayEl.appendChild(dot); }
+                        dayEl.onclick=()=>{ selectedDate=thisDate; renderCalendar(selectedDate); renderDiaryList(); };
+                        if(thisDate.toDateString()===selectedDate.toDateString()) dayEl.classList.add('selected');
+                        calendarGrid.appendChild(dayEl);
+                    }
+                }
+
+                document.getElementById('prevMonthBtn').onclick=()=>{ 
+                    selectedDate.setMonth(selectedDate.getMonth() - 1);
+                    renderCalendar(selectedDate);
+                    renderDiaryList();
+                    renderSummary(selectedDate);
+                };
+                document.getElementById('nextMonthBtn').onclick=()=>{ 
+                    selectedDate.setMonth(selectedDate.getMonth() + 1);
+                    renderCalendar(selectedDate);
+                    renderDiaryList();
+                    renderSummary(selectedDate); 
+                };
+
+                await loadDiaries();
+                renderCalendar(selectedDate);
+                renderDiaryList();
+                renderSummary(selectedDate);
             }
-
-            loadDiaryData();
+            init();
         });
-        </script>
 
+    </script>
 </th:block>
 </body>
 </html>

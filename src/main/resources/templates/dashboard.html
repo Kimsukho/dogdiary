@@ -1,172 +1,148 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main-layout}"> <!-- main-layout.html을 사용한다고 선언 -->
-<head>
-    <title>대시보드</title> <!-- 페이지 고유 타이틀 -->
-</head>
+      layout:decorate="~{layout/main-layout}">
 <body>
-    <div layout:fragment="content"> <!-- 여기가 main-layout.html의 <main> 태그 안에 삽입될 내용의 시작점 -->
-        <div class="dashboard-page">
-            <section class="section">
-                <h3>주요 현황</h3>
-                <div class="cards">
-                    <div class="card" onclick="showToast('총 방문자 수!');">
-                        <div class="card-header">
-                            <h4 class="title">총 방문자 수</h4>
-                            <i class="icon fas fa-users"></i>
-                        </div>
-                        <div class="card-body">
-                            <div class="value">12,345</div>
-                            <p class="description">지난 7일간 12% 증가</p>
-                        </div>
-                        <div class="card-footer">
-                            <span>2025.09.24</span>
-                            <span style="color: var(--accent-blue);">상세보기</span>
-                        </div>
-                    </div>
-                    <div class="card" onclick="showToast('새로운 일지가 25개 있어요!');">
-                        <div class="card-header">
-                            <h4 class="title">새로운 일지</h4>
-                            <i class="icon fas fa-book-open"></i>
-                        </div>
-                        <div class="card-body">
-                            <div class="value">25개</div>
-                            <p class="description">오늘 작성된 일지</p>
-                        </div>
-                        <div class="card-footer">
-                            <span>오늘</span>
-                            <span style="color: var(--primary-color);">확인</span>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="title">이번 달 산책 기록</h4>
-                        </div>
-                        <div>
-                            <span th:text="${walkCount}">0</span>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="title">이번 달 병원 기록</h4>
-                        </div>
-                        <div>
-                            <span th:text="${hospitalCount}">0</span>
-                        </div>
-                    </div>
+<div layout:fragment="content">
+    <div class="dashboard-page">
+        <!-- 상단 카드 -->
+        <div class="cards">
+            <div class="card" onclick="showToast('총 방문자 수!');">
+                <div class="card-header">
+                    <h4 class="title">총 방문자 수</h4>
+                    <i class="icon fas fa-users"></i>
                 </div>
-            </section>
+                <div class="card-body">
+                    <div class="value">12,345</div>
+                    <p class="description">지난 7일간 12% 증가</p>
+                </div>
+            </div>
 
-            <section class="section">
-                <h3>최근 활동</h3>
+            <div class="card" onclick="showToast('새로운 일지가 25개 있어요!');">
+                <div class="card-header">
+                    <h4 class="title">새로운 일지</h4>
+                    <i class="icon fas fa-book-open"></i>
+                </div>
+                <div class="card-body">
+                    <div class="value">25개</div>
+                    <p class="description">오늘 작성된 일지</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="title">이번 달 산책 기록</h4>
+                </div>
+                <div class="card-body">
+                    <span th:text="${walkCount}">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="title">이번 달 병원 기록</h4>
+                </div>
+                <div class="card-body">
+                    <span th:text="${hospitalCount}">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 차트 + 최근활동 -->
+        <div class="chart-activity-grid">
+            <!-- 차트 영역 -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h4 class="title">강아지 몸무게 변화</h4>
+                    <select id="dogSelect" class="dog-select">
+                        <option value="" hidden>강아지를 선택하세요</option>
+                    </select>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="weightChart"></canvas>
+                </div>
+                <p>우리 사랑스러운 댕댕이의 몸무게 변화 추이를 통해 건강 관리에 힘써주세요! ✨</p>
+            </div>
+
+            <!-- 최근 활동 -->
+            <div class="activity-section">
+                <h4 class="title">최근 활동</h4>
                 <ul>
                     <li>사용자 '김코코'님이 새로운 일지를 작성했습니다. (1분 전)</li>
                     <li>'코코'의 접종 기록이 업데이트 되었습니다. (30분 전)</li>
                     <li>관리자 '김미호'님이 사용자 설정 변경했습니다. (1시간 전)</li>
-                    <!-- 스크롤 테스트를 위해 임시로 더 많은 활동 추가 -->
-                    <li>활동1</li><li>활동2</li><li>활동3</li><li>활동4</li><li>활동5</li><li>활동6</li><li>활동7</li><li>활동8</li><li>활동9</li><li>활동10</li>
-                    <li>활동11</li><li>활동12</li><li>활동13</li><li>활동14</li><li>활동15</li><li>활동16</li><li>활동17</li><li>활동18</li><li>활동19</li><li>활동20</li>
-                    <li>활동21</li><li>활동22</li><li>활동23</li><li>활동24</li><li>활동25</li><li>활동26</li><li>활동27</li><li>활동28</li><li>활동29</li><li>활동30</li>
                 </ul>
-            </section>
-
-            <section class="section">
-                <div class="chart-section">
-                    <h3>강아지 몸무게 변화</h3>
-                    <div class="chart-container">
-                        <canvas id="weightChart"></canvas>
-                    </div>
-                    <p>우리 사랑스러운 댕댕이의 몸무게 변화 추이를 통해 건강 관리에 힘써주세요! ✨</p>
-                </div>
-            </section>
-
-            <!-- 스크롤 테스트를 위해 임시로 콘텐츠를 더 추가합니다. -->
-            <div style="height: 500px; background-color: #f9f9f9; padding: var(--spacing-lg); margin-top: var(--spacing-lg); border: 1px dashed #ccc;">
-                <p>이 영역이 추가되어 스크롤이 발생할 수 있도록 충분한 높이를 가집니다.</p>
-                <p>실제 콘텐츠가 충분히 많아지면 이 임시 영역은 제거하시면 됩니다.</p>
-                <p>반려견의 건강을 관리하는 데 있어 규칙적인 몸무게 측정은 매우 중요해요. 갑작스러운 체중 변화는 질병의 신호일 수 있기 때문이죠. 🩺</p>
-                <p>반려견의 나이, 품종, 활동량에 따른 적정 체중을 알고 있다면, 우리 아이의 건강을 지키는 데 더 큰 도움이 될 거예요!</p>
-                <p>더불어 균형 잡힌 식단과 충분한 운동도 잊지 마세요! 🐾</p>
-                <ul>
-                    <li>사료는 일일 권장량을 지켜주세요.</li>
-                    <li>간식은 전체 식단량의 10%를 넘지 않도록 해요.</li>
-                    <li>매일 꾸준히 산책하는 시간을 가져주세요.</li>
-                    <li>정기적인 건강 검진으로 이상 여부를 확인합니다.</li>
-                    <li>행복한 펫케어 생활을 응원합니다! 😊</li>
-                </ul>
-                <p>스크롤 테스트를 위한 추가 문단...</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p>
-                <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum.</p>
             </div>
         </div>
     </div>
-    
-    <!-- Chart.js 관련 스크립트: main-layout.html의 <th:block layout:fragment="script"></th:block> 안에 들어가도록 -->
-    <th:block layout:fragment="script">
-        <script th:inline="javascript">
-            // 백엔드에서 받은 실제 데이터 예시 (Spring Controller에서 `dogWeights`를 Model에 추가)
-            const rawWeightData = /*[[${dogWeights}]]*/ [
-                { date: '2025-01-01', weight: 5.2 },
-                { date: '2025-02-15', weight: 5.5 },
-                { date: '2025-03-20', weight: 5.3 },
-                { date: '2025-04-10', weight: 5.7 },
-                { date: '2025-05-05', weight: 5.9 },
-                { date: '2025-06-20', weight: 6.1 },
-                { date: '2025-07-25', weight: 6.0 },
-                { date: '2025-08-10', weight: 6.2 },
-                { date: '2025-09-01', weight: 6.3 }
-            ];
+</div>
 
-            document.addEventListener('DOMContentLoaded', function() {
-                const ctx = document.getElementById('weightChart').getContext('2d');
-                const labels = rawWeightData.map(entry => entry.date);
-                const data = rawWeightData.map(entry => entry.weight);
+<th:block layout:fragment="script">
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const dogSelect = document.getElementById('dogSelect');
+            const ctx = document.getElementById('weightChart').getContext('2d');
 
-                const weightChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
+            let weightChart;
+
+            // ✅ 강아지 목록 불러오기
+            try {
+                const response = await axios.get('/api/getDogsByUserId');
+                const dogs = response.data.resultData; 
+                dogs.forEach(dog => {
+                    const option = document.createElement('option');
+                    option.value = dog.id;
+                    option.textContent = dog.name;
+                    dogSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('강아지 목록 조회 실패:', error);
+            }
+
+            // ✅ 셀렉트 변경 시 차트 데이터 갱신
+            dogSelect.addEventListener('change', async () => {
+                const dogId = dogSelect.value;
+                if (!dogId) return;
+
+                try {
+                    const res = await axios.get(`/api/dogs/${dogId}/weight-history`);
+                    const data = res.data.resultData;
+
+                    const labels = data.map(d => d.date);
+                    const weights = data.map(d => d.weight);
+
+                    if (weightChart) weightChart.destroy();
+
+                    weightChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
                         labels: labels,
                         datasets: [{
                             label: '몸무게 (kg)',
-                            data: data,
-                            borderColor: '#4CAF50',
-                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            data: weights,
+                            borderWidth: 2,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             tension: 0.3,
                             fill: true,
-                            pointBackgroundColor: '#4CAF50',
-                            pointBorderColor: '#fff',
-                            pointRadius: 5,
-                            pointHoverRadius: 7
                         }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: true, position: 'top', labels: { color: '#333' } },
-                            tooltip: {
-                                backgroundColor: 'rgba(0,0,0,0.7)',
-                                titleColor: '#fff',
-                                bodyColor: '#fff',
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) { label += ': '; }
-                                        if (context.parsed.y !== null) { label += context.parsed.y + ' kg'; }
-                                        return label;
-                                    }
-                                }
-                            }
                         },
+                        options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
                         scales: {
-                            x: { title: { display: true, text: '날짜', color: '#555' }, ticks: { color: '#555' }, grid: { color: '#eee' } },
-                            y: { title: { display: true, text: '몸무게 (kg)', color: '#555' }, beginAtZero: false, ticks: { color: '#555' }, grid: { color: '#eee' } }
+                            y: { beginAtZero: true },
+                            x: { ticks: { color: '#555' } }
                         }
-                    }
-                });
+                        }
+                    });
+                } catch (err) {
+                    console.error('몸무게 데이터 조회 실패:', err);
+                }
             });
-        </script>
-    </th:block>
+        });
+    </script>
+</th:block>
 </body>
 </html>

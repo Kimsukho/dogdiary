@@ -4,16 +4,11 @@
       layout:decorate="~{layout/main-layout}">
 <body>
 <div layout:fragment="content">
-    <div class="diary-page">
-        <div class="dog-page-header">
-            <h3>내 반려견 목록</h3>
-            <button class="dog-add-button" onclick="location.href='/dogs/add'">
-                <i class="fas fa-plus"></i> 반려견 등록
-            </button>
-        </div>
+    <div class="dog-page">
         <div class="dog-cards" id="dogCards">
             <div id="emptyDog" class="empty-card">등록된 반려견이 없습니다.</div>
         </div>
+        <button class="dog-add-button" id="openModalBtn">반려견 등록</button>
     </div>
 </div>
 
