@@ -26,5 +26,20 @@ public class RestServiceImpl implements RestService {
 	public List<HashMap> getAllDiaries(HashMap map) {
 		return restDao.getAllDiaries(map);
 	}
+
+	@Override
+	public int saveDogDiaryByDogId(HashMap map) {
+		return restDao.saveDogDiaryByDogId(map);
+	}
+
+	@Override
+	public int updateDogDiaryByDogId(HashMap map) {
+		return restDao.updateDogDiaryByDogId(map);
+	}
+
+	@Override
+	public int deleteDogDiaryById(HashMap map) {
+		return restDao.deleteDogDiaryById(map);
+	}
 	
 }

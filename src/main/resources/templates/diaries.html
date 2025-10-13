@@ -37,19 +37,33 @@
 
     <div id="diaryModal" class="modal">
         <div class="modal-content">
-            <h3>일지 작성</h3>
-            <input type="text" id="diaryName" placeholder="제목" />
-            <textarea id="diaryContent" placeholder="내용"></textarea>
-            <select id="diaryMood">
-                <option value="">기분 선택</option>
+            <h3 id="modalTitle">일지 작성</h3>
+            <input type="hidden" id="diaryId" name="diaryId" />
+            <select id="diaryDogSelect" required="required">
+                <option value="" selected hidden>반려견 선택</option>
+            </select>
+            <select id="diaryMood" required="required">
+                <option value="" selected hidden>기분 선택</option>
                 <option value="HAPPY">행복</option>
                 <option value="SAD">슬픔</option>
                 <option value="ANGRY">화남</option>
                 <option value="EXCITED">신남</option>
             </select>
+            <textarea id="diaryContent" placeholder="내용"></textarea>
             <div class="modal-buttons">
-                <button id="saveDiaryBtn">저장</button>
-                <button id="closeModalBtn">닫기</button>
+                <button class="button save-button" id="saveDiaryBtn">저장</button>
+                <button class="button close-button" id="closeModalBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <h3>삭제 확인</h3>
+            <p>정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</p>
+            <div class="modal-buttons">
+            <button class="button confirm-button" id="confirmDeleteBtn">삭제</button>
+            <button class="button cancel-button" id="cancelDeleteBtn">취소</button>
             </div>
         </div>
     </div>
@@ -79,10 +93,16 @@
                 const closeModalBtn = document.getElementById('closeModalBtn');
                 const saveDiaryBtn = document.getElementById('saveDiaryBtn');
 
-                const diaryName = document.getElementById('diaryName');
+                const modalTitle = document.getElementById('modalTitle');
+                const diaryId = document.getElementById('diaryId');
+                const diarySelect = document.getElementById('diaryDogSelect');
                 const diaryContent = document.getElementById('diaryContent');
                 const diaryMood = document.getElementById('diaryMood');
-                const modalTitle = document.getElementById('modalTitle');
+
+                const deleteModal = document.getElementById("deleteConfirmModal");
+                const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+                const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+
 
                 let selectedDate = new Date();
                 let diaries = [];
@@ -91,21 +111,88 @@
                 const moodClassMap = { 'HAPPY':'mood-Happy','SAD':'mood-Sad','ANGRY':'mood-Angry','EXCITED':'mood-Excited' };
 
                 // 모달 열기/닫기
-                openModalBtn.onclick = () => { modal.style.display='flex'; editingId=null; modalTitle.textContent='일지 작성'; diaryName.value=''; diaryContent.value=''; diaryMood.value=''; };
-                closeModalBtn.onclick = () => { modal.style.display='none'; };
+                openModalBtn.onclick = () => {
+                    modal.style.display='flex'; 
+                    editingId=null; 
+                    modalTitle.textContent='일지 작성';
+                    saveDiaryBtn.textContent='저장';
+                    diaryId.value=''; 
+                    diarySelect.value=''; 
+                    diaryMood.value=''; 
+                    diaryContent.value=''; 
+                };
+
+                closeModalBtn.onclick = () => { 
+                    modal.style.display='none';
+                    diaryId.value=''; 
+                    diarySelect.value=''; 
+                    diaryMood.value=''; 
+                    diaryContent.value=''; 
+                };
 
                 // 저장 버튼
                 saveDiaryBtn.onclick = async () => {
-                    const data = { name: diaryName.value, content: diaryContent.value, mood: diaryMood.value, date: selectedDate };
-                    if(editingId) data.id = editingId;
-                    await axios.post('/api/diaries', data);
-                    modal.style.display='none';
-                    await loadDiaries();
-                    renderCalendar(selectedDate);
-                    renderDiaryList();
-                    renderSummary(selectedDate);
+                    const data = { 
+                        id: diaryId.value, 
+                        dog_id: diarySelect.value, 
+                        mood: diaryMood.value,
+                        content: diaryContent.value
+                    };
+                    
+                    const response = await axios.post(saveDiaryBtn.textContent == "저장"? "/api/saveDogDiaryByDogId" : "/api/updateDogDiaryByDogId", data);
+                    if (response.data.returnCode === "SUCCESS") {
+                        modal.style.display='none';
+                        await loadDiaries();
+                        renderCalendar(selectedDate);
+                        renderDiaryList();
+                        renderSummary(selectedDate);
+                    }
                 };
 
+                // 삭제 확인
+                confirmDeleteBtn.onclick = async () => {
+                    try {
+                        const response = await axios.post("/api/deleteDogDiaryById", { id: diaryId.value });
+                        if (response.data.returnCode === "SUCCESS") {
+                            await loadDiaries();
+                            renderDiaryList();
+                            renderCalendar(selectedDate);
+                            renderSummary(selectedDate);
+                        } else {
+                            alert("삭제 실패: " + response.data.errorMessage);
+                        }
+                    } catch (e) { console.error(e); }
+                    modal.style.display = "none";
+                    deleteModal.style.display = "none";
+                };
+
+                // 취소 클릭
+                cancelDeleteBtn.onclick = () => { 
+                    modal.style.display = "none";
+                    deleteModal.style.display = "none";
+                };
+
+                async function loadDogs() {
+                    try {
+                    const response = await axios.get("/api/getDogsByUserId");
+                    if (response.data.returnCode === "SUCCESS") {
+                        const dogs = response.data.resultData;
+
+                        diarySelect.innerHTML = '<option selected hidden value="">반려견 선택</option>';
+
+                        dogs.forEach(dog => {
+                            const option = document.createElement("option");
+                            option.value = dog.id;
+                            option.textContent = dog.name;
+                            diarySelect.appendChild(option);
+                        });
+                    } else {
+                        console.warn("반려견 목록 불러오기 실패:", response.data.message);
+                    }
+                    } catch (error) {
+                        console.error("반려견 목록 조회 중 오류 발생:", error);
+                    }
+                }
 
                 async function loadDiaries() {
                     try { 
@@ -159,20 +246,18 @@
                             
                             // 수정 클릭
                             card.querySelector('.edit-btn').onclick = () => {
-                                editingId=d.id;
                                 modal.style.display='flex';
                                 modalTitle.textContent='일지 수정';
-                                diaryName.value=d.name;
-                                diaryContent.value=d.content;
-                                diaryMood.value=d.mood;
+                                saveDiaryBtn.textContent='수정';
+                                diaryId.value = d.id;
+                                diarySelect.value=d.dog_id; 
+                                diaryMood.value=d.mood; 
+                                diaryContent.value=d.content; 
                             };
                             // 삭제 클릭
                             card.querySelector('.delete-btn').onclick = async () => {
-                                await axios.delete('/api/diaries/'+d.id);
-                                await loadDiaries();
-                                renderDiaryList();
-                                renderSummary(selectedDate);
-                                renderCalendar(selectedDate);
+                                deleteModal.style.display='flex';
+                                diaryId.value = d.id;
                             };
                         });
                     }
@@ -202,6 +287,7 @@
                     renderDiaryList();
                     renderSummary(selectedDate);
                 };
+
                 document.getElementById('nextMonthBtn').onclick=()=>{ 
                     selectedDate.setMonth(selectedDate.getMonth() + 1);
                     renderCalendar(selectedDate);
@@ -210,6 +296,7 @@
                 };
 
                 await loadDiaries();
+                await loadDogs();
                 renderCalendar(selectedDate);
                 renderDiaryList();
                 renderSummary(selectedDate);

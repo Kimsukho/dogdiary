@@ -24,7 +24,7 @@
                     <i class="icon fas fa-book-open"></i>
                 </div>
                 <div class="card-body">
-                    <div class="value">25개</div>
+                    <div class="value">0개</div>
                     <p class="description">오늘 작성된 일지</p>
                 </div>
             </div>
@@ -32,18 +32,20 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="title">이번 달 산책 기록</h4>
+                    <i class="icon fas fa-users"></i>
                 </div>
                 <div class="card-body">
-                    <span th:text="${walkCount}">0</span>
+                    <div class="value" th:text="${walkCount}">0번</div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
                     <h4 class="title">이번 달 병원 기록</h4>
+                    <i class="icon fas fa-hospital"></i>
                 </div>
                 <div class="card-body">
-                    <span th:text="${hospitalCount}">0</span>
+                    <div class="value" th:text="${hospitalCount}">0</div>
                 </div>
             </div>
         </div>

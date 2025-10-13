@@ -34,7 +34,7 @@
 
             if (!sidebar) {
                 console.error("Sidebar element with id 'sidebar' not found. Please ensure sidebar fragment has id='sidebar'.");
-                return; // 사이드바가 없으면 더 이상 진행하지 않음
+                return;
             }
 
             const sidebarTitle = sidebar.querySelector('.sidebar-title');
@@ -76,7 +76,7 @@
                         if (sidebarTitle) sidebarTitle.style.display = 'none';
                         if (sidebarCollapsedTitle) sidebarCollapsedTitle.style.display = 'block';
                     }
-                } else { // PC 화면 이상
+                } else { 
                     // PC 화면에서는 기본적으로 펼쳐진 상태 (혹은 이전 상태 유지)
                     sidebar.classList.remove('collapsed');
                     if (sidebarTitle) sidebarTitle.style.display = 'block';

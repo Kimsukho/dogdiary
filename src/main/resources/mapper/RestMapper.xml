@@ -20,10 +20,33 @@
 	</select>
 	
 	<select id="getAllDiaries" resultType="java.util.HashMap">
-		select d.id, p.id, p.name, d.content, d.mood, d.created_at
+		select d.id, p.id dog_id, p.name, d.content, d.mood, d.created_at
 		from dog p, diary d
 		where p.id = d.dog_id;
 	</select>
+	
+	<insert id="saveDogDiaryByDogId" parameterType="java.util.HashMap">
+		INSERT INTO diary (dog_id, mood, content)
+    	VALUES (#{dog_id}, #{mood}, #{content})
+	</insert>
+	
+	<update id="updateDogDiaryByDogId" parameterType="java.util.HashMap">
+		UPDATE diary 
+		<set>
+			dog_id=#{dog_id}, 
+			mood=#{mood},
+			<if test="content != null and content != ''">
+	            content = #{content},
+	        </if>
+			last_updated=CURRENT_TIMESTAMP
+		</set>
+		WHERE id=#{id}
+	</update>
+	
+    <delete id="deleteDogDiaryById" parameterType="java.util.HashMap">
+        DELETE FROM diary
+        WHERE id = #{id}
+    </delete>
 	
 </mapper>
 

@@ -2,21 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main-layout}">
-<body>
+<body class="profile-body">
     <div layout:fragment="content">
-        <section>
-            <h2>내 정보</h2>
-            <form method="post" th:action="@{/profile/update}">
-                <label>이름</label>
-                <input type="text" th:value="${user.name}" name="name">
-                <br>
-                <label>이메일</label>
-                <input type="email" th:value="${user.email}" name="email">
-                <br>
-                <label>비밀번호 변경</label>
-                <input type="password" name="password">
-                <br>
-                <button type="submit">수정</button>
+        <div class="profile-card">
+            <h3>내 정보</h3>
+        <form method="post" th:action="@{/profile/update}">
+                <div class="profile-item">
+                    <label>이름</label>
+                    <input type="text" th:value="${user.name}" name="name">
+                </div>
+
+                <div class="profile-item">
+                    <label>이메일</label>
+                    <input type="email" placeholder="example@email.com" th:value="${email}">
+                </div>
+
+                <div class="profile-item">
+                    <label>비밀번호 변경</label>
+                    <input type="password" name="password">
+                </div>
+                <button class="profile-save-btn">수정</button>
             </form>
         </section>
     </div>
