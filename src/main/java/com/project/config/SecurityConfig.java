@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String[] PUBLIC_URI = { "/realtime/**", "/api/user/**",
 			"/api/public/**", "/", 
 			"/favicon.ico", "/favicon.png",
-			"/login", "/dashboard", "/profile", "/dogs", "/diaries", "/settings",
+			"/login", "/dashboard", "/profile", "/dogs", "/diaries", "/schedule", "/settings",
 			"/css/**", "/js/**", "/api/**",
 			"/manifest.json", "/images/**", "/fonts/**", "/icons/**", "/static/**",
 			"/custom/**","/libs/**", "/style/**", "/lib/**" };

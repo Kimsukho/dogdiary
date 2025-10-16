@@ -73,6 +73,12 @@ public class DefaultController {
 		model.addAttribute("title", "일지 관리");
 	    return "diaries";
 	}
+	
+	@GetMapping("/schedule")
+	public String schedule(Model model) {
+		model.addAttribute("title", "일정 관리");
+	    return "schedule";
+	}
 
 	@GetMapping("/profile")
 	public String profile(Model model) {

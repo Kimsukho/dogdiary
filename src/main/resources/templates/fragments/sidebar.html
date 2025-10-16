@@ -31,6 +31,12 @@
                 <span>일지 관리</span>
             </a>
         </li>
+        <li th:classappend="${#request.requestURI == '/schedule' ? 'active' : ''}">
+            <a th:href="@{/schedule}">
+                <i class="fas fa-calendar"></i>
+                <span>스케줄 관리</span>
+            </a>
+        </li>
         <!-- 통계 메뉴 (주석 처리된 부분을 되살릴 경우) -->
         <!-- <li th:classappend="${#request.requestURI == '/statistics' ? 'active' : ''}">
             <a th:href="@{/statistics}">
