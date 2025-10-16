@@ -624,8 +624,8 @@ main { /* main-layout.html의 <main> 태그 */
 
 .diary-page {
     padding: 30px;
-    background-color: #f7f9f9;
-    min-height: 79vh;
+    /* background-color: #f7f9f9; */
+    min-height: 78vh;
 }
 
 .diary-page-header {
@@ -739,7 +739,7 @@ main { /* main-layout.html의 <main> 태그 */
 
 .modal-content input,
 .modal-content select {
-  width: 100%;
+  /* width: 100%; */
   padding: 10px 14px;
   border: 1px solid #dcdcdc;
   border-radius: 10px;
@@ -830,6 +830,189 @@ main { /* main-layout.html의 <main> 태그 */
 
 .confirm-button { background-color: #e74c3c; color: #fff; }
 .cancel-button { background-color: #bdc3c7; color: #2c3e50; }
+
+.openModalBtn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 13px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    position: fixed;
+    bottom: 75px;
+    right: 25px;
+    border-radius: 50%;
+    font-size: 1.2em;
+}
+
+.openModalBtn:hover {
+    background-color: #57B894;
+    transform: translateY(-2px);
+}
+
+.dropdown-menu {
+    display: none;
+    position: fixed;
+    bottom: 130px;
+    right: 25px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    z-index: 1000;
+    min-width: 100px;
+}
+
+.dropdown-menu.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.dropdown-item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95em;
+    color: #333;
+    transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* 플로팅 메뉴 전체 영역 */
+.floating-menu {
+    position: fixed;
+    bottom: 70px;
+    right: 30px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.main-fab {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: #6C63FF;
+    color: white;
+    border: none;
+    font-size: 38px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.main-fab:hover {
+  transform: rotate(45deg);
+}
+
+.fab-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none; /* 숨겨질 때 클릭 안 되도록 */
+}
+
+.fab-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.hidden { 
+    /* display: none;  */
+}
+
+.fab-item {
+    background-color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 16px;
+    font-size: 15px;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.fab-item:hover {
+    background-color: #f2f2f2;
+    transform: translateX(-3px);
+}
+
+.fab-item i {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.fab-item span {
+    margin-right: 8px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.fab-menu.show {
+    pointer-events: all;
+}
+
+.fab-menu.show .fab-item {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.fab-menu.show .fab-item:nth-child(1) { transition-delay: 0.05s; }
+.fab-menu.show .fab-item:nth-child(2) { transition-delay: 0.1s; }
+.fab-menu.show .fab-item:nth-child(3) { transition-delay: 0.15s; }
+
+.diaryModal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.diaryModal.hidden {
+  display: none;
+}
+
+.diaryModal-content {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+  min-width: 280px;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.walkModal-item,
+.hospitalModal-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+}
 
 /* --- 10. 토스트 알림 --- */
 #toast {
@@ -1138,7 +1321,7 @@ footer {
 }
 
 .dog-card {
-    position: relative; /* 버튼 위치를 위한 기준 */
+    position: relative;
     display: flex;
     background-color: #fff;
     border-radius: 12px;
@@ -1230,24 +1413,24 @@ footer {
 /* 새 반려견 등록 버튼 */
 .dog-add-button {
     position: fixed;
-    bottom: 75px;
-    right: 25px;
-    background: var(--primary-color);
+    bottom: 70px;
+    right: 30px;
+    background: #6C63FF;
     color: #fff;
     border: none;
-    border-radius: 5%; 
-    width: 100px;
-    height: 50px;
-    font-size: 28px;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-    font-size: 0.9em;
+    font-size: 38px;
+    font-weight: 400;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+    line-height: 55px;
 }
 
 .dog-add-button:hover {
-    background-color: #57B894;
-    transform: translateY(-2px);
+    transform: rotate(45deg);
 }
 
 .dog-add-button i {

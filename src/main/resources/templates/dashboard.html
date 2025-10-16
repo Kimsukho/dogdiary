@@ -20,11 +20,11 @@
 
             <div class="card" onclick="showToast('새로운 일지가 25개 있어요!');">
                 <div class="card-header">
-                    <h4 class="title">새로운 일지</h4>
+                    <h4 class="title" th:text="${walkCount}"">이번 달 일지</h4>
                     <i class="icon fas fa-book-open"></i>
                 </div>
                 <div class="card-body">
-                    <div class="value">0개</div>
+                    <div class="value" th:text="${walkCount}">0개</div>
                     <p class="description">오늘 작성된 일지</p>
                 </div>
             </div>
@@ -45,12 +45,11 @@
                     <i class="icon fas fa-hospital"></i>
                 </div>
                 <div class="card-body">
-                    <div class="value" th:text="${hospitalCount}">0</div>
+                    <div class="value" th:text="${hospitalCount}">0건</div>
                 </div>
             </div>
         </div>
 
-        <!-- 차트 + 최근활동 -->
         <div class="chart-activity-grid">
             <!-- 차트 영역 -->
             <div class="chart-section">
@@ -67,7 +66,6 @@
                 <p>우리 사랑스러운 댕댕이의 몸무게 변화 추이를 통해 건강 관리에 힘써주세요! ✨</p>
             </div>
 
-            <!-- 최근 활동 -->
             <div class="activity-section">
                 <h4 class="title">최근 활동</h4>
                 <ul>
@@ -102,7 +100,6 @@
                 console.error('강아지 목록 조회 실패:', error);
             }
 
-            // ✅ 셀렉트 변경 시 차트 데이터 갱신
             dogSelect.addEventListener('change', async () => {
                 const dogId = dogSelect.value;
                 if (!dogId) return;

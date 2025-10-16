@@ -50,8 +50,8 @@ public class DefaultController {
 	    model.addAttribute("title", "대시보드");
 	    model.addAttribute("todayDiaries", 3);
 	    model.addAttribute("dogCount", 2);
-	    model.addAttribute("walkCount", 5);
-	    model.addAttribute("hospitalCount", 1);
+	    model.addAttribute("walkCount", "5번");
+	    model.addAttribute("hospitalCount", "1건");
 	    model.addAttribute("recentDiaries", List.of(
 	        Map.of("title","2025-08-28 산책 2시간"),
 	        Map.of("title","2025-08-27 목욕 기록")

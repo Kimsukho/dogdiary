@@ -8,7 +8,7 @@
         <div class="dog-cards" id="dogCards">
             <div id="emptyDog" class="empty-card">등록된 반려견이 없습니다.</div>
         </div>
-        <button class="dog-add-button" id="openModalBtn">반려견 등록</button>
+        <button class="dog-add-button" id="openModalBtn">＋</button>
     </div>
 
     <!-- 등록/수정 모달 -->
@@ -186,7 +186,7 @@
                                 card.className = 'dog-card';
                                 card.innerHTML = `
                                     <div class="dog-card-left">
-                                        <img src="${dog.profile_image || '/images/default-dog.png'}" alt="${dog.name}" class="dog-profile-img">
+                                        <img src="${dog.profile_image || '/images/coco.jpg'}" alt="${dog.name}" class="dog-profile-img">
                                     </div>
                                     <div class="dog-card-right">
                                         <h4>${dog.name}</h4>
