@@ -8,7 +8,10 @@
         <div class="dog-cards" id="dogCards">
             <div id="emptyDog" class="empty-card">등록된 반려견이 없습니다.</div>
         </div>
-        <button class="dog-add-button" id="openModalBtn">＋</button>
+
+        <div class="floating-menu">
+            <button id="openModalBtn" class="fab main-fab">＋</button>
+        </div>
     </div>
 
     <!-- 등록/수정 모달 -->
@@ -169,6 +172,12 @@
                 dogModal.style.display = "none";
                 deleteModal.style.display = "none";
             };
+
+            window.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    dogModal.style.display='none';
+                }
+            });
 
             async function loadDogData() {
                 try {

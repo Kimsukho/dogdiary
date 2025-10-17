@@ -7,70 +7,32 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="diary-page">
-        <div class="calendar-container">
-            <div class="calendar-header">
-                <button id="prevMonthBtn">◀</button>
-                <h3 id="currentMonth"></h3>
-                <button id="nextMonthBtn">▶</button>
+    <div class="schedule-page">
+        <div class="schedule-calendar-container">
+            <div class="schedule-calendar-header">
+                <div class="schedule-calendar-selectors">
+                    <select id="yearSelect" class="styled-select"></select>
+                    <select id="monthSelect" class="styled-select"></select>
+                </div>
+                <button class="today-btn" id="todayButton">오늘로 이동</button>
             </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
+
+            <div class="schedule-calendar-grid" id="calendarGrid"></div>
         </div>
 
-        <div class="diary-content">
-            <div class="summary-container">
-                <div class="summary-item">
-                    <div class="summary-value" id="currentMonthTotalCount">0</div>
-                    <div class="summary-label" id="currentMonthLabel">0월 총 일지</div>
-                </div>
-                <div class="summary-item"><div class="summary-value" id="happyCount">0</div><div class="summary-label">😊 행복</div></div>
-                <div class="summary-item"><div class="summary-value" id="sadCount">0</div><div class="summary-label">😢 슬픔</div></div>
-                <div class="summary-item"><div class="summary-value" id="angryCount">0</div><div class="summary-label">😡 화남</div></div>
-                <div class="summary-item"><div class="summary-value" id="excitedCount">0</div><div class="summary-label">🤩 신남</div></div>
-            </div>
-
-            <div class="diary-cards" id="diaryCards">
-                <div id="emptyCard" class="empty-card">등록된 일지가 없습니다.</div>
+        <div class="schedule-detail-panel" id="scheduleDetail">
+            <h3>📌 일정 상세</h3>
+            <div class="detail-content">
+                <p class="placeholder">일정을 클릭하면 내용이 여기에 표시됩니다.</p>
             </div>
         </div>
     </div>
 
     <div class="floating-menu">
         <button id="mainFab" class="fab main-fab">＋</button>
-
         <div class="fab-menu">
-            <button class="fab-item" data-target="diaryModal">
-                <i class="fas fa-book"></i><span>일지 작성</span>
-            </button>
-            <button class="fab-item" data-target="walkModal">
-                <i class="fas fa-walking"></i><span>산책</span>
-            </button>
-            <button class="fab-item" data-target="hospitalModal">
-                <i class="fas fa-clinic-medical"></i><span>병원 기록</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- 각각의 모달 -->    
-    <div id="diaryModal" class="diaryModal hidden">
-        <div class="modal-content">
-            <h3 id="modalTitle">일지 작성</h3>
-            <input type="hidden" id="diaryId" name="diaryId" />
-            <select id="diaryDogSelect" required="required">
-                <option value="" selected hidden>반려견 선택</option>
-            </select>
-            <select id="diaryMood" required="required">
-                <option value="" selected hidden>기분 선택</option>
-                <option value="HAPPY">행복</option>
-                <option value="SAD">슬픔</option>
-                <option value="ANGRY">화남</option>
-                <option value="EXCITED">신남</option>
-            </select>
-            <textarea id="diaryContent" placeholder="내용"></textarea>
-            <div class="modal-buttons">
-                <button class="button save-button" id="saveDiaryBtn">저장</button>
-                <button class="button close-button" id="closeModalBtn">닫기</button>
-            </div>
+            <button class="fab-item" data-target="walkModal"><i class="fas fa-walking"></i><span>산책</span></button>
+            <button class="fab-item" data-target="hospitalModal"><i class="fas fa-clinic-medical"></i><span>병원 기록</span></button>
         </div>
     </div>
 
@@ -79,28 +41,18 @@
         <div class="modal-content">
             <h3>산책 기록</h3>
             <input type="hidden" id="walkId">
-
             <select id="walkDogSelect" required>
                 <option value="" selected hidden>반려견 선택</option>
             </select>
-
-            <div class="walkModal-item">
-                <label>산책 거리 (km)</label>
-                <input type="number" id="walkDistance" placeholder="예: 2.5" step="0.1">
-            </div>
-
             <div class="walkModal-item">
                 <label>산책 시간 (분)</label>
                 <input type="number" id="walkDuration" placeholder="예: 30">
             </div>
-
             <div class="walkModal-item">
                 <label>날씨</label>
                 <input type="text" id="walkWeather" placeholder="예: 맑음 / 흐림">
             </div>
-
             <textarea id="walkMemo" placeholder="산책 중 특이사항을 기록하세요."></textarea>
-
             <div class="modal-buttons">
                 <button class="button save-button" id="saveWalkBtn">저장</button>
                 <button class="button close-button" id="closeWalkModalBtn">닫기</button>
@@ -113,310 +65,340 @@
         <div class="modal-content">
             <h3>병원 기록</h3>
             <input type="hidden" id="hospitalId">
-
             <select id="hospitalDogSelect" required>
                 <option value="" selected hidden>반려견 선택</option>
             </select>
-
             <div class="hospitalModal-item">
                 <label>병원 이름</label>
                 <input type="text" id="hospitalName" placeholder="병원명 입력">
             </div>
-
             <div class="hospitalModal-item">
                 <label>진료 항목</label>
                 <input type="text" id="hospitalDiagnosis" placeholder="예: 정기검진, 예방접종 등">
             </div>
-
             <div class="hospitalModal-item">
                 <label>비용 (원)</label>
                 <input type="number" id="hospitalCost" placeholder="예: 45000">
             </div>
-
             <textarea id="hospitalMemo" placeholder="진료 내용, 처방 등을 기록하세요."></textarea>
-
             <div class="modal-buttons">
                 <button class="button save-button" id="saveHospitalBtn">저장</button>
                 <button class="button close-button" id="closeHospitalModalBtn">닫기</button>
             </div>
         </div>
     </div>
+
+    <!-- 🗑 삭제 확인 모달 -->
     <div id="deleteConfirmModal" class="modal">
         <div class="modal-content">
             <h3>삭제 확인</h3>
             <p>정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</p>
             <div class="modal-buttons">
-            <button class="button confirm-button" id="confirmDeleteBtn">삭제</button>
-            <button class="button cancel-button" id="cancelDeleteBtn">취소</button>
+                <button class="button confirm-button" id="confirmDeleteBtn">삭제</button>
+                <button class="button cancel-button" id="cancelDeleteBtn">취소</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- 📜 스크립트 -->
 <th:block layout:fragment="script">
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            async function init() {
-                const diaryCards = document.getElementById('diaryCards');
-                const emptyCard = document.getElementById('emptyCard');
-                const calendarGrid = document.getElementById('calendarGrid');
-                const currentMonthEl = document.getElementById('currentMonth');
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const calendarGrid = document.getElementById("calendarGrid");
+        const yearSelect = document.getElementById("yearSelect");
+        const monthSelect = document.getElementById("monthSelect");
+        const todayButton = document.getElementById("todayButton");
+        const detailPanel = document.getElementById("scheduleDetail");
+        const detailContent = document.getElementById("scheduleDetail").querySelector(".detail-content");
 
-                const currentMonthTotalCountEl = document.getElementById('currentMonthTotalCount');
-                const cuurentMonthLabel = document.getElementById('currentMonthLabel');
-                
-                const happyCountEl = document.getElementById('happyCount');
-                const sadCountEl = document.getElementById('sadCount');
-                const angryCountEl = document.getElementById('angryCount');
-                const excitedCountEl = document.getElementById('excitedCount');
+        const mainFab = document.getElementById("mainFab");
+        const fabMenu = document.querySelector(".fab-menu");
 
-                const closeModalBtn = document.getElementById('closeModalBtn');
-                const saveDiaryBtn = document.getElementById('saveDiaryBtn');
+        const saveWalkBtn = document.getElementById("saveWalkBtn");
+        const saveHospitalBtn = document.getElementById("saveHospitalBtn");
+    
+        const today = new Date();
+        let currentYear = today.getFullYear();
+        let currentMonth = today.getMonth();
 
-                const modalTitle = document.getElementById('modalTitle');
-                const diaryId = document.getElementById('diaryId');
-                const diarySelect = document.getElementById('diaryDogSelect');
-                const diaryContent = document.getElementById('diaryContent');
-                const diaryMood = document.getElementById('diaryMood');
+        const schedules = [
+            { id:1, date:"2025-10-13", type:"walk", title:"산책 - 댕댕이", dogId:1, dogName:"코코", distance:2.5, duration:30, weather:"맑음", hospitalName:null, diagnosis:null, cost:null, desc:"30분 동안 산책" },
+            { id:2, date:"2025-10-13", type:"hospital", title:"병원 - 예방접종", dogId:1, dogName:"코코", distance:null, duration:null, weather:null, hospitalName:"동물병원A", diagnosis:"광견병 주사", cost:45000, desc:"광견병 주사 맞기" }
+        ];
+            
 
-                const deleteModal = document.getElementById("deleteConfirmModal");
-                const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-                const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");            
-                
-                // 플로팅 메뉴
-                const mainFab = document.getElementById("mainFab");
-                const fabMenu = document.querySelector(".fab-menu");
-
-                let selectedDate = new Date();
-                let diaries = [];
-                let editingId = null;
-
-                const moodClassMap = { 'HAPPY':'mood-Happy','SAD':'mood-Sad','ANGRY':'mood-Angry','EXCITED':'mood-Excited' };
-
-                // 모달 열기/닫기
-                // openModalBtn.onclick = () => {
-                //     modal.style.display='flex'; 
-                //     editingId=null; 
-                //     modalTitle.textContent='일지 작성';
-                //     saveDiaryBtn.textContent='저장';
-                //     diaryId.value=''; 
-                //     diarySelect.value=''; 
-                //     diaryMood.value=''; 
-                //     diaryContent.value=''; 
-                // };
-
-                // 닫기 버튼
-                closeModalBtn.onclick = () => { 
-                    modal.style.display='none';
-                    diaryId.value=''; 
-                    diarySelect.value=''; 
-                    diaryMood.value=''; 
-                    diaryContent.value=''; 
-                };
-
-                // 저장 버튼
-                saveDiaryBtn.onclick = async () => {
-                    const data = { 
-                        id: diaryId.value, 
-                        dog_id: diarySelect.value, 
-                        mood: diaryMood.value,
-                        content: diaryContent.value
-                    };
-                    
-                    const response = await axios.post(saveDiaryBtn.textContent == "저장"? "/api/saveDogDiaryByDogId" : "/api/updateDogDiaryByDogId", data);
-                    if (response.data.returnCode === "SUCCESS") {
-                        modal.style.display='none';
-                        await loadDiaries();
-                        renderCalendar(selectedDate);
-                        renderDiaryList();
-                        renderSummary(selectedDate);
-                    }
-                };
-
-                // 삭제 확인
-                confirmDeleteBtn.onclick = async () => {
-                    try {
-                        const response = await axios.post("/api/deleteDogDiaryById", { id: diaryId.value });
-                        if (response.data.returnCode === "SUCCESS") {
-                            await loadDiaries();
-                            renderDiaryList();
-                            renderCalendar(selectedDate);
-                            renderSummary(selectedDate);
-                        } else {
-                            alert("삭제 실패: " + response.data.errorMessage);
-                        }
-                    } catch (e) { console.error(e); }
-                    modal.style.display = "none";
-                    deleteModal.style.display = "none";
-                };
-
-                // 취소 클릭
-                cancelDeleteBtn.onclick = () => { 
-                    modal.style.display = "none";
-                    deleteModal.style.display = "none";
-                };
-
-                // 플로팅 버튼 토글
-                mainFab.addEventListener("click", () => {
-                    fabMenu.classList.toggle("show");
-                });
-
-                fabMenu.addEventListener("click", (e) => {
-                    if (e.target.closest(".fab-item")) {
-                    const targetModalId = e.target.closest(".fab-item").dataset.target;
-                    const targetModal = document.getElementById(targetModalId);
-                    if (targetModal) {
-                        targetModal.classList.remove("hidden");
-                        fabMenu.classList.remove("show");
-                    }
-                    }
-                });
-
-                async function loadDogs() {
-                    try {
-                    const response = await axios.get("/api/getDogsByUserId");
-                    if (response.data.returnCode === "SUCCESS") {
-                        const dogs = response.data.resultData;
-
-                        diarySelect.innerHTML = '<option selected hidden value="">반려견 선택</option>';
-
-                        dogs.forEach(dog => {
-                            const option = document.createElement("option");
-                            option.value = dog.id;
-                            option.textContent = dog.name;
-                            diarySelect.appendChild(option);
-                        });
-                    } else {
-                        console.warn("반려견 목록 불러오기 실패:", response.data.message);
-                    }
-                    } catch (error) {
-                        console.error("반려견 목록 조회 중 오류 발생:", error);
-                    }
-                }
-
-                async function loadDiaries() {
-                    try { 
-                        const res = await axios.get('/api/getAllDiaries'); 
-                        if(res.data.returnCode==='SUCCESS') diaries=res.data.resultData; 
-                    } 
-                    catch(e){ 
-                        console.error(e); 
-                    }
-                }
-
-                function renderSummary(referenceDate){
-                    const now = selectedDate;
-                    const monthDiaries = diaries.filter(d => {
-                        const dd = new Date(d.created_at);
-                        return dd.getFullYear() === now.getFullYear() && dd.getMonth() === now.getMonth();
-                    });
-                    currentMonthTotalCountEl.textContent = monthDiaries.length;
-                    cuurentMonthLabel.textContent = `${now.getMonth() + 1}월 총 일지`;
-
-                    happyCountEl.textContent = monthDiaries.filter(d => d.mood === 'HAPPY').length;
-                    sadCountEl.textContent = monthDiaries.filter(d => d.mood === 'SAD').length;
-                    angryCountEl.textContent = monthDiaries.filter(d=>d.mood==='ANGRY').length;
-                    excitedCountEl.textContent = monthDiaries.filter(d=>d.mood==='EXCITED').length;
-                }
-
-                function renderDiaryList() {
-                    const filtered = diaries.filter(d=>new Date(d.created_at).toDateString()===selectedDate.toDateString());
-                    diaryCards.innerHTML='';
-                    if(filtered.length===0){ 
-                        diaryCards.appendChild(emptyCard); 
-                        emptyCard.style.display='flex'; 
-                    } else {
-                        filtered.forEach(d=>{
-                            const moodClass=moodClassMap[d.mood]||'';
-                            const card=document.createElement('div');
-                            card.className='diary-card';
-                            card.innerHTML=`
-                                <div class="diary-card-header">${d.name}</div>
-                                <div class="diary-card-content">${d.content}</div>
-                                <div class="diary-footer">
-                                    <div class="diary-mood ${moodClass}">${d.mood||'-'}</div>
-                                    <div>${new Date(d.created_at).toLocaleDateString('ko-KR')}</div>
-                                </div>
-                                <div class="dog-card-actions">
-                                    <button class="edit-btn" data-id="${d.id}"><i class="fas fa-edit"></i></button>
-                                    <button class="delete-btn" data-id="${d.id}"><i class="fas fa-trash"></i></button>
-                                </div>
-                            `;
-                            diaryCards.appendChild(card);
-                            
-                            // 수정 클릭
-                            card.querySelector('.edit-btn').onclick = () => {
-                                modal.style.display='flex';
-                                modalTitle.textContent='일지 수정';
-                                saveDiaryBtn.textContent='수정';
-                                diaryId.value = d.id;
-                                diarySelect.value=d.dog_id; 
-                                diaryMood.value=d.mood; 
-                                diaryContent.value=d.content; 
-                            };
-                            // 삭제 클릭
-                            card.querySelector('.delete-btn').onclick = async () => {
-                                deleteModal.style.display='flex';
-                                diaryId.value = d.id;
-                            };
-                        });
-                    }
-                }
-
-                function renderCalendar(date){
-                    const year=date.getFullYear(); const month=date.getMonth();
-                    currentMonthEl.textContent=`${year}년 ${month+1}월`;
-                    const firstDay=new Date(year,month,1).getDay();
-                    const lastDate=new Date(year,month+1,0).getDate();
-                    calendarGrid.innerHTML='';
-                    for(let i=0;i<firstDay;i++) calendarGrid.appendChild(document.createElement('div'));
-                    for(let day=1;day<=lastDate;day++){
-                        const dayEl=document.createElement('div'); dayEl.className='calendar-day'; dayEl.textContent=day;
-                        const thisDate=new Date(year,month,day);
-                        const hasDiary=diaries.some(d=>{const dd=new Date(d.created_at); return dd.getFullYear()===year && dd.getMonth()===month && dd.getDate()===day;});
-                        if(hasDiary){ const dot=document.createElement('div'); dot.className='calendar-dot'; dayEl.appendChild(dot); }
-                        dayEl.onclick=()=>{ selectedDate=thisDate; renderCalendar(selectedDate); renderDiaryList(); };
-                        if(thisDate.toDateString()===selectedDate.toDateString()) dayEl.classList.add('selected');
-                        calendarGrid.appendChild(dayEl);
-                    }
-                }
-
-                window.addEventListener("keydown", (e) => {
-                    if (e.key === "Escape") {
-                    document.querySelectorAll(".modal").forEach(m => m.classList.add("hidden"));
-                    }
-                });
-
-                document.getElementById('prevMonthBtn').onclick=()=>{ 
-                    selectedDate.setMonth(selectedDate.getMonth() - 1);
-                    renderCalendar(selectedDate);
-                    renderDiaryList();
-                    renderSummary(selectedDate);
-                };
-
-                document.getElementById('nextMonthBtn').onclick=()=>{ 
-                    selectedDate.setMonth(selectedDate.getMonth() + 1);
-                    renderCalendar(selectedDate);
-                    renderDiaryList();
-                    renderSummary(selectedDate); 
-                };
-
-                document.querySelectorAll(".close-button").forEach(btn => {
-                    btn.addEventListener("click", () => {
-                    btn.closest(".diaryModal").classList.add("hidden");
-                    });
-                });
-
-                await loadDiaries();
-                await loadDogs();
-                renderCalendar(selectedDate);
-                renderDiaryList();
-                renderSummary(selectedDate);
-            }
-            init();
+        mainFab.addEventListener("click", () => {
+            fabMenu.classList.toggle("show");
         });
 
-    </script>
+        document.querySelectorAll(".fab-item").forEach(item=>{
+            item.addEventListener("click", ()=>{
+                const target = item.dataset.target;
+                openModal(target);
+                saveWalkBtn.textContent = "저장";
+                fabMenu.classList.remove("show");
+            });
+        });
+
+
+        document.querySelectorAll(".close-button").forEach(btn=>{
+            btn.addEventListener("click", ()=>{
+                const modal = btn.closest(".diaryModal"); 
+                modal.classList.add("hidden"); 
+                modal.style.display="none";
+            });
+        });
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                fabMenu.classList.remove("show");
+                document.querySelectorAll(".diaryModal").forEach(m => {
+                    m.classList.add("hidden");
+                    m.style.display = "none";
+                });
+            }
+        });
+
+        window.addEventListener("keydown",(e)=>{ if(e.key==="Escape"){ fabMenu.classList.remove("show"); document.querySelectorAll(".diaryModal").forEach(m=>{ m.classList.add("hidden"); m.style.display="none"; }); } });
+
+        todayButton.addEventListener("click", ()=>{ currentYear=today.getFullYear(); currentMonth=today.getMonth(); yearSelect.value=currentYear; monthSelect.value=currentMonth; renderCalendar(); });
+
+        function initSelectors(){
+            for(let y=today.getFullYear()-5; y<=today.getFullYear()+5; y++){
+                const opt=document.createElement("option"); 
+                opt.value=y; opt.textContent=`${y}년`; 
+                if(y===currentYear) opt.selected=true; 
+                yearSelect.appendChild(opt);
+            }
+            for(let m=0; m<12; m++){
+                const opt=document.createElement("option"); 
+                opt.value=m; opt.textContent=`${m+1}월`;
+                if(m===currentMonth) opt.selected=true; 
+                monthSelect.appendChild(opt);
+            }
+            yearSelect.addEventListener("change", () => { 
+                currentYear=parseInt(yearSelect.value); 
+                renderCalendar(); 
+            });
+            monthSelect.addEventListener("change", () => { 
+                currentMonth=parseInt(monthSelect.value); 
+                renderCalendar(); 
+            });
+        }
+
+        function renderCalendar(){
+            calendarGrid.innerHTML = "";
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth+1,0);
+            const startDay = firstDay.getDay();
+
+            for(let i=0;i<startDay;i++){
+                const emptyDiv=document.createElement("div"); 
+                emptyDiv.classList.add("schedule-calendar-day","empty");
+                calendarGrid.appendChild(emptyDiv);
+            }
+
+            for(let day=1; day<=lastDay.getDate(); day++){
+                const div=document.createElement("div"); 
+                div.classList.add("schedule-calendar-day");
+
+                const num=document.createElement("div"); 
+                num.classList.add("schedule-calendar-day-number"); 
+                num.textContent=day; 
+                div.appendChild(num);
+
+                const dateStr=`${currentYear}-${String(currentMonth+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+                const daySchedules = schedules.filter(s=>s.date===dateStr);
+                daySchedules.forEach(s=>{
+                    const item=document.createElement("div"); 
+                    item.classList.add("schedule-item",s.type); 
+                    item.textContent=s.title;
+                    item.addEventListener("click", () =>
+                        showDetail(s)
+                    ); 
+                    div.appendChild(item);
+                });
+                if(currentYear===today.getFullYear() && currentMonth===today.getMonth() && day===today.getDate()){
+                    div.classList.add("today");
+                }
+                calendarGrid.appendChild(div);
+            }
+        }
+
+        async function loadDogs(selectElement) {
+            try {
+                const response = await axios.get("/api/getDogsByUserId");
+                if (response.data.returnCode === "SUCCESS") {
+                    const dogs = response.data.resultData;
+                    selectElement.innerHTML = '<option selected hidden value="">반려견 선택</option>';
+                    dogs.forEach(dog => {
+                        const option = document.createElement("option");
+                        option.value = dog.id;
+                        option.textContent = dog.name;
+                        selectElement.appendChild(option);
+                    });
+                } else {
+                    console.warn("반려견 목록 불러오기 실패:", response.data.message);
+                }
+            } catch (error) {
+                console.error("반려견 목록 조회 중 오류 발생:", error);
+            }
+        }
+
+        function openModal(modalId, schedule = null) {
+            document.querySelectorAll(".diaryModal").forEach(m => {
+                m.classList.add("hidden");
+                m.style.display = "none";
+            });
+
+            const modal = document.getElementById(modalId);
+            modal.classList.remove("hidden");
+            modal.style.display = "flex";
+
+            if (modalId === "walkModal") {
+                const walkSelect = document.getElementById("walkDogSelect");
+                loadDogs(walkSelect).then(() => {
+                    walkSelect.value = schedule?.dogId || "";
+                });
+
+                document.getElementById("walkId").value = schedule?.id || "";
+                document.getElementById("walkDistance").value = schedule?.distance || "";
+                document.getElementById("walkDuration").value = schedule?.duration || "";
+                document.getElementById("walkWeather").value = schedule?.weather || "";
+                document.getElementById("walkMemo").value = schedule?.desc || "";
+            } else if (modalId === "hospitalModal") {
+                const hospitalSelect = document.getElementById("hospitalDogSelect");
+                loadDogs(hospitalSelect).then(() => {
+                    hospitalSelect.value = schedule?.dogId || "";
+                });
+
+                document.getElementById("hospitalId").value = schedule?.id || "";
+                document.getElementById("hospitalName").value = schedule?.hospitalName || "";
+                document.getElementById("hospitalDiagnosis").value = schedule?.diagnosis || "";
+                document.getElementById("hospitalCost").value = schedule?.cost || "";
+                document.getElementById("hospitalMemo").value = schedule?.desc || "";
+            }
+        }
+
+        function showDetail(schedule){
+            let content = `
+                <div class="detail-card ${schedule.type}">
+                    <h4>${schedule.title}</h4>
+                    <p><strong>📅 날짜:</strong> ${schedule.date}</p>
+                    <p><strong>🐶 반려견:</strong> ${schedule.dogName || "-"}</p>
+            `;
+            if(schedule.type === "walk"){
+                content += `
+                    <p><strong>⏱ 시간:</strong> ${schedule.duration || "-"} 분</p>
+                    <p><strong>🌤 날씨:</strong> ${schedule.weather || "-"}</p>
+                `;
+            } else {
+                content += `
+                    <p><strong>🏥 병원명:</strong> ${schedule.hospitalName || "-"}</p>
+                    <p><strong>💉 진료 항목:</strong> ${schedule.diagnosis || "-"}</p>
+                    <p><strong>💰 비용:</strong> ${schedule.cost || "-"} 원</p>
+                `;
+            }
+            content += `<p><strong>📝 메모:</strong> ${schedule.desc || "-"}</p>
+                <div class="detail-actions">
+                    <button class="edit-btn" title="수정"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="delete-btn" title="삭제"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>`;
+            detailContent.innerHTML = content;
+
+            const editBtn = detailContent.querySelector(".edit-btn");
+            const deleteBtn = detailContent.querySelector(".delete-btn");
+
+            editBtn.addEventListener("click", ()=>{            
+                saveWalkBtn.textContent = "수정";
+                openModal(schedule.type==="walk"?"walkModal":"hospitalModal", schedule);
+            });
+
+            deleteBtn.addEventListener("click", ()=>{
+                const modal=document.getElementById("deleteConfirmModal"); modal.style.display="flex";
+                const confirmBtn=document.getElementById("confirmDeleteBtn");
+                const cancelBtn=document.getElementById("cancelDeleteBtn");
+                confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+                cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+
+                document.getElementById("confirmDeleteBtn").addEventListener("click", async ()=>{
+                    const idx = schedules.findIndex(s=>s.id===schedule.id);
+                    if(idx>-1) schedules.splice(idx,1);
+                    renderCalendar();
+                    detailContent.innerHTML=`<p class="placeholder">일정을 클릭하면 내용이 여기에 표시됩니다.</p>`;
+                    modal.style.display="none";
+                });
+
+                document.getElementById("cancelDeleteBtn").addEventListener("click", ()=>{ modal.style.display="none"; });
+            });
+
+        }
+
+        saveWalkBtn.addEventListener("click", async ()=>{
+            const id = document.getElementById("walkId").value;
+            const walkData = {
+                dogId: document.getElementById("walkDogSelect").value,
+                distance: parseFloat(document.getElementById("walkDistance").value),
+                duration: parseInt(document.getElementById("walkDuration").value),
+                weather: document.getElementById("walkWeather").value,
+                desc: document.getElementById("walkMemo").value,
+                date: new Date().toISOString().split("T")[0]
+            };
+            try{
+                if(id){
+                    await axios.put(`/api/schedule/walk/${id}`, walkData);
+                    const idx = schedules.findIndex(s=>s.id==id);
+                    if(idx>-1) schedules[idx]={...schedules[idx], ...walkData};
+                }else{
+                    const response = await axios.post("/api/schedule/walk", walkData);
+                    schedules.push({...walkData, id: response.data.id});
+                }
+                alert("저장 완료!"); document.getElementById("walkModal").classList.add("hidden");
+                renderCalendar();
+                detailContent.innerHTML=`<p class="placeholder">일정을 클릭하면 내용이 여기에 표시됩니다.</p>`;
+            }catch(e){ console.error(e); alert("저장 오류"); }
+        });
+
+        saveHospitalBtn.addEventListener("click", async ()=>{
+            const id = document.getElementById("hospitalId").value;
+            const hospitalData = {
+                dogId: document.getElementById("hospitalDogSelect").value,
+                hospitalName: document.getElementById("hospitalName").value,
+                diagnosis: document.getElementById("hospitalDiagnosis").value,
+                cost: parseInt(document.getElementById("hospitalCost").value),
+                desc: document.getElementById("hospitalMemo").value,
+                date: new Date().toISOString().split("T")[0]
+            };
+            try{
+                if(id){
+                    await axios.put(`/api/schedule/hospital/${id}`, hospitalData);
+                    const idx = schedules.findIndex(s=>s.id==id);
+                    if(idx>-1) schedules[idx]={...schedules[idx], ...hospitalData};
+                }else{
+                    const response = await axios.post("/api/schedule/hospital", hospitalData);
+                    schedules.push({...hospitalData, id: response.data.id});
+                }
+                alert("저장 완료!"); document.getElementById("hospitalModal").classList.add("hidden");
+                renderCalendar();
+                detailContent.innerHTML=`<p class="placeholder">일정을 클릭하면 내용이 여기에 표시됩니다.</p>`;
+            }catch(e){ console.error(e); alert("저장 오류"); }
+        });
+
+
+        todayButton.addEventListener("click", () => {
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth();
+            yearSelect.value = currentYear;
+            monthSelect.value = currentMonth;
+            renderCalendar();
+        });
+
+        initSelectors();
+        renderCalendar();
+    });
+</script>
 </th:block>
 </body>
 </html>
