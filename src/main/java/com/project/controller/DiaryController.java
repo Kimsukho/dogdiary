@@ -88,4 +88,108 @@ public class DiaryController {
         }
         return rtnVal;
     }
+	
+	@GetMapping("/getSchedulesByMonth")
+    public HashMap getSchedulesByMonth(@RequestParam HashMap map) {
+		HashMap rtnVal = new HashMap<>();
+	    try {
+	        if (!map.containsKey("user_id") || !map.containsKey("month")) {
+	            rtnVal.put("returnCode", "FAILURE");
+	            rtnVal.put("errorMessage", "userId와 month는 필수 파라미터입니다.");
+	            return rtnVal;
+	        }
+
+	        rtnVal.put("returnCode", "SUCCESS");
+	        rtnVal.put("resultData", restService.findSchedulesByMonthAndUser(map));
+	    } catch (Exception e) {
+	        rtnVal.put("returnCode", "FAILURE");
+	        rtnVal.put("errorMessage", e.getMessage());
+	    }
+	    return rtnVal;
+    }
+	
+	@PostMapping("/createWalk")
+    public HashMap createWalk(@RequestBody HashMap map) {
+		HashMap rtnVal = new HashMap();
+        try {
+            int val = restService.insertWalk(map);
+            System.out.println("------------"+ val);
+            rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
+            rtnVal.put(val > 0 ? "resultData" : "errorMessage", val);
+        } catch (Exception e) {
+            rtnVal.put("returnCode", "FAILURE");
+            rtnVal.put("errorMessage", e.getMessage());
+        }
+        return rtnVal;
+    }
+	
+	@PostMapping("/updateWalk")
+	public HashMap updateWalk(@RequestBody HashMap map) {
+	    HashMap rtnVal = new HashMap();
+	    try {
+	        int val = restService.updateWalk(map);
+	        rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
+	        rtnVal.put(val > 0 ? "resultData" : "errorMessage", val);
+	    } catch (Exception e) {
+	        rtnVal.put("returnCode", "FAILURE");
+	        rtnVal.put("errorMessage", e.getMessage());
+	    }
+	    return rtnVal;
+	}
+	
+	@PostMapping("/deleteWalk")
+	public HashMap deleteWalk(@RequestBody HashMap map) {
+	    HashMap rtnVal = new HashMap();
+	    try {
+	        int val = restService.deleteWalkById(map);
+	        rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
+	        rtnVal.put(val > 0 ? "resultData" : "errorMessage", val);
+	    } catch (Exception e) {
+	        rtnVal.put("returnCode", "FAILURE");
+	        rtnVal.put("errorMessage", e.getMessage());
+	    }
+	    return rtnVal;
+	}
+	
+	@PostMapping("/createHospital")
+    public HashMap createHospital(@RequestBody HashMap map) {
+		HashMap rtnVal = new HashMap();
+        try {
+            int val = restService.insertHospital(map);
+            rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
+            rtnVal.put(val > 0 ? "resultData" : "errorMessage", val);
+        } catch (Exception e) {
+            rtnVal.put("returnCode", "FAILURE");
+            rtnVal.put("errorMessage", e.getMessage());
+        }
+        return rtnVal;
+    }
+	
+	@PostMapping("/updateHospital")
+	public HashMap updateHospital(@RequestBody HashMap map) {
+	    HashMap rtnVal = new HashMap();
+	    try {
+	        int val = restService.updateHospital(map);
+	        rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
+	        rtnVal.put(val > 0 ? "resultData" : "errorMessage", val);
+	    } catch (Exception e) {
+	        rtnVal.put("returnCode", "FAILURE");
+	        rtnVal.put("errorMessage", e.getMessage());
+	    }
+	    return rtnVal;
+	}
+
+	@PostMapping("/deleteHospital")
+	public HashMap deleteHospital(@RequestBody HashMap map) {
+	    HashMap rtnVal = new HashMap();
+	    try {
+	        int val = restService.deleteHospitalById(map);
+	        rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
+	        rtnVal.put(val > 0 ? "resultData" : "errorMessage", val);
+	    } catch (Exception e) {
+	        rtnVal.put("returnCode", "FAILURE");
+	        rtnVal.put("errorMessage", e.getMessage());
+	    }
+	    return rtnVal;
+	}
 }

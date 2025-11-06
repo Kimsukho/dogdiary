@@ -1002,37 +1002,140 @@ transition: all 0.2s ease;
 
 .schedule-calendar-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.schedule-calendar-day.selected {
+    outline: 2px solid #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+.schedule-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.schedule-calendar-selectors {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+}
+
+.select-wrapper {
+    position: relative;
+    display: inline-block;
 }
 
 .styled-select {
     appearance: none;
-    border: 1px solid #ccc;
-    padding: 6px 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1px solid #d0d0d0;
     border-radius: 8px;
-    background: #fafafa;
+    padding: 8px 36px 8px 12px;
     font-size: 14px;
-    transition: all 0.2s ease;
-    margin-right: 6px;
+    color: #333;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path fill='%23999' d='M0 0l5 6 5-6z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 10px;
 }
+
 .styled-select:hover {
-    background: #e9f4ff;
-    border-color: #2196f3;
+    background-color: rgba(33, 150, 243, 0.05);
+}
+
+.styled-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+}
+
+.styled-select option {
+    background-color: #fff; /* 🔹 select와 동일한 배경 */
+    color: #333;
+    font-weight: 500;
+}
+
+/* Hover 혹은 선택된 옵션 */
+.styled-select option:hover,
+.styled-select option:checked {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #1976d2;
+}
+
+.select-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+    font-size: 13px;
+    transition: color 0.25s ease;
+}
+
+.select-wrapper:hover .select-icon {
+    color: #2196f3;
+}
+
+.styled-select:focus + .select-icon {
+    color: #1976d2;
+}
+
+.calendar-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.icon-btn {
+    background-color: white;
+    border: 1px solid #2196f3;
+    color: #2196f3;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    background-color: #2196f3;
+    color: white;
 }
 
 .today-btn {
-    background: #2196f3;
+    background-color: #2196f3;
     color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
     border: none;
-    cursor: pointer;
-    font-size: 13px;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
+
 .today-btn:hover {
-    background: #1976d2;
+    background-color: #1976d2; /* hover 시 진한 파랑 */
+    transform: translateY(-1px);
+}
+
+.today-btn i {
+    font-size: 14px;
 }
 
 .schedule-calendar-grid {

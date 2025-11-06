@@ -14,14 +14,14 @@
             profile_image,
             created_at,
             updated_at
-        FROM dog
+        FROM dogs
         WHERE user_id = 3
         ORDER BY created_at DESC
 	</select>
 	
 	<select id="getAllDiaries" resultType="java.util.HashMap">
 		select d.id, p.id dog_id, p.name, d.content, d.mood, d.created_at
-		from dog p, diary d
+		from dogs p, diary d
 		where p.id = d.dog_id;
 	</select>
 	
@@ -47,6 +47,73 @@
         DELETE FROM diary
         WHERE id = #{id}
     </delete>
+    
+    <select id="findSchedulesByMonthAndUser" resultType="java.util.HashMap">
+	    SELECT *
+	    FROM schedule_view
+	    WHERE user_id = #{user_id}
+	      AND DATE_FORMAT(date, '%Y-%m') = #{month}
+	    ORDER BY date ASC;
+	</select>
+	
+	<insert id="insertWalk" parameterType="java.util.HashMap">
+	    INSERT INTO walk_schedule (user_id, dog_id, date, duration, weather, memo, created_at, updated_at) 
+	    VALUES (#{user_id}, #{dog_id}, #{date}, #{duration}, #{weather}, #{memo}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateWalk" parameterType="java.util.HashMap">
+	    UPDATE walk_schedule 
+	    <set>
+	        <if test="dog_id != null">dog_id = #{dog_id},</if>
+	        <if test="date != null">date = #{date},</if>
+	        <if test="duration != null">duration = #{duration},</if>
+	        <if test="weather != null">weather = #{weather},</if>
+	        <if test="memo != null">memo = #{memo},</if>
+	        updated_at = NOW()
+	    </set>
+	    WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteWalkById" parameterType="java.util.HashMap">
+	    DELETE FROM walk_schedule  WHERE id = #{id}
+	</delete>
+	
+	<select id="getWalkById" resultType="java.util.HashMap">
+	    SELECT w.*, d.name AS dog_name
+	    FROM walk_schedule  w
+	    LEFT JOIN dogs d ON w.dog_id = d.id
+	    WHERE w.id = #{id}
+	</select>
+	
+	<insert id="insertHospital" parameterType="java.util.HashMap">
+	    INSERT INTO hospital_schedule (user_id, dog_id, date, hospital_name, diagnosis, cost, memo, created_at, updated_at)
+			VALUES (#{user_id}, #{dog_id}, #{date}, #{hospital_name}, #{diagnosis}, #{cost}, #{memo}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateHospital" parameterType="java.util.HashMap">
+	    UPDATE hospital_schedule
+	    <set>
+	        <if test="dog_id != null">dog_id = #{dog_id},</if>
+	        <if test="date != null">date = #{date},</if>
+	        <if test="hospital_name != null">hospital_name = #{hospital_name},</if>
+	        <if test="diagnosis != null">diagnosis = #{diagnosis},</if>
+	        <if test="cost != null">cost = #{cost},</if>
+	        <if test="memo != null">memo = #{memo},</if>
+	        updated_at = NOW()
+	    </set>
+	    WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteHospitalById" parameterType="java.util.HashMap">
+	    DELETE FROM hospital_schedule WHERE id = #{id}
+	</delete>
+	
+	<select id="getHospitalById" resultType="java.util.HashMap">
+	    SELECT h.*, d.name AS dog_name
+	    FROM hospital_schedule h
+	    LEFT JOIN dogs d ON h.dog_id = d.id
+	    WHERE h.id = #{id}
+	</select>
 	
 </mapper>
 
