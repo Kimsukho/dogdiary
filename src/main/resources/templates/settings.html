@@ -6,27 +6,9 @@
 <div layout:fragment="content">
     <section class="settings-page">
         <div class="settings-cards">
-            <!-- 알림 설정 -->
+            <!-- 1. 테마 설정 -->
             <div class="settings-card">
-                <h3>알림 설정</h3>
-                <div class="settings-item">
-                    <label>
-                        <input type="checkbox">
-                        이메일 알림
-                    </label>
-                </div>
-                <div class="settings-item">
-                    <label>
-                        <input type="checkbox">
-                        SMS 알림
-                    </label>
-                </div>
-                <button class="settings-save-btn">저장</button>
-            </div>
-
-            <!-- 앱 테마 -->
-            <div class="settings-card">
-                <h3>테마 설정</h3>
+                <h3><i class="fas fa-palette"></i> 테마 설정</h3>
                 <div class="settings-item">
                     <label for="themeSelect">테마 선택</label>
                     <select id="themeSelect" th:value="${theme}">
@@ -37,8 +19,231 @@
                 <button class="settings-save-btn">저장</button>
             </div>
 
+            <!-- 2. 알림 설정 -->
+            <div class="settings-card">
+                <h3><i class="fas fa-bell"></i> 알림 설정</h3>
+                <div class="settings-toggle-group">
+                    <div class="settings-item settings-toggle-item">
+                        <span class="toggle-text">이메일 알림</span>
+                        <label class="toggle-label">
+                            <input type="checkbox" class="toggle-switch" id="emailNotification" checked>
+                        </label>
+                    </div>
+                    <div class="settings-item settings-toggle-item">
+                        <span class="toggle-text">일정 알림 (산책/병원)</span>
+                        <label class="toggle-label">
+                            <input type="checkbox" class="toggle-switch" id="scheduleNotification" checked>
+                        </label>
+                    </div>
+                    <div class="settings-item settings-toggle-item">
+                        <span class="toggle-text">일지 작성 알림</span>
+                        <label class="toggle-label">
+                            <input type="checkbox" class="toggle-switch" id="diaryReminder">
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <label for="notificationTime">알림 시간</label>
+                    <select id="notificationTime">
+                        <option value="09:00">오전 9시</option>
+                        <option value="12:00">정오</option>
+                        <option value="18:00">오후 6시</option>
+                        <option value="21:00">오후 9시</option>
+                    </select>
+                </div>
+                <button class="settings-save-btn">저장</button>
+            </div>
+
+            <!-- 3. 일정 관련 설정 -->
+            <div class="settings-card">
+                <h3><i class="fas fa-calendar-alt"></i> 일정 설정</h3>
+                <div class="settings-item">
+                    <label for="defaultDog">기본 반려견</label>
+                    <select id="defaultDog">
+                    </select>
+                </div>
+                <button class="settings-save-btn">저장</button>
+            </div>
+
+            <!-- 4. 접근성 설정 -->
+            <div class="settings-card">
+                <h3><i class="fas fa-universal-access"></i> 접근성</h3>
+                <div class="settings-item">
+                    <label for="fontSize">폰트 크기</label>
+                    <select id="fontSize">
+                        <option value="small">작게</option>
+                        <option value="medium" selected>보통</option>
+                        <option value="large">크게</option>
+                        <option value="xlarge">매우 크게</option>
+                    </select>
+                </div>
+                <div class="settings-item settings-toggle-item">
+                    <span class="toggle-text">애니메이션 효과</span>
+                    <label class="toggle-label">
+                        <input type="checkbox" class="toggle-switch" id="animations" checked>
+                    </label>
+                </div>
+                <div class="settings-item settings-toggle-item">
+                    <span class="toggle-text">고대비 모드</span>
+                    <label class="toggle-label">
+                        <input type="checkbox" class="toggle-switch" id="highContrast">
+                    </label>
+                </div>
+                <button class="settings-save-btn">저장</button>
+            </div>
+
         </div>
     </section>
 </div>
+
+<th:block layout:fragment="script">
+    <script>
+        // 테마 관리 함수
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+            
+            // 테마 선택 박스에 현재 테마 설정
+            const themeSelect = document.getElementById('themeSelect');
+            if (themeSelect) {
+                themeSelect.value = savedTheme;
+            }
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // 강아지 목록 로드 함수
+        async function loadDogs() {
+            try {
+                const response = await axios.get('/api/getDogsByUserId');
+                if (response.data.returnCode === 'SUCCESS') {
+                    const dogs = response.data.resultData || [];
+                    const defaultDogSelect = document.getElementById('defaultDog');
+                    if (defaultDogSelect) {
+                        // 기존 옵션 초기화
+                        defaultDogSelect.innerHTML = '';
+                        
+                        // localStorage에서 저장된 기본 반려견 읽기
+                        const savedDefaultDog = localStorage.getItem('defaultDogId');
+                        
+                        // 강아지 목록이 있으면 추가
+                        if (dogs.length > 0) {
+                            dogs.forEach((dog) => {
+                                const option = document.createElement('option');
+                                option.value = dog.id;
+                                option.textContent = dog.name;
+                                // 저장된 기본 반려견과 일치하면 선택
+                                if (savedDefaultDog && savedDefaultDog == dog.id) {
+                                    option.selected = true;
+                                }
+                                defaultDogSelect.appendChild(option);
+                            });
+                            
+                            // 저장된 값이 없고 강아지가 있으면 첫 번째 강아지를 기본 선택
+                            if (!savedDefaultDog || savedDefaultDog === '') {
+                                defaultDogSelect.value = dogs[0].id;
+                                localStorage.setItem('defaultDogId', dogs[0].id);
+                            }
+                        } else {
+                            // 강아지가 없으면 빈 옵션만 표시
+                            const emptyOption = document.createElement('option');
+                            emptyOption.value = '';
+                            emptyOption.textContent = '등록된 반려견이 없습니다';
+                            defaultDogSelect.appendChild(emptyOption);
+                        }
+                    }
+                } else {
+                    console.error('강아지 목록 조회 실패:', response.data.errorMessage);
+                }
+            } catch (error) {
+                console.error('강아지 목록 조회 중 오류 발생:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 테마 초기화
+            initTheme();
+
+            // 강아지 목록 로드
+            loadDogs();
+
+            // 테마 선택 변경 이벤트
+            const themeSelect = document.getElementById('themeSelect');
+            if (themeSelect) {
+                themeSelect.addEventListener('change', function() {
+                    const selectedTheme = this.value;
+                    applyTheme(selectedTheme);
+                    showToast(`테마가 ${selectedTheme === 'dark' ? '다크' : '라이트'} 모드로 변경되었습니다.`, 'success');
+                });
+            }
+
+            // 테마 설정 저장 버튼
+            const themeSaveBtn = document.querySelector('.settings-card:first-child .settings-save-btn');
+            if (themeSaveBtn) {
+                themeSaveBtn.addEventListener('click', function() {
+                    const themeSelect = document.getElementById('themeSelect');
+                    if (themeSelect) {
+                        const selectedTheme = themeSelect.value;
+                        applyTheme(selectedTheme);
+                        showToast('테마 설정이 저장되었습니다.', 'success');
+                    }
+                });
+            }
+
+            // 토글 스위치 스타일 적용
+            const toggleSwitches = document.querySelectorAll('.toggle-switch');
+            toggleSwitches.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    console.log(`${this.id}: ${this.checked}`);
+                });
+            });
+
+            // 저장 버튼 클릭 이벤트 (테마 제외)
+            const saveButtons = document.querySelectorAll('.settings-save-btn');
+            saveButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const card = this.closest('.settings-card');
+                    const cardTitle = card.querySelector('h3').textContent.trim();
+                    // 테마 설정은 위에서 처리하므로 제외
+                    if (!cardTitle.includes('테마')) {
+                        // 일정 설정인 경우 기본 반려견 저장
+                        if (cardTitle.includes('일정')) {
+                            const defaultDogSelect = document.getElementById('defaultDog');
+                            if (defaultDogSelect) {
+                                const selectedDogId = defaultDogSelect.value;
+                                if (selectedDogId) {
+                                    localStorage.setItem('defaultDogId', selectedDogId);
+                                } else {
+                                    localStorage.removeItem('defaultDogId');
+                                }
+                            }
+                        }
+                        showToast(`${cardTitle} 설정이 저장되었습니다.`, 'success');
+                    }
+                });
+            });
+
+            // 액션 버튼 클릭 이벤트
+            const actionButtons = document.querySelectorAll('.settings-action-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const btnText = this.textContent.trim();
+                    if (this.classList.contains('danger-btn')) {
+                        if (confirm('정말로 모든 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                            showToast('데이터 초기화가 완료되었습니다.', 'success');
+                        }
+                    } else if (this.classList.contains('export-btn')) {
+                        showToast('데이터 내보내기가 시작되었습니다.', 'success');
+                    } else {
+                        showToast(`${btnText} 기능은 준비 중입니다.`, 'info');
+                    }
+                });
+            });
+        });
+    </script>
+</th:block>
 </body>
 </html>

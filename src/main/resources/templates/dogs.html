@@ -16,42 +16,102 @@
 
     <!-- 등록/수정 모달 -->
     <div id="dogModal" class="dogModal">
-        <div class="dogModal-content">
-            <h3 id="dogModalTitle">반려견 등록</h3>
+        <div class="dogModal-content dog-modal-content-wide">
+            <div class="dogModal-header">
+                <h3 id="dogModalTitle">
+                    <i class="fas fa-dog" style="margin-right: 8px; color: #666;"></i>
+                    반려견 등록
+                </h3>
+                <button class="dogModal-back-btn" id="closeDogModalBtn" title="닫기">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
             <input type="hidden" id="dogId">
             
-            <div class="dogModal-item">
-                <label>이름</label>
-                <input type="text" id="dogName" placeholder="반려견 이름" required>
+            <div class="dogModal-body-layout">
+                <!-- 상단: 프로필 이미지 섹션 (정중앙) -->
+                <div class="dogModal-profile-section">
+                    <div class="dogModal-profile-image-wrapper">
+                        <div class="image-preview" id="imagePreview">
+                            <i class="fas fa-dog" id="previewIcon"></i>
+                            <img id="previewImage" style="display: none;" alt="프로필 이미지">
+                        </div>
+                        <label for="dogProfileImage" class="dogModal-profile-edit-btn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </label>
+                        <input type="file" id="dogProfileImage" accept="image/*" style="display: none;">
+                    </div>
+                    <button type="button" class="image-remove-btn" id="removeImageBtn" style="display: none;">이미지 제거</button>
+                </div>
+                
+                <!-- 하단: 입력 필드들 -->
+                <div class="dogModal-fields">
+                    <!-- 이름 / 성별 -->
+                    <div class="dogModal-field-row">
+                        <div class="dogModal-field">
+                            <label>이름</label>
+                            <div class="dogModal-field-wrapper">
+                                <input type="text" id="dogName" placeholder="반려견 이름" required>
+                            </div>
+                        </div>
+                        <div class="dogModal-field">
+                            <label>성별</label>
+                            <div class="gender-selector">
+                                <button type="button" class="gender-btn" data-gender="MALE">
+                                    <i class="fas fa-mars"></i>
+                                    <span>남아</span>
+                                </button>
+                                <button type="button" class="gender-btn" data-gender="FEMALE">
+                                    <i class="fas fa-venus"></i>
+                                    <span>여아</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="dogGender" value="">
+                        </div>
+                    </div>
+
+                    <!-- 품종 / 몸무게 -->
+                    <div class="dogModal-field-row">
+                        <div class="dogModal-field">
+                            <label>품종</label>
+                            <div class="dogModal-field-wrapper">
+                                <input type="text" id="dogBreed" placeholder="품종" required>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="dogModal-field">
+                            <label>몸무게</label>
+                            <div class="dogModal-field-wrapper">
+                                <input type="number" id="dogWeight" placeholder="몸무게 (kg)" step="0.1">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 나이 -->
+                    <div class="dogModal-field-row">
+                        <div class="dogModal-field dogModal-field-full">
+                            <div class="dogModal-label-with-buttons">
+                                <label>나이</label>
+                                <div class="age-unit-selector-inline">
+                                    <button type="button" class="age-unit-btn active" data-unit="year">년</button>
+                                    <button type="button" class="age-unit-btn" data-unit="month">개월</button>
+                                </div>
+                            </div>
+                            <div class="dogModal-field-wrapper">
+                                <input type="number" id="dogAge" placeholder="나이" min="1" max="30">
+                                <span class="age-unit-display" id="ageUnitDisplay">살</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <input type="hidden" id="dogAgeUnit" value="year">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="dogModal-item">
-                <label>품종</label>
-                <input type="text" id="dogBreed" placeholder="품종" required>
-            </div>
-
-            <div class="dogModal-item">
-                <label>나이</label>
-                <input type="number" id="dogAge" placeholder="나이">
-            </div>
-
-            <div class="dogModal-item">
-                <label>성별</label>
-                <select id="dogGender">
-                    <option value="" selected hidden>성별 선택</option>
-                    <option value="MALE">남</option>
-                    <option value="FEMALE">여</option>
-                </select>
-            </div>
-
-            <div class="dogModal-item">
-                <label>프로필 이미지</label>
-                <input type="file" id="dogProfileImage">
-            </div>
-
-            <div class="modal-buttons">
-                <button class="button save-button" id="saveDogBtn">저장</button>
-                <button class="button close-button" id="closeDogModalBtn">닫기</button>
+            <div class="dogModal-action-buttons">
+                <button class="dogModal-save-btn" id="saveDogBtn">저장하기</button>
             </div>
         </div>
     </div>
@@ -77,8 +137,17 @@
             const dogName = document.getElementById("dogName");
             const dogBreed = document.getElementById("dogBreed");
             const dogAge = document.getElementById("dogAge");
+            const dogAgeUnit = document.getElementById("dogAgeUnit");
+            const ageUnitDisplay = document.getElementById("ageUnitDisplay");
+            const ageUnitButtons = document.querySelectorAll(".age-unit-btn");
             const dogGender = document.getElementById("dogGender");
+            const dogWeight = document.getElementById("dogWeight");
             const dogProfileImage = document.getElementById("dogProfileImage");
+            const genderButtons = document.querySelectorAll(".gender-btn");
+            const imagePreview = document.getElementById("imagePreview");
+            const previewImage = document.getElementById("previewImage");
+            const previewIcon = document.getElementById("previewIcon");
+            const removeImageBtn = document.getElementById("removeImageBtn");
             const openModalBtn = document.getElementById("openModalBtn");
             const closeDogModalBtn = document.getElementById("closeDogModalBtn");
             const saveDogBtn = document.getElementById("saveDogBtn");
@@ -88,16 +157,166 @@
             const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
             const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
             
+            // Base64 디코딩 함수
+            function decodeBase64Image(base64String) {
+                try {
+                    // Base64 문자열인지 확인 (일반적으로 Base64는 A-Z, a-z, 0-9, +, /, = 문자로 구성)
+                    if (!base64String || typeof base64String !== 'string') {
+                        return base64String;
+                    }
+                    
+                    // Base64로 인코딩된 것처럼 보이는지 확인
+                    const base64Pattern = /^[A-Za-z0-9+/=]+$/;
+                    if (base64Pattern.test(base64String) && base64String.length > 20) {
+                        // Base64 디코딩 시도
+                        const decoded = atob(base64String);
+                        // 디코딩된 문자열이 경로 형식인지 확인
+                        if (decoded.startsWith('/') || decoded.startsWith('http')) {
+                            return decoded;
+                        }
+                    }
+                    // Base64가 아니거나 디코딩 실패 시 원본 반환
+                    return base64String;
+                } catch (e) {
+                    // 디코딩 실패 시 원본 반환
+                    console.warn('Base64 디코딩 실패:', e);
+                    return base64String;
+                }
+            }
+            
+            // 이미지 미리보기 함수
+            function showImagePreview(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        // 이미지 로드 성공 시
+                        previewImage.onload = function() {
+                            previewImage.style.display = 'block';
+                            previewIcon.style.display = 'none';
+                            removeImageBtn.style.display = 'block';
+                        };
+                        // 이미지 로드 실패 시 기본 아이콘 표시
+                        previewImage.onerror = function() {
+                            previewImage.style.display = 'none';
+                            previewIcon.style.display = 'block';
+                            removeImageBtn.style.display = 'none';
+                            previewImage.src = '';
+                        };
+                        previewImage.src = e.target.result;
+                    };
+                    reader.onerror = () => {
+                        // 파일 읽기 실패 시 기본 아이콘 유지
+                        previewImage.style.display = 'none';
+                        previewIcon.style.display = 'block';
+                        removeImageBtn.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // 이미지 미리보기 제거
+            function clearImagePreview() {
+                previewImage.src = '';
+                previewImage.style.display = 'none';
+                previewIcon.style.display = 'block';
+                removeImageBtn.style.display = 'none';
+                dogProfileImage.value = '';
+            }
+
+            // 이미지 파일 선택 이벤트
+            dogProfileImage.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    showImagePreview(e.target.files[0]);
+                }
+            });
+            
+            // 프로필 편집 버튼 클릭 시 파일 선택 트리거 (이벤트 위임 사용)
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.dogModal-profile-edit-btn')) {
+                    e.preventDefault();
+                    dogProfileImage.click();
+                }
+            });
+
+            // 이미지 제거 버튼
+            removeImageBtn.addEventListener('click', () => {
+                clearImagePreview();
+            });
+
+            // 성별 버튼 선택
+            genderButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    genderButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    dogGender.value = btn.dataset.gender;
+                });
+            });
+
+            // 나이 단위 선택 (라벨 옆 버튼)
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.age-unit-btn')) {
+                    const btn = e.target.closest('.age-unit-btn');
+                    const allAgeUnitButtons = document.querySelectorAll('.age-unit-btn');
+                    allAgeUnitButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const unit = btn.dataset.unit;
+                    dogAgeUnit.value = unit;
+                    
+                    if (unit === 'month') {
+                        dogAge.placeholder = '개월';
+                        dogAge.min = 1;
+                        dogAge.max = 12;
+                        ageUnitDisplay.textContent = '개월';
+                        // 개월 선택 시 기존 값이 12보다 크면 12로 제한
+                        if (dogAge.value && parseInt(dogAge.value) > 12) {
+                            dogAge.value = 12;
+                        }
+                    } else {
+                        dogAge.placeholder = '나이';
+                        dogAge.min = 1;
+                        dogAge.max = 30;
+                        ageUnitDisplay.textContent = '살';
+                    }
+                }
+            });
+
+            // 나이 입력 시 개월인 경우 1~12 제한
+            dogAge.addEventListener('input', () => {
+                if (dogAgeUnit.value === 'month') {
+                    const value = parseInt(dogAge.value);
+                    if (value > 12) {
+                        dogAge.value = 12;
+                    } else if (value < 1 && dogAge.value !== '') {
+                        dogAge.value = 1;
+                    }
+                }
+            });
+
              // 등록 버튼 클릭
             openModalBtn.onclick = () => {
-                dogModalTitle.textContent = "반려견 등록";
-                saveDogBtn.textContent = "저장";
+                dogModalTitle.innerHTML = '<i class="fas fa-dog" style="margin-right: 8px; color: #666;"></i>반려견 등록';
+                saveDogBtn.textContent = "저장하기";
                 dogId.value = "";
                 dogName.value = "";
                 dogBreed.value = "";
                 dogAge.value = "";
+                dogAgeUnit.value = "year";
+                dogWeight.value = "";
                 dogGender.value = "";
-                dogProfileImage.value = "";
+                genderButtons.forEach(btn => btn.classList.remove('active'));
+                // 나이 단위 버튼 초기화
+                const allAgeUnitButtons = document.querySelectorAll('.age-unit-btn');
+                allAgeUnitButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.unit === 'year') {
+                        btn.classList.add('active');
+                    }
+                });
+                dogAge.placeholder = '나이';
+                dogAge.min = 1;
+                dogAge.max = 30;
+                ageUnitDisplay.textContent = '살';
+                clearImagePreview();
                 dogModal.style.display = "flex";
             };
 
@@ -107,62 +326,177 @@
             };
 
             // 수정 버튼 클릭
-            document.addEventListener("click", e => {
+            document.addEventListener("click", async e => {
                 if(e.target.closest(".edit-btn")) {
-                    const card = e.target.closest(".dog-card");
                     const id = e.target.closest(".edit-btn").dataset.id;
-                    const name = card.querySelector("h4").textContent;
-                    const breed = card.querySelector(".dog-info span:nth-child(1)").textContent.replace("품종: ","");
-                    const age = card.querySelector(".dog-info span:nth-child(2)").textContent.replace("나이: ","");
-                    const genderText = card.querySelector(".dog-info span:nth-child(3)").textContent.replace("성별: ","");
-                    const gender = genderText === "남" ? "MALE" : "FEMALE";
-
-                    dogModalTitle.textContent = "반려견 수정";
-                    saveDogBtn.textContent = "수정";
-                    dogId.value = id;
-                    dogName.value = name;
-                    dogBreed.value = breed;
-                    dogAge.value = age;
-                    dogGender.value = gender;
-                    dogModal.style.display = "flex";
+                    
+                    // 서버에서 최신 데이터 가져오기
+                    try {
+                        const response = await axios.get('/api/getDogsByUserId');
+                        if (response.data.returnCode === "SUCCESS") {
+                            const dog = response.data.resultData.find(d => d.id == id);
+                            if (dog) {
+                                dogModalTitle.innerHTML = '<i class="fas fa-dog" style="margin-right: 8px; color: #666;"></i>반려견 수정';
+                                saveDogBtn.textContent = "수정하기";
+                                dogId.value = dog.id;
+                                dogName.value = dog.name || "";
+                                dogBreed.value = dog.breed || "";
+                                
+                                // 나이 및 단위 설정
+                                const ageUnit = dog.age_unit || 'year';
+                                dogAgeUnit.value = ageUnit;
+                                
+                                if (dog.age) {
+                                    dogAge.value = dog.age;
+                                } else {
+                                    dogAge.value = "";
+                                }
+                                
+                                // 단위에 따라 UI 업데이트
+                                const allAgeUnitButtons = document.querySelectorAll('.age-unit-btn');
+                                allAgeUnitButtons.forEach(btn => {
+                                    btn.classList.remove('active');
+                                    if (btn.dataset.unit === ageUnit) {
+                                        btn.classList.add('active');
+                                    }
+                                });
+                                
+                                if (ageUnit === 'month') {
+                                    dogAge.placeholder = '개월';
+                                    dogAge.min = 1;
+                                    dogAge.max = 12;
+                                    ageUnitDisplay.textContent = '개월';
+                                } else {
+                                    dogAge.placeholder = '나이';
+                                    dogAge.min = 1;
+                                    dogAge.max = 30;
+                                    ageUnitDisplay.textContent = '살';
+                                }
+                                
+                                dogWeight.value = dog.weight || "";
+                                dogGender.value = dog.gender || "";
+                                
+                                // 성별 버튼 활성화
+                                genderButtons.forEach(btn => {
+                                    btn.classList.remove('active');
+                                    if (btn.dataset.gender === dog.gender) {
+                                        btn.classList.add('active');
+                                    }
+                                });
+                                
+                                // 기존 이미지 미리보기 (Base64 디코딩)
+                                if (dog.profile_image) {
+                                    const decodedImageUrl = decodeBase64Image(dog.profile_image);
+                                    // 이미지 로드 성공 시
+                                    previewImage.onload = function() {
+                                        previewImage.style.display = 'block';
+                                        previewIcon.style.display = 'none';
+                                        removeImageBtn.style.display = 'block';
+                                    };
+                                    // 이미지 로드 실패 시 기본 아이콘 표시
+                                    previewImage.onerror = function() {
+                                        previewImage.style.display = 'none';
+                                        previewIcon.style.display = 'block';
+                                        removeImageBtn.style.display = 'none';
+                                        previewImage.src = '';
+                                    };
+                                    previewImage.src = decodedImageUrl;
+                                } else {
+                                    clearImagePreview();
+                                }
+                                
+                                dogProfileImage.value = "";
+                                dogModal.style.display = "flex";
+                            }
+                        }
+                    } catch (error) {
+                        console.error('반려견 정보 불러오기 실패:', error);
+                        alert('반려견 정보를 불러오는데 실패했습니다.');
+                    }
                 }
             });
 
             // 저장 버튼 클릭 (등록/수정 구분)
             saveDogBtn.onclick = async () => {
+                // 필수 입력값 검증
+                if (!dogName.value.trim()) {
+                    alert("이름을 입력해주세요.");
+                    return;
+                }
+                if (!dogBreed.value.trim()) {
+                    alert("품종을 입력해주세요.");
+                    return;
+                }
+
                 const formData = new FormData();
                 if(dogId.value) formData.append("id", dogId.value);
-                formData.append("name", dogName.value);
-                formData.append("breed", dogBreed.value);
-                formData.append("age", dogAge.value);
-                formData.append("gender", dogGender.value);
+                formData.append("name", dogName.value.trim());
+                formData.append("breed", dogBreed.value.trim());
+                if(dogAge.value) {
+                    formData.append("age", dogAge.value);
+                    formData.append("age_unit", dogAgeUnit.value);
+                }
+                if(dogWeight.value) formData.append("weight", dogWeight.value);
+                if(dogGender.value) formData.append("gender", dogGender.value);
                 if(dogProfileImage.files[0]) formData.append("profile_image", dogProfileImage.files[0]);
 
                 const url = dogId.value ? "/api/updateDogById" : "/api/saveDog";
                 try {
-                    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" }});
+                    const response = await axios.post(url, formData, { 
+                        headers: { "Content-Type": "multipart/form-data" }
+                    });
                     if(response.data.returnCode === "SUCCESS") {
+                        alert("저장 완료!");
                         dogModal.style.display = "none";
-                        loadDogData(); // 목록 갱신
+                        // 폼 초기화
+                        dogId.value = "";
+                        dogName.value = "";
+                        dogBreed.value = "";
+                        dogAge.value = "";
+                        dogAgeUnit.value = "year";
+                        dogWeight.value = "";
+                        dogGender.value = "";
+                        genderButtons.forEach(btn => btn.classList.remove('active'));
+                        // 나이 단위 버튼 초기화
+                        const allAgeUnitButtons = document.querySelectorAll('.age-unit-btn');
+                        allAgeUnitButtons.forEach(btn => {
+                            btn.classList.remove('active');
+                            if (btn.dataset.unit === 'year') {
+                                btn.classList.add('active');
+                            }
+                        });
+                        dogAge.placeholder = '나이';
+                        dogAge.min = 1;
+                        dogAge.max = 30;
+                        ageUnitDisplay.textContent = '살';
+                        clearImagePreview();
+                        // 약간의 지연 후 목록 갱신 (서버에서 이미지 저장 완료 대기)
+                        setTimeout(async () => {
+                            await loadDogData(); // 목록 갱신
+                        }, 300);
                     } else {
-                        alert("저장 실패: " + response.data.errorMessage);
+                        alert("저장 실패: " + (response.data.errorMessage || "알 수 없는 오류"));
                     }
-                } catch(err) { console.error(err); }
+                } catch(err) {
+                    console.error(err);
+                    alert("저장 중 오류가 발생했습니다.");
+                }
             };
 
             // 삭제 확인
             confirmDeleteBtn.onclick = async () => {
-                // try {
-                //     const response = await axios.post("/api/deleteDogDiaryById", { id: diaryId.value });
-                //     if (response.data.returnCode === "SUCCESS") {
-                //         await loadDiaries();
-                //         renderDiaryList();
-                //         renderCalendar(selectedDate);
-                //         renderSummary(selectedDate);
-                //     } else {
-                //         alert("삭제 실패: " + response.data.errorMessage);
-                //     }
-                // } catch (e) { console.error(e); }
+                try {
+                    const response = await axios.post("/api/deleteDogById", { id: dogId.value });
+                    if (response.data.returnCode === "SUCCESS") {
+                        alert("삭제 완료!");
+                        await loadDogData();
+                    } else {
+                        alert("삭제 실패: " + (response.data.errorMessage || "알 수 없는 오류"));
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert("삭제 중 오류가 발생했습니다.");
+                }
                 dogModal.style.display = "none";
                 deleteModal.style.display = "none";
             };
@@ -184,7 +518,12 @@
                     const response = await axios.get('/api/getDogsByUserId');
                     if (response.data.returnCode === "SUCCESS") {
                         const data = response.data.resultData;
+                        const dogCards = document.getElementById('dogCards');
+                        const emptyDog = document.getElementById('emptyDog');
                         dogCards.innerHTML = '';
+
+                        // localStorage에서 기본 반려견 ID 읽기
+                        const defaultDogId = localStorage.getItem('defaultDogId');
 
                         if (data.length === 0) {
                             dogCards.appendChild(emptyDog);
@@ -193,16 +532,60 @@
                             data.forEach(dog => {
                                 const card = document.createElement('div');
                                 card.className = 'dog-card';
+                                
+                                // 기본 반려견 여부 확인
+                                const isDefaultDog = defaultDogId && defaultDogId == dog.id;
+                                
+                                // 성별 텍스트 변환
+                                const genderText = dog.gender === 'MALE' ? '남아' : dog.gender === 'FEMALE' ? '여아' : '-';
+                                
+                                // 프로필 이미지 처리 (Base64 디코딩)
+                                let imageUrl = dog.profile_image;
+                                if (imageUrl) {
+                                    imageUrl = decodeBase64Image(imageUrl);
+                                    // 이미지 URL에 캐시 버스터 추가 (타임스탬프)
+                                    const separator = imageUrl.includes('?') ? '&' : '?';
+                                    imageUrl = imageUrl + separator + 't=' + Date.now();
+                                }
+                                
+                                // 이미지가 있으면 img 태그, 없으면 아이콘 표시
+                                let imageHtml;
+                                if (dog.profile_image && imageUrl) {
+                                    // 이미지 로드 실패 시 기본 아이콘으로 대체
+                                    imageHtml = `<img src="${imageUrl}" alt="${dog.name}" class="dog-profile-img" onerror="this.onerror=null; this.style.display='none'; const parent = this.parentElement; const existingPlaceholder = parent.querySelector('.dog-profile-placeholder-fallback'); if (!existingPlaceholder) { const fallback = document.createElement('div'); fallback.className = 'dog-profile-placeholder dog-profile-placeholder-fallback'; fallback.innerHTML = '<i class=\\'fas fa-dog\\'></i>'; parent.appendChild(fallback); }" loading="lazy">`;
+                                    // 기본 아이콘도 함께 추가 (이미지 로드 실패 시 표시)
+                                    imageHtml += `<div class="dog-profile-placeholder dog-profile-placeholder-fallback" style="display: none;"><i class="fas fa-dog"></i></div>`;
+                                } else {
+                                    imageHtml = `<div class="dog-profile-placeholder"><i class="fas fa-dog"></i></div>`;
+                                }
+                                
                                 card.innerHTML = `
                                     <div class="dog-card-left">
-                                        <img src="${dog.profile_image || '/images/coco.jpg'}" alt="${dog.name}" class="dog-profile-img">
+                                        ${imageHtml}
                                     </div>
                                     <div class="dog-card-right">
-                                        <h4>${dog.name}</h4>
-                                        <div class="dog-info">
-                                            <span>품종: ${dog.breed}</span>
-                                            <span>나이: ${dog.age || '-'}</span>
-                                            <span>성별: ${dog.gender || '-'}</span>
+                                        <div class="dog-name-wrapper">
+                                            <h2 class="dog-name">${dog.name}</h2>
+                                            ${dog.gender ? `
+                                            <div class="dog-gender-icon">
+                                                <i class="fas ${dog.gender === 'MALE' ? 'fa-mars' : 'fa-venus'}" style="color: ${dog.gender === 'MALE' ? '#4A90E2' : '#E91E63'};"></i>
+                                            </div>
+                                            ` : ''}
+                                            ${isDefaultDog ? `<span class="default-dog-badge" title="기본 반려견"><i class="fas fa-star"></i></span>` : ''}
+                                        </div>
+                                        <div class="dog-info-grid">
+                                            <div class="dog-info-grid-item">
+                                                <div class="dog-info-grid-label">품종</div>
+                                                <div class="dog-info-grid-value">${dog.breed || '-'}</div>
+                                            </div>
+                                            <div class="dog-info-grid-item">
+                                                <div class="dog-info-grid-label">나이</div>
+                                                <div class="dog-info-grid-value">${dog.age ? dog.age + (dog.age_unit === 'month' ? '개월' : '살') : '-'}</div>
+                                            </div>
+                                            <div class="dog-info-grid-item">
+                                                <div class="dog-info-grid-label">몸무게</div>
+                                                <div class="dog-info-grid-value">${dog.weight ? dog.weight + 'kg' : '-'}</div>
+                                            </div>
                                         </div>
                                         <div class="dog-card-actions">
                                             <button class="edit-btn" data-id="${dog.id}" title="수정">
@@ -215,15 +598,36 @@
                                     </div>
                                 `;
                                 dogCards.appendChild(card);
-                                card.querySelector('.delete-btn').onclick = async () => {
-                                    deleteModal.style.display='flex';
-                                    diaryId.value = d.id;
+                                
+                                // 이미지 로드 실패 시 기본 아이콘 표시 처리
+                                const imgElement = card.querySelector('.dog-profile-img');
+                                if (imgElement) {
+                                    imgElement.addEventListener('error', function() {
+                                        this.style.display = 'none';
+                                        const parent = this.parentElement;
+                                        let placeholder = parent.querySelector('.dog-profile-placeholder-fallback');
+                                        if (!placeholder) {
+                                            placeholder = document.createElement('div');
+                                            placeholder.className = 'dog-profile-placeholder dog-profile-placeholder-fallback';
+                                            placeholder.innerHTML = '<i class="fas fa-dog"></i>';
+                                            parent.appendChild(placeholder);
+                                        }
+                                        placeholder.style.display = 'flex';
+                                    });
+                                }
+                                
+                                // 삭제 버튼 이벤트
+                                card.querySelector('.delete-btn').onclick = () => {
+                                    deleteModal.style.display = 'flex';
+                                    dogId.value = dog.id;
                                 };
                             });
                         }
                     }
                 } catch (error) {
                     console.error('반려견 데이터 불러오기 실패:', error);
+                    const dogCards = document.getElementById('dogCards');
+                    const emptyDog = document.getElementById('emptyDog');
                     dogCards.innerHTML = '';
                     dogCards.appendChild(emptyDog);
                     emptyDog.style.display = 'flex';

@@ -23,6 +23,21 @@ public class RestServiceImpl implements RestService {
 	}
 
 	@Override
+	public int saveDog(HashMap map) {
+		return restDao.saveDog(map);
+	}
+
+	@Override
+	public int updateDogById(HashMap map) {
+		return restDao.updateDogById(map);
+	}
+
+	@Override
+	public int deleteDogById(HashMap map) {
+		return restDao.deleteDogById(map);
+	}
+
+	@Override
 	public List<HashMap> getAllDiaries(HashMap map) {
 		return restDao.getAllDiaries(map);
 	}
@@ -75,6 +90,11 @@ public class RestServiceImpl implements RestService {
 	@Override
 	public int deleteHospitalById(HashMap map) {
 		return restDao.deleteHospitalById(map);
+	}
+
+	@Override
+	public List<HashMap> getMonthlyStatistics(HashMap map) {
+		return restDao.getMonthlyStatistics(map);
 	}
 	
 }

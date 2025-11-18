@@ -52,40 +52,79 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private PasswordEncoder pwdEncode;
+    private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
 
     @RequestMapping(value = "/public/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(HttpServletRequest request, @RequestBody HashMap map) throws Exception {
-    	    	
+    	String username = (String) map.get("username");
+    	String password = (String) map.get("password");
+    	
+    	logger.debug("로그인 시도: username={}", username);
+    	
+    	if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+    		Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "로그인 실패");
+            errorResponse.put("message", "아이디와 비밀번호를 입력해주세요.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    	}
+    	
     	try {
+            // 사용자 존재 여부 먼저 확인
+            User user = userService.findUserByUsername(username);
+            if (user == null) {
+            	logger.warn("사용자를 찾을 수 없음: {}", username);
+            	Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("error", "로그인 실패");
+                errorResponse.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
+            
+            logger.debug("사용자 찾음: username={}, password 존재={}, password 길이={}", 
+            		username, user.getPassword() != null, 
+            		user.getPassword() != null ? user.getPassword().length() : 0);
+            
+            // 비밀번호가 BCrypt 형식인지 확인 (BCrypt는 항상 $2a$, $2b$, $2y$로 시작)
+            if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
+            	logger.warn("경고: 사용자 비밀번호가 BCrypt 형식이 아닙니다. username={}", username);
+            }
+            
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(map.get("username"), map.get("password")));
+                    new UsernamePasswordAuthenticationToken(username, password));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                final UserDetails userDetails = userService.loadUserByUsername((String)map.get("username"));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final UserDetails userDetails = userService.loadUserByUsername(username);
   
-                HttpSession session = request.getSession();
-                session.setAttribute("userDetails", userDetails);
-            User loginUser = userService.findUserByUsername((String)map.get("username"));                        
-        	
+            HttpSession session = request.getSession();
+            session.setAttribute("userDetails", userDetails);
+            User loginUser = userService.findUserByUsername(username);
+            
+            logger.info("로그인 성공: username={}", username);
             return ResponseEntity.ok(loginUser);
 
-    	}catch(Exception e) {
-    		logger.error(e.getMessage());
+    	} catch (org.springframework.security.core.AuthenticationException e) {
+    		logger.error("인증 실패: username={}, error={}", username, e.getMessage(), e);
     		
     		Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "로그인 실패");
-            errorResponse.put("message", e.getMessage());
+            errorResponse.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
 
             return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED) // 401 코드로 내려주는 게 REST 표준
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(errorResponse);
+    	} catch (Exception e) {
+    		logger.error("로그인 처리 중 오류 발생: username={}, error={}", username, e.getMessage(), e);
+    		
+    		Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "로그인 실패");
+            errorResponse.put("message", "로그인 처리 중 오류가 발생했습니다: " + e.getMessage());
 
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(errorResponse);
     	}
-
     }
     /*
     @RequestMapping(value = "/public/isTokenExpired", method = RequestMethod.GET)
@@ -104,6 +143,95 @@ public class UserController {
     	return ResponseEntity.ok(is_expired);
     }*/
     
+    // 개발용: 비밀번호 BCrypt 인코딩 유틸리티 (개발 완료 후 제거 권장)
+    @RequestMapping(value = "/public/encodePassword", method = RequestMethod.POST)
+    public ResponseEntity<?> encodePassword(@RequestBody HashMap map) {
+    	try {
+    		String plainPassword = (String) map.get("password");
+    		if (plainPassword == null || plainPassword.isEmpty()) {
+    			return ResponseEntity.badRequest().body(Map.of("error", "비밀번호를 입력해주세요."));
+    		}
+    		
+    		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    		String encodedPassword = encoder.encode(plainPassword);
+    		
+    		// BCrypt 해시 형식 검증
+    		boolean isValidFormat = encodedPassword.startsWith("$2a$") || 
+    		                        encodedPassword.startsWith("$2b$") || 
+    		                        encodedPassword.startsWith("$2y$");
+    		
+    		Map<String, Object> result = new HashMap<>();
+    		result.put("plainPassword", plainPassword);
+    		result.put("encodedPassword", encodedPassword);
+    		result.put("isValidBCrypt", isValidFormat);
+    		result.put("hashLength", encodedPassword.length());
+    		
+    		// SQL 업데이트 문 예시도 제공
+    		result.put("sqlExample", String.format(
+    			"UPDATE users SET password = '%s' WHERE username = '사용자명';", 
+    			encodedPassword));
+    		
+    		logger.info("BCrypt 인코딩 완료: password={}, hash={}", plainPassword, encodedPassword);
+    		
+    		return ResponseEntity.ok(result);
+    	} catch (Exception e) {
+    		logger.error("비밀번호 인코딩 실패: " + e.getMessage(), e);
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    				.body(Map.of("error", "비밀번호 인코딩 실패: " + e.getMessage()));
+    	}
+    }
+    
+    // 개발용: 사용자 비밀번호 직접 업데이트 (개발 완료 후 제거 권장)
+    @RequestMapping(value = "/public/updateUserPassword", method = RequestMethod.POST)
+    public ResponseEntity<?> updateUserPassword(@RequestBody HashMap map) {
+    	logger.info("비밀번호 업데이트 요청 수신: map={}", map);
+    	try {
+    		String username = (String) map.get("username");
+    		String plainPassword = (String) map.get("password");
+    		logger.debug("요청 파라미터: username={}, password 존재={}", username, plainPassword != null);
+    		
+    		if (username == null || username.isEmpty()) {
+    			return ResponseEntity.badRequest().body(Map.of("error", "사용자명을 입력해주세요."));
+    		}
+    		if (plainPassword == null || plainPassword.isEmpty()) {
+    			return ResponseEntity.badRequest().body(Map.of("error", "비밀번호를 입력해주세요."));
+    		}
+    		
+    		// 사용자 존재 확인
+    		User user = userService.findUserByUsername(username);
+    		if (user == null) {
+    			return ResponseEntity.badRequest().body(Map.of("error", "사용자를 찾을 수 없습니다: " + username));
+    		}
+    		
+    		// BCrypt 인코딩
+    		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    		String encodedPassword = encoder.encode(plainPassword);
+    		
+    		// 비밀번호 업데이트
+    		HashMap updateMap = new HashMap();
+    		updateMap.put("id", user.getId());
+    		updateMap.put("password", encodedPassword);
+    		
+    		int result = userService.update(updateMap);
+    		
+    		if (result > 0) {
+    			Map<String, Object> response = new HashMap<>();
+    			response.put("returnCode", "SUCCESS");
+    			response.put("message", "비밀번호가 성공적으로 업데이트되었습니다.");
+    			response.put("username", username);
+    			logger.info("비밀번호 업데이트 성공: username={}", username);
+    			return ResponseEntity.ok(response);
+    		} else {
+    			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    					.body(Map.of("error", "비밀번호 업데이트 실패"));
+    		}
+    	} catch (Exception e) {
+    		logger.error("비밀번호 업데이트 실패: " + e.getMessage(), e);
+    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    				.body(Map.of("error", "비밀번호 업데이트 실패: " + e.getMessage()));
+    	}
+    }
+    
     // 사용자 등록
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping(value = "/admin/register", method = RequestMethod.POST)
@@ -113,12 +241,18 @@ public class UserController {
     	User userInfo = new User();
     	userInfo = userService.findUserByUsername(map.get("username"));
     	if(StringUtils.isEmpty(userInfo)) {
-	    	try {
-	    		String password = map.get("password");
-		        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		        String encpass = encoder.encode(password);
-		        map.put("password", encpass);
-		        int val = userService.register(map);
+    	try {
+    		String password = map.get("password");
+	        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	        String encpass = encoder.encode(password);
+	        map.put("password", encpass);
+	        
+	        // role이 없으면 기본값 "USER" 설정
+	        if (!map.containsKey("role") || map.get("role") == null || map.get("role").toString().isEmpty()) {
+	        	map.put("role", "USER");
+	        }
+	        
+	        int val = userService.register(map);
 				// 가장 최근에 생성된 사용자의 id 가져오기 위함 
 		        List<HashMap> list = userService.getUserList();
 				HashMap CreatedUser = null;
@@ -146,7 +280,32 @@ public class UserController {
     // 사용자 정보 수정
     @PostMapping("/admin/update")
     public HashMap update(@RequestBody HashMap map) throws Exception{
-    	HashMap rtnVal = new HashMap();    	
+    	HashMap rtnVal = new HashMap();
+    	
+    	// 로그인한 사용자 정보 가져오기
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+    		rtnVal.put("returnCode", "FAILURE");
+    		rtnVal.put("errorMessage", "로그인이 필요합니다.");
+    		return rtnVal;
+    	}
+    	
+    	// 관리자 권한 확인
+    	boolean isAdmin = authentication.getAuthorities().stream()
+    			.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    	
+    	// 관리자가 아니면 자신의 정보만 수정 가능
+    	if (!isAdmin) {
+    		User loginUser = userService.findUserByUsername(authentication.getName());
+    		if (loginUser == null) {
+    			rtnVal.put("returnCode", "FAILURE");
+    			rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
+    			return rtnVal;
+    		}
+    		// 자신의 ID로만 수정 가능하도록 강제
+    		map.put("id", loginUser.getId());
+    	}
+    	
     	try {
         	int val = userService.update(map);
 	        if(val == 0) {
@@ -168,6 +327,25 @@ public class UserController {
     @DeleteMapping("/admin/delete/{userId}")
 	public HashMap deleteById(@PathVariable(value = "userId") String userId) throws Exception {
     	HashMap rtnVal = new HashMap();
+    	
+    	// 로그인한 사용자 정보 가져오기
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+    		rtnVal.put("returnCode", "FAILURE");
+    		rtnVal.put("errorMessage", "로그인이 필요합니다.");
+    		return rtnVal;
+    	}
+    	
+    	// 관리자 권한 확인
+    	boolean isAdmin = authentication.getAuthorities().stream()
+    			.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    	
+    	if (!isAdmin) {
+    		rtnVal.put("returnCode", "FAILURE");
+    		rtnVal.put("errorMessage", "관리자 권한이 필요합니다.");
+    		return rtnVal;
+    	}
+    	
     	try {
         	int val = userService.deleteById(Integer.parseInt(userId));
 	        if(val == 0) {
@@ -229,10 +407,19 @@ public class UserController {
 	public HashMap getUserInfo(Principal principal) throws Exception {
     	HashMap rtnVal = new HashMap();
     	try {
-        	rtnVal.put("returnCode", "SUCCESS");
-	        rtnVal.put("resultData", userService.findUserByUsername(principal.getName()));	        
+    		// getUserInfo는 HashMap을 반환하므로 regdate 등 모든 필드 포함
+    		HashMap userInfo = userService.getUserInfo(principal.getName());
+    		if (userInfo != null) {
+    			// password는 보안상 제외
+    			userInfo.remove("password");
+    			rtnVal.put("returnCode", "SUCCESS");
+    			rtnVal.put("resultData", userInfo);
+    		} else {
+    			rtnVal.put("returnCode", "FAILURE");
+    			rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
+    		}
     	} catch (Exception e) {
-    		logger.error(e.getMessage());
+    		logger.error("사용자 정보 조회 실패: " + e.getMessage(), e);
     		rtnVal.put("returnCode", "FAILURE");
 			rtnVal.put("errorMessage", e.getMessage());
     	}
@@ -241,35 +428,108 @@ public class UserController {
     
     // 비밀번호 변경
     @PostMapping("/user/resetPassword")
-    public HashMap resetPassword(HttpSession session, @RequestBody HashMap map) throws Exception{
+    public HashMap resetPassword(@RequestBody HashMap map) throws Exception{
     	HashMap rtnVal = new HashMap();    	
     	try {
-			String password = (String) map.get("password");
-        	UserDetails sessionUser = (UserDetails) session.getAttribute("userDetails");
-        	String username = sessionUser.getUsername();
-    		final UserDetails userDetails = userService.loadUserByUsername(username);  
-	        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-	        boolean isMatch = encoder.matches(password, userDetails.getPassword());
-	        if(!isMatch) {
-	        	String encPassword = encoder.encode(password);
-	        	map.put("username", userDetails.getUsername());
-	        	map.put("password", encPassword);
-	        	int val = userService.resetPassword(map);
-		        if(val == 0) {
-		        	rtnVal.put("returnCode", "FAILIRE");
-			        rtnVal.put("errorMessage", val);
-		        }else {
-		        	rtnVal.put("returnCode", "SUCCESS");
-			        rtnVal.put("resultData", val);	        	
-		        }
-	        } else {
-	        	rtnVal.put("returnCode", "FAILIRE");
-		        rtnVal.put("errorMessage", 0);
-	        }
+			// 로그인한 사용자 정보 가져오기
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "로그인이 필요합니다.");
+				return rtnVal;
+			}
+			
+			String username = authentication.getName();
+			String currentPassword = (String) map.get("currentPassword");
+			String newPassword = (String) map.get("password");
+			
+			logger.debug("비밀번호 변경 요청 - username: {}, currentPassword 제공: {}, newPassword 제공: {}", 
+					username, currentPassword != null && !currentPassword.isEmpty(), newPassword != null && !newPassword.isEmpty());
+			
+			// 입력값 검증
+			if (currentPassword == null || currentPassword.isEmpty()) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "현재 비밀번호를 입력해주세요.");
+				return rtnVal;
+			}
+			
+			if (newPassword == null || newPassword.isEmpty()) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "새 비밀번호를 입력해주세요.");
+				return rtnVal;
+			}
+			
+			if (newPassword.length() < 4) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "비밀번호는 최소 4자 이상이어야 합니다.");
+				return rtnVal;
+			}
+			
+			// 데이터베이스에서 사용자 정보 조회 (암호화된 비밀번호 포함)
+			User user = userService.findUserByUsername(username);
+			if (user == null) {
+				logger.error("사용자를 찾을 수 없음: {}", username);
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
+				return rtnVal;
+			}
+			
+			String encodedPasswordFromDb = user.getPassword();
+			if (encodedPasswordFromDb == null || encodedPasswordFromDb.isEmpty()) {
+				logger.error("데이터베이스에 저장된 비밀번호가 없음: {}", username);
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "비밀번호 정보를 찾을 수 없습니다.");
+				return rtnVal;
+			}
+			
+			logger.debug("데이터베이스 비밀번호 해시: {}", encodedPasswordFromDb.substring(0, Math.min(20, encodedPasswordFromDb.length())) + "...");
+			
+			// 현재 비밀번호 확인 (BCrypt로 비교)
+			boolean isMatch = passwordEncoder.matches(currentPassword, encodedPasswordFromDb);
+			logger.debug("현재 비밀번호 일치 여부: {}", isMatch);
+			
+			if (!isMatch) {
+				logger.warn("현재 비밀번호 불일치 - username: {}", username);
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "현재 비밀번호가 일치하지 않습니다.");
+				return rtnVal;
+			}
+			
+			// 새 비밀번호가 현재 비밀번호와 같은지 확인
+			boolean isSamePassword = passwordEncoder.matches(newPassword, encodedPasswordFromDb);
+			if (isSamePassword) {
+				logger.warn("새 비밀번호가 현재 비밀번호와 동일 - username: {}", username);
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+				return rtnVal;
+			}
+			
+			// 새 비밀번호 인코딩
+			String encPassword = passwordEncoder.encode(newPassword);
+			logger.debug("새 비밀번호 인코딩 완료");
+			
+			// 데이터베이스 업데이트
+			HashMap updateMap = new HashMap();
+			updateMap.put("username", username);
+			updateMap.put("password", encPassword);
+			
+			int val = userService.resetPassword(updateMap);
+			if (val == 0) {
+				logger.error("비밀번호 업데이트 실패 - username: {}, 업데이트된 행 수: 0", username);
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "비밀번호 변경에 실패했습니다.");
+			} else {
+				rtnVal.put("returnCode", "SUCCESS");
+				rtnVal.put("resultData", val);
+				logger.info("비밀번호 변경 성공 - username: {}, 업데이트된 행 수: {}", username, val);
+			}
         } catch (Exception e) {
-    		logger.error(e.getMessage());
+    		logger.error("비밀번호 변경 실패 - username: {}, error: {}", 
+    				SecurityContextHolder.getContext().getAuthentication() != null ? 
+    				SecurityContextHolder.getContext().getAuthentication().getName() : "unknown", 
+    				e.getMessage(), e);
     		rtnVal.put("returnCode", "FAILURE");
-			rtnVal.put("errorMessage", e.getMessage());
+			rtnVal.put("errorMessage", e.getMessage() != null ? e.getMessage() : "비밀번호 변경 중 오류가 발생했습니다.");
     	}
         return rtnVal;
     }    

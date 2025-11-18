@@ -30,7 +30,7 @@
         </div>
 
         <div class="schedule-detail-panel" id="scheduleDetail">
-            <h3>📌 일정 상세</h3>
+            <h3>일정 상세</h3>
             <div class="detail-content">
                 <p class="placeholder">일정을 클릭하면 내용이 여기에 표시됩니다.</p>
             </div>
@@ -47,60 +47,135 @@
 
     <!-- 🦮 산책 기록 모달 -->
     <div id="walkModal" class="diaryModal hidden">
-        <div class="modal-content">
-            <h3>산책 기록</h3>
+        <div class="modal-content schedule-modal-content">
+            <div class="dogModal-header">
+                <h3>
+                    <i class="fas fa-walking" style="margin-right: 8px; color: #666;"></i>
+                    산책 기록
+                </h3>
+                <button class="dogModal-back-btn" id="closeWalkModalBtn" title="닫기">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <input type="hidden" id="walkId">
-            <select id="walkDogSelect" required>
-                <option value="" selected hidden>반려견 선택</option>
-            </select>
-             <div class="walkModal-item">
-                <label>날짜</label>
-                <input type="date" id="walkDate" readonly>
+            <div class="dogModal-fields">
+                <div class="dogModal-field">
+                    <label>반려견</label>
+                    <div class="dogModal-field-wrapper">
+                        <select id="walkDogSelect" required>
+                            <option value="" selected hidden>반려견 선택</option>
+                        </select>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>날짜</label>
+                    <div class="dogModal-field-wrapper">
+                        <input type="date" id="walkDate" readonly>
+                    </div>
+                </div>
+                <div class="dogModal-field dogModal-field-full">
+                    <label>날씨</label>
+                    <div class="weather-selector">
+                        <button type="button" class="weather-btn" data-weather="맑음">
+                            <!-- <i class="fas fa-sun"></i> -->
+                            <span>맑음</span>
+                        </button>
+                        <button type="button" class="weather-btn" data-weather="흐림">
+                            <!-- <i class="fas fa-cloud"></i> -->
+                            <span>흐림</span>
+                        </button>
+                        <button type="button" class="weather-btn" data-weather="비">
+                            <!-- <i class="fas fa-cloud-rain"></i> -->
+                            <span>비</span>
+                        </button>
+                        <button type="button" class="weather-btn" data-weather="눈">
+                            <!-- <i class="fas fa-snowflake"></i> -->
+                            <span>눈</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="walkWeather" value="">
+                </div>
+                <div class="dogModal-field dogModal-field-full">
+                    <label>산책 시간</label>
+                    <div class="duration-selector">
+                        <button type="button" class="duration-btn" data-minutes="15">15분</button>
+                        <button type="button" class="duration-btn" data-minutes="30">30분</button>
+                        <button type="button" class="duration-btn" data-minutes="60">1시간</button>
+                        <button type="button" class="duration-btn" data-minutes="90">1시간 반</button>
+                        <button type="button" class="duration-btn" data-minutes="120">2시간</button>
+                    </div>
+                    <input type="hidden" id="walkDuration" value="">
+                </div>
+                <div class="dogModal-field dogModal-field-full">
+                    <label>메모</label>
+                    <div class="dogModal-field-wrapper">
+                        <textarea id="walkMemo" placeholder="산책 중 특이사항을 기록하세요." style="resize: vertical; min-height: 80px;"></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="walkModal-item">
-                <label>산책 시간 (분)</label>
-                <input type="number" id="walkDuration" placeholder="예: 30">
-            </div>
-            <div class="walkModal-item">
-                <label>날씨</label>
-                <input type="text" id="walkWeather" placeholder="예: 맑음 / 흐림">
-            </div>
-            <textarea id="walkMemo" placeholder="산책 중 특이사항을 기록하세요."></textarea>
-            <div class="modal-buttons">
-                <button class="button save-button" id="saveWalkBtn">저장</button>
-                <button class="button close-button" id="closeWalkModalBtn">닫기</button>
+            <div class="dogModal-action-buttons">
+                <button class="dogModal-save-btn" id="saveWalkBtn">저장하기</button>
             </div>
         </div>
     </div>
 
     <!-- 🏥 병원 기록 모달 -->
     <div id="hospitalModal" class="diaryModal hidden">
-        <div class="modal-content">
-            <h3>병원 기록</h3>
+        <div class="modal-content schedule-modal-content">
+            <div class="dogModal-header">
+                <h3>
+                    <i class="fas fa-clinic-medical" style="margin-right: 8px; color: #666;"></i>
+                    병원 기록
+                </h3>
+                <button class="dogModal-back-btn" id="closeHospitalModalBtn" title="닫기">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <input type="hidden" id="hospitalId">
-            <select id="hospitalDogSelect" required>
-                <option value="" selected hidden>반려견 선택</option>
-            </select>
-            <div class="hospitalModal-item">
-                <label>날짜</label>
-                <input type="date" id="hospitalDate" readonly>
+            <div class="dogModal-fields">
+                <div class="dogModal-field">
+                    <label>반려견</label>
+                    <div class="dogModal-field-wrapper">
+                        <select id="hospitalDogSelect" required>
+                            <option value="" selected hidden>반려견 선택</option>
+                        </select>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>날짜</label>
+                    <div class="dogModal-field-wrapper">
+                        <input type="date" id="hospitalDate" readonly>
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>병원 이름</label>
+                    <div class="dogModal-field-wrapper">
+                        <input type="text" id="hospitalName" placeholder="병원명 입력">
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>진료 항목</label>
+                    <div class="dogModal-field-wrapper">
+                        <input type="text" id="hospitalDiagnosis" placeholder="예: 정기검진, 예방접종 등">
+                    </div>
+                </div>
+                <div class="dogModal-field dogModal-field-full">
+                    <label>비용 (원)</label>
+                    <div class="dogModal-field-wrapper">
+                        <input type="number" id="hospitalCost" placeholder="예: 45000">
+                    </div>
+                </div>
+                <div class="dogModal-field dogModal-field-full">
+                    <label>메모</label>
+                    <div class="dogModal-field-wrapper">
+                        <textarea id="hospitalMemo" placeholder="진료 내용, 처방 등을 기록하세요." style="resize: vertical; min-height: 80px;"></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="hospitalModal-item">
-                <label>병원 이름</label>
-                <input type="text" id="hospitalName" placeholder="병원명 입력">
-            </div>
-            <div class="hospitalModal-item">
-                <label>진료 항목</label>
-                <input type="text" id="hospitalDiagnosis" placeholder="예: 정기검진, 예방접종 등">
-            </div>
-            <div class="hospitalModal-item">
-                <label>비용 (원)</label>
-                <input type="number" id="hospitalCost" placeholder="예: 45000">
-            </div>
-            <textarea id="hospitalMemo" placeholder="진료 내용, 처방 등을 기록하세요."></textarea>
-            <div class="modal-buttons">
-                <button class="button save-button" id="saveHospitalBtn">저장</button>
-                <button class="button close-button" id="closeHospitalModalBtn">닫기</button>
+            <div class="dogModal-action-buttons">
+                <button class="dogModal-save-btn" id="saveHospitalBtn">저장하기</button>
             </div>
         </div>
     </div>
@@ -158,29 +233,19 @@
             }
             yearSelect.addEventListener("change", () => { 
                 currentYear=parseInt(yearSelect.value); 
+                yearSelect.classList.remove("active");
+                monthSelect.classList.remove("active");
                 renderCalendar(); 
             });
             monthSelect.addEventListener("change", () => { 
                 currentMonth=parseInt(monthSelect.value); 
+                yearSelect.classList.remove("active");
+                monthSelect.classList.remove("active");
                 renderCalendar(); 
             });
         }
 
-        async function loadMonthlySchedules(year, month) {
-            try {
-                const formattedMonth = `${year}-${String(month + 1).padStart(2, "0")}`;
-                const response = await axios.get(`/api/getSchedulesByMonth`, {
-                    params: { user_id: 3, month: formattedMonth }
-                });
-                if(response.data.returnCode === "SUCCESS"){
-                    return response.data.resultData || [];
-                }
-                return [];
-            } catch (error) {
-                console.error("월별 일정 조회 실패:", error);
-                return [];
-            }
-        }
+        // 월별 일정 조회는 ApiCommon.loadMonthlySchedules 사용
 
         async function renderCalendar(){
             calendarGrid.innerHTML = "";
@@ -188,7 +253,26 @@
             const lastDay = new Date(currentYear, currentMonth+1,0);
             const startDay = firstDay.getDay();
 
-            schedules = await loadMonthlySchedules(currentYear, currentMonth);
+            let allSchedules = await ApiCommon.loadMonthlySchedules(currentYear, currentMonth, 3);
+            
+            // localStorage에서 기본 반려견 ID 읽기
+            const defaultDogId = localStorage.getItem('defaultDogId');
+            
+            // 기본 반려견이 설정되어 있으면 해당 강아지의 스케줄만 필터링
+            if (defaultDogId && defaultDogId !== '') {
+                schedules = allSchedules.filter(s => s.dog_id == defaultDogId);
+            } else {
+                schedules = allSchedules;
+            }
+
+            // 요일 헤더 추가
+            const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+            weekdays.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'schedule-calendar-weekday';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
 
             for(let i=0;i<startDay;i++){
                 const emptyDiv=document.createElement("div"); 
@@ -199,6 +283,12 @@
             for(let day=1; day<=lastDay.getDate(); day++){
                 const div=document.createElement("div"); 
                 div.classList.add("schedule-calendar-day");
+                const thisDate = new Date(currentYear, currentMonth, day);
+                const dayOfWeek = thisDate.getDay();
+                
+                // 주말 스타일 추가
+                if(dayOfWeek === 0) div.classList.add('sunday');
+                if(dayOfWeek === 6) div.classList.add('saturday');
 
                 const num=document.createElement("div"); 
                 num.classList.add("schedule-calendar-day-number"); 
@@ -215,8 +305,11 @@
                     
                     item.addEventListener("click", (e) => {
                         e.stopPropagation();
+                        selectedDate = dateStr;
                         document.querySelectorAll(".schedule-item").forEach(si => si.classList.remove("selected"));
+                        document.querySelectorAll(".schedule-calendar-day").forEach(d => d.classList.remove("selected"));
                         item.classList.add("selected");
+                        div.classList.add("selected");
 
                         showDetail(s);
                     });
@@ -229,11 +322,17 @@
                     document.querySelectorAll(".schedule-calendar-day").forEach(d => d.classList.remove("selected"));
                     div.classList.add("selected");
 
+                    // select에 active 스타일 제거 (일자 클릭 시에는 select를 active로 만들지 않음)
+                    yearSelect.classList.remove("active");
+                    monthSelect.classList.remove("active");
+                    
                     const daySchedules = schedules.filter(s => s.date === selectedDate);
                     if(daySchedules.length){
+                        // 첫 번째 일정(최상단) 표시
                         detailContent.innerHTML = "";
-                        daySchedules.forEach(s => showDetail(s));
+                        showDetail(daySchedules[0]);
                     } else {
+                        document.querySelector("#scheduleDetail h3").textContent = `일정 상세`;
                         detailContent.innerHTML = `<p class="placeholder">일정이 없습니다.</p>`;
                     }
                 });
@@ -244,13 +343,25 @@
 
                 calendarGrid.appendChild(div);
             }
-            const todaySchedule = schedules.find(s=>s.date===selectedDate);
-            if(todaySchedule){
-                showDetail(todaySchedule);
-            } else {
-                document.querySelector("#scheduleDetail h3").textContent = `📌 일정 상세 (${selectedDate})`;
-                detailContent.innerHTML = `<p class="placeholder">일정이 없습니다.</p>`;
+            // 선택된 날짜가 현재 표시 중인 월에 속하는지 확인
+            const selectedDateObj = new Date(selectedDate);
+            const isSelectedDateInCurrentMonth = selectedDateObj.getFullYear() === currentYear && 
+                                                  selectedDateObj.getMonth() === currentMonth;
+            
+            // 선택된 날짜가 현재 월에 속하는 경우에만 일정 상세 패널 업데이트
+            if(isSelectedDateInCurrentMonth){
+                const daySchedules = schedules.filter(s => s.date === selectedDate);
+                
+                if(daySchedules.length > 0){
+                    // 첫 번째 일정(최상단) 표시
+                    detailContent.innerHTML = "";
+                    showDetail(daySchedules[0]);
+                } else {
+                    document.querySelector("#scheduleDetail h3").textContent = `일정 상세`;
+                    detailContent.innerHTML = `<p class="placeholder">일정이 없습니다.</p>`;
+                }
             }
+            // 선택된 날짜가 현재 월에 속하지 않으면 일정 상세 패널은 그대로 유지
         }
 
         // async function renderSchedulesByDate(date) {
@@ -278,17 +389,41 @@
         // }
 
 
-        async function loadDogs(selectElement){
+        async function loadDogs(selectElement, preserveValue = null){
             try{
-                const response = await axios.get("/api/getDogsByUserId", { params: { userId: 1 } });
+                const response = await axios.get("/api/getDogsByUserId");
                 if(response.data.returnCode==="SUCCESS"){
-                    selectElement.innerHTML='<option selected hidden value="">반려견 선택</option>';
-                    response.data.resultData.forEach(dog=>{
-                        const opt=document.createElement("option");
-                        opt.value=dog.id;
-                        opt.textContent=dog.name;
+                    const dogs = response.data.resultData || [];
+                    
+                    // 기존 옵션 초기화
+                    selectElement.innerHTML = '';
+                    
+                    // 강아지 목록이 있으면 무조건 첫 번째 강아지를 기본값으로 설정
+                    if (dogs.length > 0) {
+                        dogs.forEach((dog, index) => {
+                            const opt = document.createElement("option");
+                            opt.value = dog.id;
+                            opt.textContent = dog.name;
+                            // 무조건 첫 번째 강아지를 기본 선택
+                            if (index === 0) {
+                                opt.selected = true;
+                            }
+                            selectElement.appendChild(opt);
+                        });
+                        
+                        // preserveValue가 있으면 해당 값으로 변경 (첫 번째가 기본이지만 수정 모드에서는 기존 값 유지)
+                        if (preserveValue) {
+                            selectElement.value = preserveValue;
+                        }
+                    } else {
+                        // 강아지가 없으면 "반려견 선택" 옵션만 표시
+                        const opt = document.createElement("option");
+                        opt.value = "";
+                        opt.textContent = "반려견 선택";
+                        opt.selected = true;
+                        opt.hidden = true;
                         selectElement.appendChild(opt);
-                    });
+                    }
                 }
             } catch(e){ console.error("반려견 조회 실패", e); }
         }
@@ -309,21 +444,41 @@
                 const dateInput = document.getElementById("walkDate");
                 dateInput.value = schedule?.date || selectedDate;
                 dateInput.readOnly = true;
-                loadDogs(walkSelect).then(()=>{ walkSelect.value = schedule?.dog_id || ""; });
+                loadDogs(walkSelect, schedule?.dog_id || null);
 
                 document.getElementById("walkId").value = schedule?.id || "";
-                document.getElementById("walkDuration").value = schedule?.duration || "";
-                document.getElementById("walkWeather").value = schedule?.weather || "";
+                const durationValue = schedule?.duration || "";
+                document.getElementById("walkDuration").value = durationValue;
+                
+                // 기존 duration 값에 맞는 버튼 선택
+                document.querySelectorAll(".duration-btn").forEach(btn => {
+                    btn.classList.remove("active");
+                    if(btn.dataset.minutes == durationValue) {
+                        btn.classList.add("active");
+                    }
+                });
+                
+                const weatherValue = schedule?.weather || "";
+                document.getElementById("walkWeather").value = weatherValue;
+                
+                // 기존 날씨 값에 맞는 버튼 선택
+                document.querySelectorAll(".weather-btn").forEach(btn => {
+                    btn.classList.remove("active");
+                    if(btn.dataset.weather === weatherValue) {
+                        btn.classList.add("active");
+                    }
+                });
+                
                 document.getElementById("walkMemo").value = schedule?.desc || "";
             } else if(modalId==="hospitalModal"){
                 const hospitalSelect = document.getElementById("hospitalDogSelect");
                 const dateInput = document.getElementById("hospitalDate");
                 dateInput.value = schedule?.date || selectedDate;
                 dateInput.readOnly = true;
-                loadDogs(hospitalSelect).then(()=>{ hospitalSelect.value = schedule?.dog_id || ""; });
+                loadDogs(hospitalSelect, schedule?.dog_id || null);
 
                 document.getElementById("hospitalId").value = schedule?.id || "";
-                document.getElementById("hospitalName").value = schedule?.hospitalName || "";
+                document.getElementById("hospitalName").value = schedule?.hospital_name || "";
                 document.getElementById("hospitalDiagnosis").value = schedule?.diagnosis || "";
                 document.getElementById("hospitalCost").value = schedule?.cost || "";
                 document.getElementById("hospitalMemo").value = schedule?.desc || "";
@@ -331,38 +486,114 @@
         }
 
         function showDetail(schedule){
-            let content = `
-                <div class="detail-card ${schedule.type}">
-                    <h4>${schedule.type =="walk" ? "산책": "병원"}</h4>
-                    <p><strong>📅 날짜:</strong> ${schedule.date}</p>
-                    <p><strong>🐶 반려견:</strong> ${schedule.dog_name || "-"}</p>
-            `;
+            document.querySelector("#scheduleDetail h3").textContent = `일정 상세`;
+            
+            // 날짜 포맷팅
+            const dateObj = new Date(schedule.date);
+            const formattedDate = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`;
+            
+            let statsContent = '';
+            let titleText = '';
+            
             if(schedule.type === "walk"){
-                content += `
-                    <p><strong>⏱ 시간:</strong> ${schedule.duration || "-"} 분</p>
-                    <p><strong>🌤 날씨:</strong> ${schedule.weather || "-"}</p>
+                titleText = "산책";
+                statsContent = `
+                    <div class="schedule-stat-item">
+                        <div class="schedule-stat-label">
+                            <i class="fas fa-clock" style="margin-right: 4px;"></i>시간
+                        </div>
+                        <div class="schedule-stat-value">${schedule.duration || "-"} 분</div>
+                    </div>
+                    <div class="schedule-stat-item">
+                        <div class="schedule-stat-label">
+                            <i class="fas fa-cloud-sun" style="margin-right: 4px;"></i>날씨
+                        </div>
+                        <div class="schedule-stat-value">${schedule.weather || "-"}</div>
+                    </div>
                 `;
             } else {
-                content += `
-                    <p><strong>🏥 병원명:</strong> ${schedule.hospital_name || "-"}</p>
-                    <p><strong>💉 진료 항목:</strong> ${schedule.diagnosis || "-"}</p>
-                    <p><strong>💰 비용:</strong> ${schedule.cost || "-"} 원</p>
+                titleText = "병원";
+                statsContent = `
+                    <div class="schedule-stat-item">
+                        <div class="schedule-stat-label">
+                            <i class="fas fa-hospital" style="margin-right: 4px;"></i>병원명
+                        </div>
+                        <div class="schedule-stat-value">${schedule.hospital_name || "-"}</div>
+                    </div>
+                    <div class="schedule-stat-item">
+                        <div class="schedule-stat-label">
+                            <i class="fas fa-stethoscope" style="margin-right: 4px;"></i>진료 항목
+                        </div>
+                        <div class="schedule-stat-value">${schedule.diagnosis || "-"}</div>
+                    </div>
+                    ${schedule.cost ? `
+                    <div class="schedule-stat-item">
+                        <div class="schedule-stat-label">
+                            <i class="fas fa-won-sign" style="margin-right: 4px;"></i>비용
+                        </div>
+                        <div class="schedule-stat-value">${schedule.cost.toLocaleString()}원</div>
+                    </div>
+                    ` : ''}
                 `;
             }
-            content += `<p><strong>📝 메모:</strong> ${schedule.desc || "-"}</p>
-                <div class="detail-actions">
-                    <button class="edit-btn" title="수정"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="delete-btn" title="삭제"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            </div>`;
+            
+            // 일정 타입에 따른 아이콘과 색상 설정
+            let dateIcon = 'fa-calendar-alt';
+            let dateIconColor = 'var(--primary-color)';
+            let memoIconColor = 'var(--primary-color)';
+            
+            if(schedule.type === 'walk') {
+                dateIcon = 'fa-walking';
+                dateIconColor = '#F57F17';
+                memoIconColor = '#F57F17';
+            } else if(schedule.type === 'hospital') {
+                dateIcon = 'fa-clinic-medical';
+                dateIconColor = '#388E3C';
+                memoIconColor = '#388E3C';
+            }
+            
+            let content = `
+                <div class="schedule-profile-card ${schedule.type}">
+                    <div class="schedule-card-header">
+                        <div class="schedule-date-header">
+                            <i class="fas ${dateIcon}" style="color: ${dateIconColor};"></i>
+                            <span>${formattedDate}</span>
+                        </div>
+                        <div class="schedule-profile-actions">
+                            <button class="schedule-edit-btn" title="수정"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="schedule-delete-btn" title="삭제"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                    <div class="schedule-profile-header">
+                        <div class="schedule-avatar ${schedule.type}">
+                            <i class="fas ${schedule.type === 'walk' ? 'fa-walking' : 'fa-clinic-medical'}"></i>
+                        </div>
+                        <div class="schedule-stats">
+                            ${statsContent}
+                        </div>
+                    </div>
+                    <div class="schedule-profile-info">
+                        <h3 class="schedule-name">${schedule.dog_name || "-"}</h3>
+                    </div>
+                    <div class="schedule-about-section">
+                        <div class="schedule-about-title">
+                            <i class="fas fa-sticky-note" style="margin-right: 6px; color: ${memoIconColor};"></i>메모
+                        </div>
+                        <p class="schedule-about-content ${!schedule.desc || schedule.desc === '메모가 없습니다.' ? 'empty-memo' : ''}">${schedule.desc || "메모가 없습니다."}</p>
+                    </div>
+                </div>`;
             detailContent.innerHTML = content;
 
-            detailContent.querySelector(".edit-btn").addEventListener("click", ()=>{
-                saveWalkBtn.textContent = "수정";
+            detailContent.querySelector(".schedule-edit-btn").addEventListener("click", ()=>{
+                if(schedule.type==="walk") {
+                    saveWalkBtn.textContent = "수정하기";
+                } else {
+                    saveHospitalBtn.textContent = "수정하기";
+                }
                 openModal(schedule.type==="walk"?"walkModal":"hospitalModal", schedule);
             });
 
-            detailContent.querySelector(".delete-btn").addEventListener("click", ()=>{
+            detailContent.querySelector(".schedule-delete-btn").addEventListener("click", ()=>{
                 const modal=document.getElementById("deleteConfirmModal"); 
                 modal.style.display="flex";
                 const confirmBtn=document.getElementById("confirmDeleteBtn");
@@ -373,9 +604,9 @@
                 document.getElementById("confirmDeleteBtn").addEventListener("click", async ()=>{
                     try{
                         if(schedule.type==="walk"){
-                            await axios.post("/api/deleteWalk", { id: schedule.id });
+                            await ApiCommon.deleteWalk(schedule.id);
                         } else {
-                            await axios.post("/api/deleteHospital", { id: schedule.id });
+                            await ApiCommon.deleteHospital(schedule.id);
                         }
                         schedules = schedules.filter(s=>s.id!==schedule.id);
                         await renderCalendar();
@@ -390,48 +621,125 @@
 
         saveWalkBtn.addEventListener("click", async ()=>{
             const id = document.getElementById("walkId").value;
+            const dogId = document.getElementById("walkDogSelect").value;
+            const duration = document.getElementById("walkDuration").value;
+            const weather = document.getElementById("walkWeather").value;
+            const memo = document.getElementById("walkMemo").value;
+            
+            // 필수 필드 검증
+            if (!dogId || dogId === "") {
+                alert("반려견을 선택해주세요.");
+                return;
+            }
+            
+            if (!selectedDate || selectedDate === "") {
+                alert("날짜를 선택해주세요.");
+                return;
+            }
+            
             const walkData = {
                 user_id: 3,
-                dog_id: document.getElementById("walkDogSelect").value,
-                duration: parseInt(document.getElementById("walkDuration").value || 0),
-                weather: document.getElementById("walkWeather").value,
-                memo: document.getElementById("walkMemo").value,
+                dog_id: parseInt(dogId),
+                duration: duration ? parseInt(duration) : null,
+                weather: weather || null,
+                memo: memo || null,
                 date: selectedDate
             };
-            const url = id ? "/api/updateWalk" : "/api/createWalk";
+            
             try{
-                const response = await axios.post(url, id? { id, ...walkData }: walkData, { headers: { "Content-Type": "application/json" }});
+                const response = id
+                    ? await ApiCommon.updateWalk({ id: parseInt(id), ...walkData })
+                    : await ApiCommon.createWalk(walkData);
                 
-                if(response.data.returnCode === "SUCCESS") {
+                if(response && response.data && response.data.returnCode === "SUCCESS") {
                     alert("저장 완료!");
-                    document.getElementById("walkModal").classList.add("hidden");
+                    // 모달 닫기 (fade-out 효과)
+                    const modal = document.getElementById("walkModal");
+                    modal.style.opacity = 0;
+                    setTimeout(() => {
+                        modal.classList.add("hidden");
+                        // 폼 초기화
+                        document.getElementById("walkId").value = "";
+                        document.getElementById("walkDogSelect").value = "";
+                        document.getElementById("walkDuration").value = "";
+                        document.getElementById("walkWeather").value = "";
+                        document.getElementById("walkMemo").value = "";
+                        document.querySelectorAll(".duration-btn").forEach(btn => btn.classList.remove("active"));
+                        document.querySelectorAll(".weather-btn").forEach(btn => btn.classList.remove("active"));
+                        saveWalkBtn.textContent = "저장하기";
+                    }, 300);
                     await renderCalendar();
+                } else {
+                    const errorMsg = response?.data?.errorMessage || "저장에 실패했습니다.";
+                    alert(errorMsg);
                 }
-            } catch(e){ console.error(e); alert("저장 오류"); }
+            } catch(e){ 
+                console.error("저장 오류:", e);
+                const errorMsg = e.response?.data?.errorMessage || e.message || "저장 중 오류가 발생했습니다.";
+                alert(errorMsg);
+            }
         });
 
         saveHospitalBtn.addEventListener("click", async ()=>{
             const id = document.getElementById("hospitalId").value;
+            const dogId = document.getElementById("hospitalDogSelect").value;
+            const hospitalName = document.getElementById("hospitalName").value;
+            const diagnosis = document.getElementById("hospitalDiagnosis").value;
+            const cost = document.getElementById("hospitalCost").value;
+            const memo = document.getElementById("hospitalMemo").value;
+            
+            // 필수 필드 검증
+            if (!dogId || dogId === "") {
+                alert("반려견을 선택해주세요.");
+                return;
+            }
+            
+            if (!selectedDate || selectedDate === "") {
+                alert("날짜를 선택해주세요.");
+                return;
+            }
+            
             const hospitalData = {
                 user_id: 3,
-                dog_id: document.getElementById("hospitalDogSelect").value,
-                hospital_name: document.getElementById("hospitalName").value,
-                diagnosis: document.getElementById("hospitalDiagnosis").value,
-                cost: parseInt(document.getElementById("hospitalCost").value || 0),
-                memo: document.getElementById("hospitalMemo").value,
+                dog_id: parseInt(dogId),
+                hospital_name: hospitalName || null,
+                diagnosis: diagnosis || null,
+                cost: cost ? parseInt(cost) : null,
+                memo: memo || null,
                 date: selectedDate
             };
-            const url = id ? "/api/updateHospital" : "/api/createHospital";
-
+            
             try {
-                const response = await axios.post(url, id ? { id, ...hospitalData } : hospitalData, { headers: { "Content-Type": "application/json" }});
+                const response = id
+                    ? await ApiCommon.updateHospital({ id: parseInt(id), ...hospitalData })
+                    : await ApiCommon.createHospital(hospitalData);
 
-                if (response.data.returnCode === "SUCCESS") {
+                if (response && response.data && response.data.returnCode === "SUCCESS") {
                     alert("저장 완료!");
-                    document.getElementById("hospitalModal").classList.add("hidden");
+                    // 모달 닫기 (fade-out 효과)
+                    const modal = document.getElementById("hospitalModal");
+                    modal.style.opacity = 0;
+                    setTimeout(() => {
+                        modal.classList.add("hidden");
+                        // 폼 초기화
+                        document.getElementById("hospitalId").value = "";
+                        document.getElementById("hospitalDogSelect").value = "";
+                        document.getElementById("hospitalName").value = "";
+                        document.getElementById("hospitalDiagnosis").value = "";
+                        document.getElementById("hospitalCost").value = "";
+                        document.getElementById("hospitalMemo").value = "";
+                        saveHospitalBtn.textContent = "저장하기";
+                    }, 300);
                     await renderCalendar();
+                } else {
+                    const errorMsg = response?.data?.errorMessage || "저장에 실패했습니다.";
+                    alert(errorMsg);
                 }
-            } catch(e){ console.error(e); alert("저장 오류"); }
+            } catch(e){ 
+                console.error("저장 오류:", e);
+                const errorMsg = e.response?.data?.errorMessage || e.message || "저장 중 오류가 발생했습니다.";
+                alert(errorMsg);
+            }
         });
 
         mainFab.addEventListener("click", () => {
@@ -441,11 +749,43 @@
         document.querySelectorAll(".fab-item").forEach(item=>{
             item.addEventListener("click", ()=>{
                 openModal(item.dataset.target);
-                saveWalkBtn.textContent = "저장";
+                if(item.dataset.target === "walkModal") {
+                    saveWalkBtn.textContent = "저장하기";
+                    // 새로 모달을 열 때 모든 duration 버튼 초기화
+                    document.querySelectorAll(".duration-btn").forEach(btn => {
+                        btn.classList.remove("active");
+                    });
+                    document.getElementById("walkDuration").value = "";
+                    // 날씨 버튼도 초기화
+                    document.querySelectorAll(".weather-btn").forEach(btn => {
+                        btn.classList.remove("active");
+                    });
+                    document.getElementById("walkWeather").value = "";
+                } else if(item.dataset.target === "hospitalModal") {
+                    saveHospitalBtn.textContent = "저장하기";
+                }
                 fabMenu.classList.remove("show");
             });
         });
 
+        // 닫기 버튼 이벤트 리스너
+        document.getElementById("closeWalkModalBtn")?.addEventListener("click", ()=>{
+            const modal = document.getElementById("walkModal");
+            modal.style.opacity = 0;
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300);
+        });
+        
+        document.getElementById("closeHospitalModalBtn")?.addEventListener("click", ()=>{
+            const modal = document.getElementById("hospitalModal");
+            modal.style.opacity = 0;
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300);
+        });
+        
+        // 기존 close-button 클래스도 지원 (하위 호환성)
         document.querySelectorAll(".close-button").forEach(btn=>{
             btn.addEventListener("click", ()=>{
                 btn.closest(".diaryModal").classList.add("hidden");
@@ -457,7 +797,6 @@
                 fabMenu.classList.remove("show");
                 document.querySelectorAll(".diaryModal").forEach(m => {
                     m.classList.add("hidden");
-                    m.style.display = "none";
                 });
             }
         });
@@ -465,9 +804,63 @@
         todayButton.addEventListener("click", async () => {
             currentYear=today.getFullYear();
             currentMonth=today.getMonth();
+            selectedDate = `${currentYear}-${String(currentMonth+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
             yearSelect.value=currentYear;
             monthSelect.value=currentMonth;
+            yearSelect.classList.remove("active");
+            monthSelect.classList.remove("active");
+            await renderCalendar();
+        });
+
+        // 이전/다음 월 버튼 이벤트
+        document.getElementById("prevMonthBtn").addEventListener("click", () => {
+            currentMonth--;
+            if(currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            yearSelect.value = currentYear;
+            monthSelect.value = currentMonth;
+            yearSelect.classList.remove("active");
+            monthSelect.classList.remove("active");
             renderCalendar();
+        });
+
+        document.getElementById("nextMonthBtn").addEventListener("click", () => {
+            currentMonth++;
+            if(currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            yearSelect.value = currentYear;
+            monthSelect.value = currentMonth;
+            yearSelect.classList.remove("active");
+            monthSelect.classList.remove("active");
+            renderCalendar();
+        });
+
+        // 산책 시간 버튼 클릭 이벤트
+        document.querySelectorAll(".duration-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                // 모든 버튼에서 active 클래스 제거
+                document.querySelectorAll(".duration-btn").forEach(b => b.classList.remove("active"));
+                // 클릭한 버튼에 active 클래스 추가
+                this.classList.add("active");
+                // hidden input에 값 저장
+                document.getElementById("walkDuration").value = this.dataset.minutes;
+            });
+        });
+
+        // 날씨 버튼 클릭 이벤트
+        document.querySelectorAll(".weather-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                // 모든 버튼에서 active 클래스 제거
+                document.querySelectorAll(".weather-btn").forEach(b => b.classList.remove("active"));
+                // 클릭한 버튼에 active 클래스 추가
+                this.classList.add("active");
+                // hidden input에 값 저장
+                document.getElementById("walkWeather").value = this.dataset.weather;
+            });
         });
 
         initSelectors();

@@ -2,7 +2,9 @@ package com.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,23 @@ public class DefaultController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@GetMapping("/")
+	public String root() {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
+		// 로그인된 사용자는 대시보드로 리다이렉트
+		logger.debug("인증된 사용자: {} - 대시보드로 리다이렉트", authentication.getName());
+		return "redirect:/dashboard";
+	}
+	
 	@GetMapping("/error")
 	public String error() {
 
@@ -47,6 +66,16 @@ public class DefaultController {
 	
 	@GetMapping("/dashboard")
 	public String dashboard(Model model) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
 	    model.addAttribute("title", "대시보드");
 	    model.addAttribute("todayDiaries", 3);
 	    model.addAttribute("dogCount", 2);
@@ -82,8 +111,27 @@ public class DefaultController {
 
 	@GetMapping("/profile")
 	public String profile(Model model) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
+		// 로그인한 사용자 정보 가져오기
+		User loginUser = userService.findUserByUsername(authentication.getName());
+		if (loginUser != null) {
+			// 사용자 정보를 모델에 추가 (비밀번호는 제외)
+			model.addAttribute("user", loginUser);
+			logger.debug("프로필 페이지 로드 - 사용자: {}", loginUser.getUsername());
+		} else {
+			logger.warn("사용자 정보를 찾을 수 없음: {}", authentication.getName());
+		}
+		
 		model.addAttribute("title", "프로필 설정");
-	    model.addAttribute("user", Map.of("name","홍길동", "email","example@test.com"));
 	    return "profile";
 	}
 	

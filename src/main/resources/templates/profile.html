@@ -4,26 +4,254 @@
       layout:decorate="~{layout/main-layout}">
 <body class="profile-body">
     <div layout:fragment="content">
-        <div class="profile-card">
-            <h3>내 정보</h3>
-        <form method="post" th:action="@{/profile/update}">
-                <div class="profile-item">
-                    <label>이름</label>
-                    <input type="text" th:value="${user.name}" name="name">
-                </div>
+        <div class="profile-page-wrapper">
+            <div class="profile-container">
+                <!-- 프로필 카드 -->
+                <div class="profile-card">
+                    <!-- 프로필 헤더 섹션 -->
+                    <div class="profile-header-section">
+                        <div class="profile-picture-container">
+                            <div class="profile-picture" id="profilePicture">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-name-section">
+                            <div class="name-row">
+                                <h1 class="display-name" id="userName">-</h1>
+                                <span class="badge-new" id="newBadge" style="display: none;">NEW</span>
+                            </div>
+                            <div class="username-row">
+                                <span class="username-text" id="username">@username</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="profile-item">
-                    <label>이메일</label>
-                    <input type="email" placeholder="example@email.com" th:value="${email}">
-                </div>
+                    <!-- 구분선 -->
+                    <div class="profile-divider"></div>
 
-                <div class="profile-item">
-                    <label>비밀번호 변경</label>
-                    <input type="password" name="password">
+                    <!-- 프로필 정보 섹션 -->
+                    <div class="profile-info-section">
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-envelope icon"></i>
+                                <span>이메일</span>
+                            </div>
+                            <div class="info-value" id="email">-</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-user-tag icon"></i>
+                                <span>역할</span>
+                            </div>
+                            <div class="info-value" id="role">-</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-calendar-alt icon"></i>
+                                <span>가입일</span>
+                            </div>
+                            <div class="info-value" id="regdate">-</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-key icon"></i>
+                                <span>비밀번호</span>
+                            </div>
+                            <div class="info-value">
+                                <button class="change-password-link" onclick="openPasswordModal()">
+                                    비밀번호 변경
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="profile-save-btn">수정</button>
-            </form>
-        </section>
+            </div>
+        </div>
+
+        <!-- 비밀번호 변경 모달 -->
+        <div id="passwordModal" class="modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>비밀번호 변경</h3>
+                    <button class="modal-close" onclick="closePasswordModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwordForm">
+                        <div class="form-field">
+                            <label for="currentPassword">현재 비밀번호</label>
+                            <input type="password" id="currentPassword" name="currentPassword" required 
+                                   placeholder="현재 비밀번호를 입력하세요">
+                        </div>
+                        <div class="form-field">
+                            <label for="newPassword">새 비밀번호</label>
+                            <input type="password" id="newPassword" name="newPassword" required 
+                                   minlength="4" placeholder="새 비밀번호를 입력하세요 (최소 4자)">
+                        </div>
+                        <div class="form-field">
+                            <label for="confirmPassword">새 비밀번호 확인</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required 
+                                   minlength="4" placeholder="새 비밀번호를 다시 입력하세요">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="closePasswordModal()">취소</button>
+                            <button type="submit" class="btn-save">변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+
+<th:block layout:fragment="script">
+    <script>
+        // 전역 함수로 정의 (HTML onclick에서 접근 가능하도록)
+        function openPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.getElementById('passwordForm').reset();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('passwordForm').reset();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            async function init() {
+                let currentUser = null;
+
+                // 사용자 정보 조회
+                async function loadUserInfo() {
+                    try {
+                        const response = await fetch('/api/user/getInfo', {
+                            method: 'GET',
+                            credentials: 'include'
+                        });
+
+                        const result = await response.json();
+                        console.log('사용자 정보 응답:', result);
+
+                        if (result.returnCode === 'SUCCESS' && result.resultData) {
+                            currentUser = result.resultData;
+                            displayUserInfo(currentUser);
+                        } else {
+                            console.error('사용자 정보 조회 실패:', result);
+                            // 서버에서 전달된 정보가 없을 때만 에러 메시지 표시
+                            if (!currentUser) {
+                                showToast('사용자 정보를 불러오는데 실패했습니다.', 'error');
+                            }
+                        }
+                    } catch (error) {
+                        console.error('사용자 정보 조회 실패:', error);
+                        // 서버에서 전달된 정보가 없을 때만 에러 메시지 표시
+                        if (!currentUser) {
+                            showToast('사용자 정보를 불러오는데 실패했습니다.', 'error');
+                        }
+                    }
+                }
+
+                // 사용자 정보 표시
+                function displayUserInfo(user) {
+                    console.log('사용자 정보 표시:', user);
+                    
+                    // 사용자명 (이름이 없으면 username 사용)
+                    const displayName = user.username || '사용자';
+                    document.getElementById('userName').textContent = displayName;
+                    
+                    // 사용자명 (@username 형식)
+                    document.getElementById('username').textContent = '@' + (user.username || 'username');
+                    
+                    // 이메일
+                    document.getElementById('email').textContent = user.email || '-';
+                    
+                    // 역할
+                    let roleText = '일반 사용자';
+                    if (user.role === 'ADMIN' || user.role === 'ROLE_ADMIN') {
+                        roleText = '관리자';
+                    }
+                    document.getElementById('role').textContent = roleText;
+                    
+                    // 가입일 (regdate가 있으면 포맷팅)
+                    if (user.regdate) {
+                        const regDate = new Date(user.regdate);
+                        const formattedDate = regDate.toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        document.getElementById('regdate').textContent = formattedDate;
+                    } else {
+                        document.getElementById('regdate').textContent = '-';
+                    }
+                    
+                    // 프로필 아이콘은 기본 아이콘 유지 (편집 불가)
+                    // displayUserInfo 함수에서 프로필 아이콘 변경 로직 제거
+                }
+
+                // 모달 외부 클릭 시 닫기
+                window.onclick = function(event) {
+                    const passwordModal = document.getElementById('passwordModal');
+                    
+                    if (event.target === passwordModal) {
+                        closePasswordModal();
+                    }
+                }
+
+                // 비밀번호 변경 폼 제출
+                document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const currentPassword = document.getElementById('currentPassword').value;
+                    const newPassword = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+
+                    // 유효성 검사
+                    if (newPassword !== confirmPassword) {
+                        showToast('새 비밀번호와 확인 비밀번호가 일치하지 않습니다.', 'error');
+                        return;
+                    }
+
+                    if (newPassword.length < 4) {
+                        showToast('비밀번호는 최소 4자 이상이어야 합니다.', 'error');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/api/user/resetPassword', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            credentials: 'include',
+                            body: JSON.stringify({
+                                currentPassword: currentPassword,
+                                password: newPassword
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.returnCode === 'SUCCESS') {
+                            showToast('비밀번호가 성공적으로 변경되었습니다.', 'success');
+                            closePasswordModal();
+                        } else {
+                            showToast(result.errorMessage || '비밀번호 변경에 실패했습니다.', 'error');
+                        }
+                    } catch (error) {
+                        console.error('비밀번호 변경 실패:', error);
+                        showToast('비밀번호 변경 중 오류가 발생했습니다.', 'error');
+                    }
+                });
+                loadUserInfo();
+            }
+            init();
+        });
+    </script>
+</th:block>
 </body>
 </html>

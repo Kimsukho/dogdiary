@@ -7,7 +7,7 @@
 	 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"> -->
 	<title th:text="${pageTitle} ?: '댕댕이 일지'">댕댕이 일지</title>
 	<!-- <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css"> -->
-	<link rel="stylesheet" th:href="@{/css/loginStyle.css}">
+	<link rel="stylesheet" th:href="@{/css/loginStyle.css}" type="text/css">
 	<script src="http://code.jquery.com/jquery-latest.js"></script> 
 </head>
 <body>
@@ -208,40 +208,40 @@
 			function login() {
 				let loginId = document.getElementById("loginInputId").value;
 				let password = document.getElementById("loginInputPassword").value;
-				console.log(loginId, password);
+				
+				if(!loginId || !password) {
+					toast('아이디와 비밀번호를 입력해주세요.');
+					return;
+				}
 
-				window.location.href = '/dashboard';
-				// if(!login || !password) return;
-
-				// $.ajax({
-				// 		url: '/public/authenticate',
-				// 		method: 'POST',
-				// 		headers: {
-				// 				'Content-Type': 'application/json'
-				// 		},
-				// 		data: JSON.stringify({ username: loginId, password: password }),
-				// 		success: function(data, textStatus, jqXHR) {
-				// 				if(data.returnCode == "FAILURE") return;
-				// 		},
-				// 		error: function(err) {
-				// 				const errorMessage = '서버 오류가 발생했습니다. 다시 시도해주세요.';
-				// 				console.log(errorMessage);
-				// 		}
-				// });
+				$.ajax({
+					url: '/api/public/authenticate',
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					data: JSON.stringify({ username: loginId, password: password }),
+					success: function(data, textStatus, jqXHR) {
+						console.log('로그인 성공:', data);
+						// 로그인 성공 시 대시보드로 리다이렉트
+						window.location.href = '/dashboard';
+					},
+					error: function(xhr, status, error) {
+						console.error('로그인 실패:', error);
+						let errorMessage = '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.';
+						
+						if(xhr.responseJSON && xhr.responseJSON.message) {
+							errorMessage = xhr.responseJSON.message;
+						}
+						
+						toast(errorMessage);
+					}
+				});
 			}
 
 			function logout() {
-				$.ajax({
-						url: '/public/logout',
-						type: 'GET',
-						success: function() {
-								// 로그인 페이지로 리다이렉트
-								window.location.href = '/login';
-						},
-						error: function(err) {
-								console.log(err);
-						}
-				});
+				// Spring Security의 logout 엔드포인트 사용
+				window.location.href = '/logout';
 			}
 		
 		  // 초기 상태: 로그인 화면

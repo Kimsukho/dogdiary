@@ -10,7 +10,7 @@
     --sidebar-expanded-width: 250px; /* 펼쳤을 때 사이드바 너비 */
     --sidebar-collapsed-width: 80px;  /* 접었을 때 사이드바 너비 */
     --header-height: 60px;            /* 헤더의 높이 */
-    --footer-height: 35px;            /* 푸터의 높이 */
+    --footer-height: 50px;            /* 푸터의 높이 */
     --transition-speed: 0.3s;         /* 전환 애니메이션 속도 */
 
     /* 색상 변수 */
@@ -23,7 +23,7 @@
 
     --text-dark: #333;                /* 어두운 텍스트 색상 */
     --text-light: #f8f8f8;            /* 밝은 텍스트 색상 */
-    --text-secondary: #666;           /* 보조 텍스트 색상 */
+    --text-secondary: #7f7f7f;           /* 보조 텍스트 색상 */
     --text-muted: #999;               /* 흐린 텍스트 색상 */
 
     --background-light: #f4f4f4;      /* 밝은 배경색 (주요 콘텐츠 영역, 테이블 헤더 등) */
@@ -42,6 +42,737 @@
     --spacing-lg: 15px;
     --spacing-xl: 32px;
     --spacing-xxl: 48px;
+}
+
+/* 다크 모드 CSS 변수 - 어두운 회색 계열 */
+[data-theme="dark"] {
+    --text-dark: #e0e0e0;
+    --text-light: #1a1a1a;
+    --text-secondary: #b0b0b0;
+    --text-muted: #888;
+
+    --background-light: #1a1a1a;
+    --background-dark: #2d2d2d;
+    --background-header: #2d2d2d;
+    --background-card: #2d2d2d;
+
+    --border-color: #444;
+    --shadow-color: rgba(0,0,0,0.4);
+}
+
+/* 다크 모드 적용 시 body 배경색 */
+[data-theme="dark"] body {
+    background-color: var(--background-light);
+    color: var(--text-dark);
+}
+
+/* 다크 모드 적용 시 main content wrapper */
+[data-theme="dark"] .main-content-wrapper {
+    background-color: var(--background-light);
+}
+
+/* 다크 모드 적용 시 main 영역 */
+[data-theme="dark"] main {
+    background-color: var(--background-light);
+}
+
+/* 다크 모드 적용 시 대시보드 페이지 */
+[data-theme="dark"] .dashboard-page {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+/* 다크 모드 적용 시 일지 페이지 */
+[data-theme="dark"] .diary-page {
+    background-color: var(--background-light);
+}
+
+/* 다크 모드 적용 시 스케줄 페이지 */
+[data-theme="dark"] .schedule-page {
+    background-color: var(--background-light);
+}
+
+/* 다크 모드 적용 시 설정 페이지 */
+[data-theme="dark"] .settings-page {
+    background-color: var(--background-light);
+}
+
+/* 다크 모드 적용 시 카드 배경색 */
+[data-theme="dark"] .card,
+[data-theme="dark"] .settings-card,
+[data-theme="dark"] .chart-section,
+[data-theme="dark"] .activity-section,
+[data-theme="dark"] .schedule-calendar-container,
+[data-theme="dark"] .schedule-detail-panel,
+[data-theme="dark"] .calendar-container,
+[data-theme="dark"] .diary-content {
+    background-color: var(--background-card) !important;
+    color: var(--text-dark);
+    border-color: var(--border-color);
+}
+
+/* 다크 모드 적용 시 개별 카드 배경색 */
+[data-theme="dark"] .diary-card {
+    background: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .empty-card {
+    background: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .summary-container {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .schedule-profile-card {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .profile-card {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .diaryModal-content,
+[data-theme="dark"] .dogModal-content,
+[data-theme="dark"] .modal-container {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+/* 다크 모드 적용 시 추가 카드 및 컨테이너 배경색 */
+[data-theme="dark"] .summary-item {
+    background-color: var(--background-card) !important;
+}
+
+[data-theme="dark"] .dog-card {
+    background: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dog-card-left {
+    background: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dog-card-right {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dog-info-grid {
+    background: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dog-info-grid-item {
+    background-color: transparent;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .schedule-calendar-day,
+[data-theme="dark"] .calendar-day {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+/* 다크 모드에서 diaries.html 캘린더 today 및 selected 스타일 */
+[data-theme="dark"] .calendar-day.today {
+    background: var(--background-card) !important;
+    border: 2px solid #87CEEB !important;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .calendar-day.today .calendar-day-number {
+    color: var(--text-dark) !important;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .calendar-day.selected {
+    background: var(--background-card) !important;
+    border: 2px solid var(--primary-color) !important;
+    box-shadow: 0 2px 8px rgba(78, 166, 133, 0.2);
+}
+
+[data-theme="dark"] .calendar-day.selected .calendar-day-number {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+/* 다크 모드에서 calendar-header h3 스타일 */
+[data-theme="dark"] .calendar-header h3 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .schedule-item {
+    background-color: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .diary-card-body,
+[data-theme="dark"] .diary-card-header-section,
+[data-theme="dark"] .diary-profile-section,
+[data-theme="dark"] .diary-content-section {
+    background-color: transparent !important;
+}
+
+[data-theme="dark"] .dogModal-field-wrapper {
+    background-color: transparent !important;
+}
+
+[data-theme="dark"] .dogModal-header {
+    background-color: transparent !important;
+}
+
+[data-theme="dark"] .dogModal-header h3,
+[data-theme="dark"] .modal-header h3,
+[data-theme="dark"] .diaryModal-header h3 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dogModal-back-btn {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dogModal-back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .chart-container,
+[data-theme="dark"] .statistics-chart-container {
+    background: var(--background-card) !important;
+    background-color: var(--background-card) !important;
+}
+
+/* 다크 모드 적용 시 차트 섹션 및 옵션 */
+[data-theme="dark"] .chart-section .dog-select {
+    background: var(--background-card) !important;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .chart-section .dog-select:hover {
+    background: var(--background-card) !important;
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .chart-section p {
+    background: var(--background-card) !important;
+    background-color: var(--background-card) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color);
+    border-left: 3px solid var(--primary-color) !important;
+}
+
+/* 다크 모드 적용 시 예정 일정 카드 (activity-section) */
+[data-theme="dark"] .activity-section {
+    background: var(--background-card) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .activity-section ul li {
+    background: #3c3c3c !important;
+    background-color: #3c3c3c !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .activity-section ul li:hover {
+    background: #3c3c3c !important;
+    background-color: #3c3c3c !important;
+}
+
+[data-theme="dark"] .activity-section ul li.schedule-item-preview,
+[data-theme="dark"] .schedule-item-preview {
+    background-color: #3c3c3c !important;
+}
+
+[data-theme="dark"] .activity-section .schedule-item-info,
+[data-theme="dark"] .schedule-item-info {
+    background-color: #3c3c3c !important;
+    color: var(--text-secondary);
+}
+
+/* 다크 모드에서 schedule-item-info hover 시 색상 유지 */
+[data-theme="dark"] .activity-section ul li:hover .schedule-item-info,
+[data-theme="dark"] .activity-section ul li:hover .schedule-item-preview,
+[data-theme="dark"] .activity-section ul li:hover .schedule-item-date,
+[data-theme="dark"] .activity-section ul li:hover .schedule-item-type,
+[data-theme="dark"] .activity-section ul li:hover .schedule-item-detail {
+    color: var(--text-secondary) !important;
+    background-color: #3c3c3c !important;
+}
+
+[data-theme="dark"] .activity-section .empty-schedule {
+    background: var(--background-card) !important;
+    background-color: var(--background-card) !important;
+    color: var(--text-muted) !important;
+}
+
+/* 다크 모드 적용 시 dogModal 관련 */
+[data-theme="dark"] .dogModal-content {
+    background: var(--background-card) !important;
+}
+
+[data-theme="dark"] .dogModal-field-wrapper input,
+[data-theme="dark"] .dogModal-field-wrapper select,
+[data-theme="dark"] .dogModal-field-wrapper textarea {
+    background-color: #3a3a3a !important;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dogModal-action-buttons .dogModal-save-btn {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .dogModal-action-buttons .dogModal-save-btn:hover {
+    background-color: var(--primary-light-color);
+}
+
+[data-theme="dark"] .cancel-button {
+    color: var(--text-secondary) !important;
+    background-color: transparent;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .cancel-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+/* 다크 모드 적용 시 모달 버튼들 */
+[data-theme="dark"] .gender-btn {
+    background-color: #3a3a3a !important;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .gender-btn:hover {
+    background-color: rgba(78, 166, 133, 0.2) !important;
+    border-color: var(--primary-color);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .gender-btn.active {
+    background-color: var(--primary-color) !important;
+    color: var(--text-light);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .gender-btn[data-gender="MALE"] i {
+    color: #4A90E2;
+}
+
+[data-theme="dark"] .gender-btn[data-gender="FEMALE"] i {
+    color: #E91E63;
+}
+
+[data-theme="dark"] .gender-btn.active[data-gender="MALE"] i,
+[data-theme="dark"] .gender-btn.active[data-gender="FEMALE"] i {
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .age-unit-selector-inline {
+    background-color: #3a3a3a !important;
+}
+
+[data-theme="dark"] .age-unit-selector-inline .age-unit-btn {
+    background-color: transparent !important;
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .age-unit-selector-inline .age-unit-btn:hover:not(.active) {
+    background-color: rgba(78, 166, 133, 0.2) !important;
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .age-unit-selector-inline .age-unit-btn.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6BC4A4 100%) !important;
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .age-unit-btn {
+    background-color: #3a3a3a !important;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .age-unit-btn:hover {
+    background-color: rgba(78, 166, 133, 0.2) !important;
+    border-color: var(--primary-color);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .age-unit-btn.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6BC4A4 100%) !important;
+    color: var(--text-light);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .image-remove-btn {
+    background-color: #3a3a3a !important;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .image-remove-btn:hover {
+    background-color: rgba(231, 76, 60, 0.2) !important;
+    border-color: #e74c3c;
+    color: var(--text-secondary);
+}
+
+
+/* 다크 모드 적용 시 모달 label 색상 */
+[data-theme="dark"] .dogModal-field label,
+[data-theme="dark"] .dogModal-label-with-buttons label,
+[data-theme="dark"] .form-field label,
+[data-theme="dark"] .modal-content label {
+    color: var(--text-secondary) !important;
+    background-color: rgba(60, 60, 60, 0.3) !important;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* 다크 모드 적용 시 입력 필드 */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background-color: #3a3a3a;
+    color: var(--text-dark);
+    border-color: var(--border-color);
+}
+
+/* 다크 모드 적용 시 헤더 */
+[data-theme="dark"] .header {
+    background-color: var(--background-header);
+    border-bottom-color: var(--border-color);
+}
+
+/* 다크 모드 적용 시 헤더 네비게이션 텍스트 및 아이콘 색상 */
+[data-theme="dark"] .header-page-title {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-nav a {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-nav a i {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-nav a:hover i {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-nav a.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-nav a.active i {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header .sidebar-toggle-button {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+[data-theme="dark"] .header .sidebar-toggle-button:hover {
+    background-color: var(--primary-light-color);
+}
+
+[data-theme="dark"] .header .sidebar-toggle-button i {
+    color: var(--text-light);
+}
+
+/* 다크 모드 적용 시 푸터 */
+[data-theme="dark"] footer {
+    border-top: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .footer {
+    background-color: var(--background-light);
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color) !important;
+}
+
+/* 다크 모드 적용 시 사이드바 */
+[data-theme="dark"] .sidebar {
+    background-color: #151515; /* 메인 콘텐츠보다 더 어두운 배경 */
+    border-right: 1px solid var(--border-color); /* 오른쪽 경계선 추가 */
+}
+
+/* 다크 모드 적용 시 사이드바 텍스트 및 아이콘 색상 */
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .sidebar-header,
+[data-theme="dark"] .sidebar-title,
+[data-theme="dark"] .sidebar-collapsed-title {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sidebar ul li a {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sidebar ul li a i {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sidebar ul li a:hover,
+[data-theme="dark"] .sidebar ul li.active a {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sidebar ul li a:hover i,
+[data-theme="dark"] .sidebar ul li.active a i {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sidebar-header i {
+    color: var(--primary-light-color);
+}
+
+/* 다크 모드 적용 시 테이블 */
+[data-theme="dark"] table,
+[data-theme="dark"] .diary-table {
+    background-color: var(--background-card);
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] table th,
+[data-theme="dark"] .diary-table th {
+    background-color: #3a3a3a;
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] table td,
+[data-theme="dark"] .diary-table td {
+    background-color: var(--background-card);
+    color: var(--text-dark);
+    border-color: var(--border-color);
+}
+
+/* 다크 모드 적용 시 텍스트 색상 일관성 - 모두 var(--text-secondary)로 통일 */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .header-title {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .card-header .title {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .card-body .value {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .card-body .description {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .chart-section .chart-header h4 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .chart-section p {
+    background-color: #3c3c3c !important;
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .activity-section h4 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .activity-section li {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .activity-section .schedule-item-date {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .activity-section .schedule-item-type {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .activity-section .schedule-item-detail {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] div {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .schedule-calendar-header h3,
+[data-theme="dark"] .schedule-detail-panel h3,
+[data-theme="dark"] .diary-page-header h3,
+[data-theme="dark"] .settings-card h3 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .schedule-calendar-weekday {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .schedule-calendar-day-number {
+    color: var(--text-secondary);
+}
+
+/* 다크 모드에서 오늘 일자 및 선택된 일자 스타일 (diaries.html과 일관되게) */
+[data-theme="dark"] .schedule-calendar-day.today {
+    background: var(--background-card) !important;
+    border: 2px solid #87CEEB !important;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .schedule-calendar-day.today .schedule-calendar-day-number {
+    color: var(--text-dark) !important;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .schedule-calendar-day.selected {
+    background: var(--background-card) !important;
+    border: 1px solid var(--primary-color) !important;
+    box-shadow: 0 2px 8px rgba(78, 166, 133, 0.2);
+}
+
+[data-theme="dark"] .schedule-calendar-day.selected .schedule-calendar-day-number {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .schedule-item {
+    color: var(--text-secondary);
+}
+
+/* 다크 모드에서 schedule-item 타입별 배경색 */
+[data-theme="dark"] .schedule-item.walk {
+    background: rgba(255, 193, 7, 0.2) !important;
+    color: #FFD54F !important;
+}
+
+[data-theme="dark"] .schedule-item.hospital {
+    background: rgba(56, 142, 60, 0.2) !important;
+    color: #81C784 !important;
+}
+
+[data-theme="dark"] .diary-card-body,
+/* 다크 모드 적용 시 일지 카드 아이콘 색상 */
+[data-theme="dark"] .diary-date-header i,
+[data-theme="dark"] .diary-about-title i {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .diary-date-header,
+[data-theme="dark"] .diary-dog-name,
+[data-theme="dark"] .diary-content {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .diary-about-title {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .diary-about-content {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .summary-value {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .summary-label {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .empty-card,
+[data-theme="dark"] .detail-content .placeholder {
+    color: var(--text-secondary);
+    background: #3c3c3c !important;
+    border: 0px;
+}
+
+[data-theme="dark"] .settings-item label {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .settings-card h3 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-label {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-value {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .toggle-text {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .dog-select {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .schedule-profile-card,
+[data-theme="dark"] .schedule-name,
+[data-theme="dark"] .schedule-stat-label,
+[data-theme="dark"] .schedule-stat-value,
+[data-theme="dark"] .schedule-about-content {
+    color: var(--text-secondary);
+    background: #1a1a1a !important;
+}
+
+/* "메모가 없습니다"일 때 더 어두운 배경 */
+[data-theme="dark"] .schedule-about-content.empty-memo {
+    background: #3c3c3c !important;
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .schedule-about-title {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] body {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .settings-card,
+[data-theme="dark"] .chart-section,
+[data-theme="dark"] .activity-section,
+[data-theme="dark"] .schedule-calendar-container,
+[data-theme="dark"] .schedule-detail-panel,
+[data-theme="dark"] .calendar-container,
+[data-theme="dark"] .diary-content {
+    color: var(--text-secondary);
 }
 
 /* --- 0. 기본 스타일 및 리셋 --- */
@@ -86,6 +817,7 @@ ul {
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     box-sizing: border-box;
     flex-shrink: 0; /* 사이드바가 줄어들지 않도록 */
+    border-right: 1px solid var(--border-color); /* 오른쪽 경계선 추가 */
 }
 
 /* 사이드바 접혔을 때 스타일 */
@@ -165,6 +897,8 @@ ul {
     display: flex;
     flex-direction: column; /* 헤더, 메인, 푸터가 세로로 쌓이도록 */
     background-color: var(--background-light); /* 메인 영역 배경색 */
+    height: 100vh;
+    overflow: hidden;
 }
 
 
@@ -223,197 +957,471 @@ ul {
 /* --- 메인 콘텐츠 영역 (스크롤 기능의 핵심!) --- */
 main {
     flex: 1;
-    overflow-y: auto;
+    overflow: hidden;
     box-sizing: border-box;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 0; /* flex 축소를 위해 명시적으로 0 설정 */
 }
 
 /* ====================== 푸터 ====================== */
 footer {
     margin-top: auto; /* 항상 아래쪽으로 */
     background: #f8f9fa;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     text-align: center;
     /* padding: 15px; */
 }
 
 .footer {
     width: 100%;
-    height: var(--footer-height);
+    min-height: var(--footer-height);
     background-color: var(--background-light);
     color: var(--font-color);
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    text-align: center;
+    width: 100%;
 }
 
 /* --- 대시보드 페이지 (`.dashboard-page`) --- */
 .dashboard-page {
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    background-color: #f9f9f9;
+    padding: 30px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
     min-height: 81vh;
+    gap: 30px;
 }
 
 /* --- 상단 카드 영역 --- */
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    /* margin-bottom: 10px; */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
 }
 
 .card {
-    background-color: #fff;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-direction: row;
+    align-items: center;
+    padding: 24px;
+    gap: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 일지 카드 호버 라인 - 보라색 계열 */
+.card-diary::before {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* 산책 카드 호버 라인 - 핑크/빨강 계열 */
+.card-walk::before {
+    background: linear-gradient(90deg, #f093fb, #f5576c);
+}
+
+/* 병원 카드 호버 라인 - 파란색 계열 */
+.card-hospital::before {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-icon-wrapper::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .card-icon-wrapper::after {
+    opacity: 1;
+}
+
+.card-icon-wrapper .icon {
+    font-size: 28px;
+    color: #fff;
+    z-index: 1;
+    position: relative;
+}
+
+.diary-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.walk-icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+}
+
+.hospital-icon {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+}
+
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .card-header { 
     display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    margin-bottom: 4px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
 }
 
-.card-header h4 {
+/* 다크 모드에서 card-header border-bottom 색상 */
+[data-theme="dark"] .card-header {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+
+.card-header .title {
     margin: 0;
-    font-size: 1.1em;
-}
-
-.card-header .icon {
-    background-color: var(--primary-color);
-    color: #fff;
-    border-radius: 50%;
-    padding: 10px;
-    font-size: 1.1em;
+    font-size: 1em;
+    font-weight: 600;
+    color: #2c3e50;
+    letter-spacing: -0.2px;
+    line-height: 1.4;
 }
 
 .card-body {
-    flex-grow: 1;
-    margin-bottom: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .card-body .value { 
-    font-size: 1.5em; 
-    font-weight: bold; 
+    font-size: 2.2em; 
+    font-weight: 700; 
+    color: #2c3e50;
+    line-height: 1.2;
+    letter-spacing: -1px;
 }
 
 .card-body .description { 
-    font-size: 0.9em; 
-    color: #666; 
+    font-size: 0.85em; 
+    color: #95a5a6;
+    font-weight: 500;
 }
 
 /* --- 하단 차트 + 활동 2단 그리드 --- */
 .chart-activity-grid {
     display: grid;
     grid-template-columns: 1.7fr 1fr;
-    gap: 20px;
-    margin-top: 20px; /* 상단 카드와 간격 확보 */
+    gap: 24px;
 }
 
 /* 차트 카드 스타일 */
 .chart-section {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #fff;
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+}
+
+.chart-section:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .chart-section .chart-header {
     display: flex;
-    justify-content: space-between; /* 제목 왼쪽, 셀렉트 박스 오른쪽 정렬 */
+    justify-content: space-between;
     align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 다크 모드에서 chart-section .chart-header border-bottom 색상 */
+[data-theme="dark"] .chart-section .chart-header {
+    border-bottom: 2px solid #3c3c3c !important;
 }
 
 .chart-section .chart-header h4 {
     margin: 0;
-    font-size: 1.2em;
-    color: var(--primary-color);
-    font-weight: 600;
+    font-size: 1.4em;
+    color: #2c3e50;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chart-section .chart-header h4::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light-color));
+    border-radius: 2px;
 }
 
 /* 강아지 선택 콤보박스 */
 .chart-section .dog-select {
     cursor: pointer;
-    padding: 10px 14px;
-    border: 1px solid #dcdcdc;
-    border-radius: 10px;
+    padding: 12px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
     font-size: 14px;
     font-family: inherit;
-    background-color: #fafafa;
+    background: linear-gradient(to bottom, #fff, #fafafa);
     color: #333;
-    margin-bottom: 10px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
-.chart-section .dog-select select {
-    border-color: #4EA685;
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(78,166,133,0.3);
+.chart-section .dog-select:hover {
+    border-color: var(--primary-color);
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(78, 166, 133, 0.15);
+}
+
+.chart-section .dog-select:focus {
     outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
 }
 
 /* 차트 컨테이너 */
 .chart-container {
-    height: 250px;
+    height: 280px;
+    padding: 10px;
+    background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+    border-radius: 12px;
+    margin: 10px 0;
 }
 
 /* 차트 설명 */
 .chart-section p {
-    margin-top: 10px;
-    color: #555;
-    font-size: 0.95em;
+    margin-top: 8px;
+    color: #7f8c8d;
+    font-size: 0.9em;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    border-left: 3px solid var(--primary-color);
 }
 
 /* 최근 활동 */
 .activity-section {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #fff;
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+}
+
+.activity-section:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .activity-section h4 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    color: var(--primary-color);
-    font-weight: 600;
+    margin: 0;
+    margin-bottom: 8px;
+    font-size: 1.4em;
+    color: #2c3e50;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
 }
+
+/* 다크 모드에서 activity-section h4 border-bottom 색상 */
+[data-theme="dark"] .activity-section h4 {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+
+.activity-section h4::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light-color));
+    border-radius: 2px;
+}
+
 .activity-section ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 0.95em;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .activity-section li {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
+    padding: 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    color: #34495e;
+    font-size: 0.95em;
+    line-height: 1.6;
+    border-left: 3px solid var(--primary-color);
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    padding-left: 32px;
+}
+
+.activity-section li:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.activity-section li::before {
+    content: '●';
+    color: var(--primary-color);
+    font-size: 0.6em;
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
 }
 
 .activity-section li:last-child {
     border-bottom: none;
 }
 
+.activity-section .empty-schedule {
+    text-align: center;
+    padding: 40px 20px;
+    color: #95a5a6;
+    font-style: italic;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-left: none;
+}
+
+.activity-section .empty-schedule::before {
+    display: none;
+}
+
+.schedule-item-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.schedule-item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.schedule-item-icon i {
+    font-size: 18px;
+}
+
+.schedule-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.schedule-item-date {
+    font-size: 0.85em;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.schedule-item-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95em;
+}
+
+.schedule-item-type {
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.schedule-item-detail {
+    color: #7f8c8d;
+}
+
 /* --- 일지 페이지 (`.diary-page`) 특정 스타일 --- */
 .diary-page { 
     display: flex;
-    gap: 20px; 
-    padding: 20px; 
+    gap: 15px; 
+    padding: 15px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    height: 100%;
 }
 
 .diary-page-header {
@@ -524,52 +1532,278 @@ footer {
 .diary-cards { 
     display: flex; 
     flex-direction: column; 
-    gap: 10px; 
+    gap: 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1 1 0;
+    min-height: 583px;
+    max-height: 630px;
+    padding-right: 8px;
+}
+
+.diary-cards:has(.empty-card) {
+    padding-right: 0;
 }
 .diary-card {
     background: #fff;
-    padding: 14px;
-    border-radius: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+    width: 100%;
+    margin-bottom: 10px;
 }
 .diary-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.diary-card-header {
-    font-weight: 600;
+/* 왼쪽 색상 라인 */
+.diary-card-left-border {
+    width: 4px;
+    flex-shrink: 0;
+}
+.diary-card-left-border.mood-Happy {
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E9B 100%);
+}
+.diary-card-left-border.mood-Sad {
+    background: linear-gradient(135deg, #4A90E2 0%, #5BA3F5 100%);
+}
+.diary-card-left-border.mood-Angry {
+    background: linear-gradient(135deg, #FF8C42 0%, #FFA366 100%);
+}
+.diary-card-left-border.mood-Excited {
+    background: linear-gradient(135deg, #9B59B6 0%, #BB6BD9 100%);
+}
+
+/* 카드 본문 */
+.diary-card-body {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+/* 일지 카드 헤더 (날짜 + 액션 버튼) */
+.diary-card-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 다크 모드에서 diary-card-header-section border-bottom 색상 */
+[data-theme="dark"] .diary-card-header-section {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+
+.diary-date-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 1.1em;
+    font-weight: 600;
     color: #333;
 }
 
-.diary-card-content {
-    color: #555;
-    margin-top: 8px;
-    margin-bottom: 12px;
+.diary-date-header i {
+    color: var(--primary-color);
+    font-size: 1em;
 }
 
-.diary-footer {
+/* 일지 액션 버튼 */
+.diary-card-actions {
     display: flex;
-    justify-content: space-between;
-    font-size: 0.9em;
-    color: #777;
+    gap: 8px;
+    align-items: center;
 }
 
-/* mood 강조 색상 */
-.diary-mood {
-    padding: 4px 10px;
-    border-radius: 12px;
+.diary-card-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    color: #666;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.diary-card-actions button:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.diary-card-actions .edit-btn:hover {
+    color: var(--primary-color);
+}
+
+.diary-card-actions .delete-btn:hover {
+    color: #e74c3c;
+}
+
+/* 일지 프로필 섹션 (아바타 + 강아지 이름 + 기분) */
+.diary-profile-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.diary-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff !important;
+    flex-shrink: 0;
+}
+
+.diary-avatar.mood-Happy {
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E9B 100%) !important;
+}
+
+.diary-avatar.mood-Sad {
+    background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%) !important;
+}
+
+.diary-avatar.mood-Angry {
+    background: linear-gradient(135deg, #EF5350 0%, #E53935 100%) !important;
+}
+
+.diary-avatar.mood-Excited {
+    background: linear-gradient(135deg, #9B59B6 0%, #BB6BD9 100%) !important;
+}
+
+/* 다크 모드에서도 기분별 배경색과 흰색 아이콘 유지 */
+[data-theme="dark"] .diary-avatar {
+    color: #fff !important;
+}
+
+[data-theme="dark"] .diary-avatar.mood-Happy {
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E9B 100%) !important;
+}
+
+[data-theme="dark"] .diary-avatar.mood-Sad {
+    background: linear-gradient(135deg, #64B5F6 0%, #42A5F5 100%) !important;
+}
+
+[data-theme="dark"] .diary-avatar.mood-Angry {
+    background: linear-gradient(135deg, #EF5350 0%, #E53935 100%) !important;
+}
+
+[data-theme="dark"] .diary-avatar.mood-Excited {
+    background: linear-gradient(135deg, #9B59B6 0%, #BB6BD9 100%) !important;
+}
+
+.diary-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.diary-dog-name {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.diary-mood-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 8px;
     font-weight: 600;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 0.85em;
+    font-size: 0.9em;
+    width: fit-content;
 }
 
-.mood-Happy { background-color: #4caf50; }   /* 초록 */
-.mood-Sad { background-color: #2196f3; }     /* 파랑 */
-.mood-Angry { background-color: #f44336; }   /* 빨강 */
-.mood-Excited { background-color: #ff9800; } /* 주황 */
+.diary-mood-badge.mood-Happy {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.2) 0%, rgba(255, 107, 157, 0.2) 100%);
+    color: #FF6B9D;
+    border: 1px solid rgba(255, 79, 202, 0.3);
+}
+
+.diary-mood-badge.mood-Sad {
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.2) 0%, rgba(66, 165, 245, 0.2) 100%);
+    color: #1976D2;
+    border: 1px solid rgba(100, 181, 246, 0.3);
+}
+
+.diary-mood-badge.mood-Angry {
+    background: linear-gradient(135deg, rgba(239, 83, 80, 0.2) 0%, rgba(229, 57, 53, 0.2) 100%);
+    color: #C62828;
+    border: 1px solid rgba(239, 83, 80, 0.3);
+}
+
+.diary-mood-badge.mood-Excited {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.2) 0%, rgba(187, 107, 217, 0.2) 100%);
+    color: #7B1FA2;
+    border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+/* 일지 내용 섹션 */
+.diary-content-section {
+    margin-top: 13px;
+}
+
+.diary-about-title {
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.diary-about-title i {
+    color: var(--primary-color);
+    font-size: 0.9em;
+    margin-right: 6px;
+}
+
+.diary-content {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.7;
+    margin: 0;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    min-height: 40px;
+}
+
+.mood-Happy { 
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E9B 100%);
+}   /* 핑크 그라데이션 - 행복 아이콘과 동일 */
+.mood-Sad { 
+    background: linear-gradient(135deg, #4A90E2 0%, #5BA3F5 100%);
+}     /* 파란색 그라데이션 - 슬픔 아이콘과 동일 */
+.mood-Angry { 
+    background: linear-gradient(135deg, #FF8C42 0%, #FFA366 100%);
+}   /* 오렌지 그라데이션 - 화남 아이콘과 동일 */
+.mood-Excited { 
+    background: linear-gradient(135deg, #9B59B6 0%, #BB6BD9 100%);
+} /* 보라색 그라데이션 - 신남 아이콘과 동일 */
 .mood- { background-color: #9e9e9e; }        /* 빈값 */
 
 /* --- 작업 버튼 (수정/삭제) --- */
@@ -582,16 +1816,29 @@ footer {
 }
 
 .empty-card {
+    color: #999;
+    font-size: 15px;
     text-align: center;
-    padding: 40px;
-    color: #888;
+    padding: 0px 20px;
+    margin: 0;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.06);
+    min-height: 150px;
+    box-sizing: border-box;
+    font-weight: 400;
+    line-height: 1.6;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
 }
 
-.diary-page {
-    padding: 30px;
-    /* background-color: #f7f9f9; */
-    min-height: 78vh;
-}
 
 .diary-page-header {
     display: flex;
@@ -616,43 +1863,150 @@ footer {
 /* 왼쪽 달력 */
 .calendar-container {
     flex: 1;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(0,0,0,0.06);
     border-radius: 12px;
+    margin-top: 11px;
+    margin: 11px 0px 0px 7px;
     padding: 20px;
-    background: #fafafa;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+    min-height: 0;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
 }
 
 .calendar-header { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    margin-bottom: 10px; 
+    margin-bottom: 15px; 
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+    flex-shrink: 0;
+}
+
+/* 다크 모드에서 calendar-header border-bottom 색상 */
+[data-theme="dark"] .calendar-header {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+.calendar-header h3 {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
 }
 .calendar-header button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #4EA685;
+    background: rgba(78, 166, 133, 0.1);
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #4EA685;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
 }
+.calendar-header button:hover {
+    background: rgba(78, 166, 133, 0.2);
+    transform: scale(1.05);
+}
+
+/* 요일 헤더 */
+.calendar-weekday {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: #666;
+    padding: 8px 4px;
+    margin-bottom: 4px;
+}
+.calendar-weekday:nth-child(1) {
+    color: #e74c3c;
+}
+.calendar-weekday:nth-child(7) {
+    color: #3498db;
+}
+
 .calendar-grid { 
     display: grid; 
     grid-template-columns: repeat(7, 1fr); 
-    gap: 4px; 
+    gap: 8px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 .calendar-day {
-    padding: 8px;
+    padding: 8px 4px;
     text-align: center;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     position: relative;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
+    min-height: 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 6px;
+    background: #fafafa;
+    border: 2px solid transparent;
+    margin: 2px;
 }
-.calendar-day.today { background: #d9f0ff; }
-.calendar-day.selected { border: 2px solid #007bff; }
+.calendar-day:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+}
+.calendar-day.today { 
+    background: #fff;
+    border: 2px solid #87CEEB;
+    font-weight: 600;
+}
+.calendar-day.today .calendar-day-number {
+    color: #333 !important;
+    font-weight: 700;
+}
+.calendar-day.selected { 
+    background: #fff;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 2px 8px rgba(78, 166, 133, 0.2);
+}
+.calendar-day.selected .calendar-day-number {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+/* 주말 스타일 */
+.calendar-day.sunday .calendar-day-number {
+    color: #e74c3c;
+}
+.calendar-day.saturday .calendar-day-number {
+    color: #3498db;
+}
+
+/* 날짜 숫자 */
+.calendar-day-number {
+    position: relative;
+    display: inline-block;
+}
+
+/* 일지가 있는 날짜 표시 원 */
+.calendar-diary-dot {
+    position: absolute;
+    top: -2px;
+    right: -15px;
+    width: 7px;
+    height: 7px;
+    background: #4EA685;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
 .calendar-dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     background: #ff5f5f;
     border-radius: 50%;
     position: absolute;
@@ -661,24 +2015,114 @@ footer {
     transform: translateX(-50%);
 }
 
+/* 일지 개수 표시 */
+.calendar-diary-count {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7em;
+    color: #4EA685;
+    font-weight: 600;
+    pointer-events: none;
+    margin-top: 10px;
+}
+
 /* 오른쪽 컨텐츠 */
-.diary-content { flex: 2; display: flex; flex-direction: column; gap: 20px; }
+.diary-content { 
+    flex: 2; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px;
+    overflow: hidden;
+    min-height: 0;
+}
 
 /* 요약 박스 */
 .summary-container {
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    padding: 16px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+    padding: 20px;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    flex-shrink: 0;
 }
 .summary-item {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 80px;
 }
-.summary-value { font-size: 1.4em; font-weight: bold; }
-.summary-label { color: #666; font-size: 0.9em; }
+
+/* 원형 아이콘 스타일 */
+.summary-icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.summary-icon-circle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.summary-icon-circle i {
+    font-size: 1.8em;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* 총 일지 아이콘 - 파란색 클립보드 스타일 */
+.total-icon {
+    background: linear-gradient(135deg, #FFD54F 0%, #FFC107 100%);
+}
+
+/* 행복 아이콘 - 핑크색 클립보드 스타일 */
+.happy-icon {
+    background: linear-gradient(135deg, #FF6B9D 0%, #FF8E9B 100%);
+}
+
+/* 슬픔 아이콘 - 파란색 말풍선 스타일 */
+.sad-icon {
+    background: linear-gradient(135deg, #4A90E2 0%, #5BA3F5 100%);
+}
+
+/* 화남 아이콘 - 오렌지색 캘린더 스타일 */
+.angry-icon {
+    background: linear-gradient(135deg, #FF8C42 0%, #FFA366 100%);
+}
+
+/* 신남 아이콘 - 보라색 별 스타일 */
+.excited-icon {
+    background: linear-gradient(135deg, #9B59B6 0%, #BB6BD9 100%);
+}
+
+.summary-value { 
+    font-size: 1.5em; 
+    font-weight: bold; 
+    color: #333;
+    margin-top: 5px;
+}
+.summary-label { 
+    color: #666; 
+    font-size: 0.85em; 
+    font-weight: 500;
+    margin-top: 2px;
+}
 
 /* 모달 */
 .modal {
@@ -691,6 +2135,8 @@ footer {
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 .modal-content {
     background: #fff;
@@ -700,6 +2146,8 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    animation: modalSlideIn 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .modal-content input,
@@ -798,9 +2246,9 @@ transition: all 0.2s ease;
     color: #fff;
     border-color: rgba(78, 166, 133,0);
 }
-.cancel-button { 
+.cancel-button {
     background-color: #bdc3c7; 
-    color: #2c3e50; 
+    color: #555 !important; /* 다크 그레이 색상 */
     border-color: rgba(78, 166, 133,0);
 }
 
@@ -955,11 +2403,14 @@ transition: all 0.2s ease;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 3000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
 }
 
 .diaryModal.hidden {
@@ -970,10 +2421,11 @@ transition: all 0.2s ease;
     background: #fff;
     padding: 30px 40px;
     border-radius: 12px;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     min-width: 280px;
     text-align: center;
     font-size: 1.1em;
+    animation: modalSlideIn 0.3s ease;
 }
 
 .walkModal-item,
@@ -990,6 +2442,8 @@ transition: all 0.2s ease;
     gap: 25px;
     padding: 25px 20px;
     justify-content: center;
+    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 50px);
+    box-sizing: border-box;
 }
 
 .schedule-calendar-container {
@@ -997,7 +2451,8 @@ transition: all 0.2s ease;
     background: #fff;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .schedule-calendar-header {
@@ -1009,7 +2464,7 @@ transition: all 0.2s ease;
 }
 
 .schedule-calendar-day.selected {
-    outline: 2px solid #4CAF50;
+    outline: 1px solid #4CAF50;
     background-color: rgba(76, 175, 80, 0.1);
 }
 .schedule-calendar-header {
@@ -1036,15 +2491,15 @@ transition: all 0.2s ease;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-color: #fff;
-    border: 1px solid #d0d0d0;
-    border-radius: 8px;
+    background: linear-gradient(to bottom, #fff, #fafafa);
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
     padding: 8px 36px 8px 12px;
     font-size: 14px;
     color: #333;
     cursor: pointer;
     font-weight: 500;
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path fill='%23999' d='M0 0l5 6 5-6z'/></svg>");
     background-repeat: no-repeat;
@@ -1053,25 +2508,71 @@ transition: all 0.2s ease;
 }
 
 .styled-select:hover {
-    background-color: rgba(33, 150, 243, 0.05);
+    border-color: var(--primary-color);
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(78, 166, 133, 0.15);
 }
 
 .styled-select:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+.styled-select.active {
+    background-color: rgba(78, 166, 133, 0.08);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(78, 166, 133, 0.2), 0 2px 4px rgba(78, 166, 133, 0.1);
+    color: var(--primary-dark-color);
+    font-weight: 600;
 }
 
 .styled-select option {
-    background-color: #fff; /* 🔹 select와 동일한 배경 */
+    background-color: #fff;
     color: #333;
     font-weight: 500;
 }
 
-/* Hover 혹은 선택된 옵션 */
 .styled-select option:hover,
 .styled-select option:checked {
-    background-color: rgba(33, 150, 243, 0.1);
-    color: #1976d2;
+    background-color: rgba(78, 166, 133, 0.1);
+    color: var(--primary-dark-color);
+}
+
+/* 다크 모드에서 styled-select 스타일 (차트 옵션과 일관되게) */
+[data-theme="dark"] .styled-select {
+    background: var(--background-card) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .styled-select:hover {
+    background: var(--background-card) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 4px 12px rgba(78, 166, 133, 0.15);
+}
+
+[data-theme="dark"] .styled-select:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+[data-theme="dark"] .styled-select.active {
+    background-color: rgba(78, 166, 133, 0.2) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* 다크 모드에서 option 스타일 */
+[data-theme="dark"] .styled-select option {
+    background-color: var(--background-card) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .styled-select option:hover,
+[data-theme="dark"] .styled-select option:checked {
+    background-color: rgba(78, 166, 133, 0.2) !important;
+    color: var(--primary-color) !important;
 }
 
 .select-icon {
@@ -1134,6 +2635,28 @@ transition: all 0.2s ease;
     transform: translateY(-1px);
 }
 
+/* 다크 모드에서 스케줄 페이지 버튼 스타일 */
+[data-theme="dark"] .icon-btn {
+    background-color: #3a3a3a !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .icon-btn:hover {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+[data-theme="dark"] .today-btn {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
+
+[data-theme="dark"] .today-btn:hover {
+    background-color: var(--primary-light-color) !important;
+    transform: translateY(-1px);
+}
+
 .today-btn i {
     font-size: 14px;
 }
@@ -1141,30 +2664,76 @@ transition: all 0.2s ease;
 .schedule-calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
+    gap: 8px;
+}
+
+/* 요일 헤더 */
+.schedule-calendar-weekday {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: #666;
+    padding: 8px 4px;
+    margin-bottom: 4px;
+}
+.schedule-calendar-weekday:nth-child(1) {
+    color: #e74c3c;
+}
+.schedule-calendar-weekday:nth-child(7) {
+    color: #3498db;
 }
 
 .schedule-calendar-day {
-    min-height: 100px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 4px;
+    min-height: 110px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 6px;
     display: flex;
     flex-direction: column;
     font-size: 13px;
     background: #fafafa;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    margin: 2px;
 }
 .schedule-calendar-day:hover {
-    background: #f0f8ff;
+    background: #f0f0f0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .schedule-calendar-day.today {
-    border: 2px solid #2196F3;
-    background: #E3F2FD;
+    background: #fff;
+    border: 2px solid #87CEEB;
+    font-weight: 600;
 }
+.schedule-calendar-day.today .schedule-calendar-day-number {
+    color: #333;
+    font-weight: 700;
+}
+.schedule-calendar-day.selected {
+    background: #fff;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 2px 8px rgba(78, 166, 133, 0.2);
+}
+.schedule-calendar-day.selected .schedule-calendar-day-number {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* 주말 스타일 */
+.schedule-calendar-day.sunday .schedule-calendar-day-number {
+    color: #e74c3c;
+}
+.schedule-calendar-day.saturday .schedule-calendar-day-number {
+    color: #3498db;
+}
+
 .schedule-calendar-day-number {
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 4px;
+    font-size: 0.95em;
+    position: relative;
 }
 
 .schedule-item {
@@ -1179,44 +2748,308 @@ transition: all 0.2s ease;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.schedule-item.walk { background: #fcffbb; color: #c79800; }
-.schedule-item.hospital { background: #C8E6C9; color: #2E7D32; }
+.schedule-item.walk { background: #FFF9C4; color: #FFC107; }
+.schedule-item.hospital { background: #C8E6C9; color: #388E3C; }
 
 .schedule-detail-panel {
     flex: 0.8;
-    background: #ffffff;
+    background: #fff;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
     height: fit-content;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    cursor: default;
 }
 .schedule-detail-panel h3 {
     font-size: 18px;
     margin-bottom: 12px;
-    border-bottom: 2px solid #2196f3;
-    padding-bottom: 6px;
+    margin-top: 0px;
 }
 
+.detail-content {
+    width: 100%;
+    min-height: 200px;
+    position: relative;
+    cursor: default;
+    pointer-events: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-content .placeholder {
+    color: #999;
+    font-size: 15px;
+    text-align: center;
+    margin-top: 20px;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    border-radius: 16px;
+    border: 1px dashed #ddd;
+    min-height: 200px;
+    box-sizing: border-box;
+    font-weight: 400;
+    line-height: 1.6;
+    align-self: flex-start;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* placeholder에도 가상 요소 제거 */
+.detail-content .placeholder::before,
+.detail-content .placeholder::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* 프로필 카드 스타일 */
+.schedule-profile-card {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.06);
+    margin-top: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.schedule-profile-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 카드 헤더 (날짜 + 액션 버튼) */
+.schedule-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 다크 모드에서 schedule-card-header border-bottom 색상 */
+[data-theme="dark"] .schedule-card-header {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+
+.schedule-date-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+}
+
+.schedule-date-header i {
+    color: var(--primary-color);
+    font-size: 1em;
+}
+
+/* 프로필 헤더 (아바타 + 통계) */
+.schedule-profile-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* 아바타 */
+.schedule-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff !important;
+    flex-shrink: 0;
+}
+
+.schedule-avatar.walk {
+    background: linear-gradient(135deg, #FFE082 0%, #FFD54F 100%) !important;
+}
+
+.schedule-avatar.hospital {
+    background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%) !important;
+}
+
+/* 다크 모드에서도 타입별 배경색과 흰색 아이콘 유지 */
+[data-theme="dark"] .schedule-avatar {
+    color: #fff !important;
+}
+
+[data-theme="dark"] .schedule-avatar.walk {
+    background: linear-gradient(135deg, #FFE082 0%, #FFD54F 100%) !important;
+}
+
+[data-theme="dark"] .schedule-avatar.hospital {
+    background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%) !important;
+}
+
+/* 통계 섹션 */
+.schedule-stats {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+}
+
+.schedule-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.schedule-stat-label {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.schedule-stat-label i {
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+
+.schedule-stat-value {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 프로필 정보 */
+.schedule-profile-info {
+    margin-bottom: 20px;
+}
+
+.schedule-name {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.schedule-type-label {
+    font-size: 0.95em;
+    color: #666;
+    margin: 0;
+}
+
+/* About 섹션 */
+.schedule-about-section {
+    margin-bottom: 16px;
+}
+
+.schedule-about-title {
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.schedule-about-title i {
+    color: var(--primary-color);
+    font-size: 0.9em;
+}
+
+.schedule-about-content {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.7;
+    margin: 0;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    min-height: 40px;
+}
+
+/* 액션 버튼 */
+.schedule-profile-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.schedule-profile-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    color: #666;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schedule-profile-actions button:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* 기존 detail-card 스타일 (하위 호환성) */
 .detail-card {
     position: relative;
-    padding: 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     margin-bottom: 8px;
     background: #fff;
+    display: flex;
+    overflow: hidden;
 }
 
-/* 아이콘 컨테이너 */
+.detail-card-left-border {
+    width: 4px;
+    flex-shrink: 0;
+}
+
+.detail-card-left-border.walk {
+    background: #FFE082;
+}
+
+.detail-card-left-border.hospital {
+    background: #A5D6A7;
+}
+
+.detail-card-body {
+    flex: 1;
+    padding: 16px;
+    position: relative;
+}
+
 .detail-actions {
     position: absolute;
     top: 8px;
     right: 8px;
     display: flex;
-    flex-direction: row; /* 위아래 → 양옆으로 변경 */
+    flex-direction: row;
     gap: 6px;
 }
 
-/* 버튼 스타일 */
 .detail-actions button {
     background: none;
     border: none;
@@ -1233,49 +3066,58 @@ transition: all 0.2s ease;
     color: #000;
 }
 
-/* 카드 타입별 색상 */
-.detail-card.walk {
-    border-left-color: #c79800;
-    background: #fffce7;
-}
-
-.detail-card.hospital {
-    border-left-color: #2E7D32;
-    background: #e9f8ec;
-}
-
 /* ====================== 토스트 알림  ====================== */
 #toast {
     visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
+    min-width: 200px;
+    max-width: 400px;
+    width: auto;
     background-color: var(--primary-color);
     color: var(--text-light);
     text-align: center;
-    border-radius: 8px;
-    padding: var(--spacing-sm);
+    border-radius: 12px;
+    padding: 14px 24px;
     position: fixed;
     z-index: 10000;
-    left: 50%;
-    bottom: var(--spacing-xl);
-    font-size: 1em;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    left: 55%;
+    bottom: 65px;
+    transform: translateX(-50%) translateY(20px);
+    font-size: 0.95em;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     transition: all var(--transition-speed) ease-in-out;
+    opacity: 0;
+    word-wrap: break-word;
+    line-height: 1.5;
 }
 
 #toast.reveal {
     visibility: visible;
-    animation: fadein var(--transition-speed), fadeout var(--transition-speed) 2.5s;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    animation: toastSlideUp var(--transition-speed) ease-out, toastSlideDown var(--transition-speed) ease-in 2.5s;
 }
 
-@keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: var(--spacing-xl); opacity: 1;}
+@keyframes toastSlideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
-@keyframes fadeout {
-    from {bottom: var(--spacing-xl); opacity: 1;}
-    to {bottom: 0; opacity: 0;}
+@keyframes toastSlideDown {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
 }
 
 /* --- 추가: 스크롤바 커스터마이징 (선택 사항) --- */
@@ -1418,22 +3260,25 @@ transition: all 0.2s ease;
 .header-nav {
     display: flex; /* 네비게이션 메뉴 항목들을 가로로 정렬 */
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-sm);
 }
 
 .header-nav a {
-    color: var(--text-dark);
+    color: var(--text-secondary);
     font-weight: 500;
-    transition: color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
     display: flex; /* 아이콘과 텍스트를 나란히 정렬 */
     align-items: center;
     gap: var(--spacing-xs); /* 아이콘과 텍스트 사이 간격 */
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 6px;
+    text-decoration: none;
 }
 
 .header-nav a:hover {
-    color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
 }
-
 
 .header-nav a i {
     color: var(--text-secondary); /* 네비게이션 아이콘 색상 */
@@ -1443,13 +3288,17 @@ transition: all 0.2s ease;
 }
 
 .header-nav a:hover i {
-    color: var(--primary-color); /* 호버 시 아이콘 색상 변경 */
+    color: var(--text-secondary); /* 호버 시 아이콘 색상 유지 */
 }
 
 .header-nav a.active {
-  color: #fff;
-  background-color: var(--primary-color, #4e73df);
-  font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.header-nav a.active i {
+    color: var(--text-secondary);
 }
 
 
@@ -1505,7 +3354,7 @@ html, body {
     flex: 1; /* 남는 공간 차지 */
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* footer 밀어내기 */
+    min-height: 80vh; /* footer 밀어내기 */
 }
 
 /* --- 반려견 관리 페이지 (`.dog-page`) 특정 스타일 --- */
@@ -1538,33 +3387,145 @@ html, body {
 .dog-card {
     position: relative;
     display: flex;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
+    min-height: 180px;
+    border: 1px solid rgba(78, 166, 133, 0.1);
 }
 
 .dog-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(78, 166, 133, 0.15), 0 4px 12px rgba(0,0,0,0.08);
+    border-color: rgba(78, 166, 133, 0.3);
 }
 
 .dog-card-left {
-    flex: 0 0 120px;
+    flex: 0 0 140px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
-    background-color: #f9f9f9;
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f7f4 0%, #e8f5f0 100%);
+    position: relative;
+}
+
+.dog-card-left::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60%;
+    background: linear-gradient(to bottom, transparent, rgba(78, 166, 133, 0.2), transparent);
+}
+
+.dog-card-right {
+    flex: 1;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: #fff;
+}
+
+.dog-name {
+    margin: 0;
+    font-size: 1.75em;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+}
+
+.dog-info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dog-info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dog-info-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A8E6CF, #B8F5D3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dog-info-icon i {
+    font-size: 1.1em;
+    color: #fff;
+}
+
+.dog-info-text {
+    font-size: 1em;
+    color: #333;
+    font-weight: 500;
 }
 
 .dog-profile-img {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #4EA685;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 12px rgba(78, 166, 133, 0.2), 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.dog-card:hover .dog-profile-img {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(78, 166, 133, 0.3), 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 이미지 없을 때 플레이스홀더 */
+.dog-profile-placeholder {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8f5f0 0%, #d4ede4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 12px rgba(78, 166, 133, 0.2), 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.dog-profile-placeholder i {
+    font-size: 3.2em;
+    color: #4EA685;
+    opacity: 0.6;
+}
+
+.dog-card:hover .dog-profile-placeholder {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(78, 166, 133, 0.3), 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 다크 모드에서 dog-profile-placeholder 스타일 (모달 폼과 일관되게) */
+[data-theme="dark"] .dog-profile-placeholder,
+[data-theme="dark"] .dog-profile-placeholder-fallback {
+    background-color: #3a3a3a !important;
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dog-profile-placeholder i,
+[data-theme="dark"] .dog-profile-placeholder-fallback i {
+    color: var(--text-secondary) !important;
+    opacity: 1;
 }
 
 .dog-card-right {
@@ -1591,27 +3552,58 @@ html, body {
 /* 편집/삭제 버튼 - 오른쪽 상단 고정 */
 .dog-card-actions {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 16px;
+    right: 16px;
     display: flex;
-    gap: 5px;
+    gap: 8px;
+    align-items: center;
 }
 
 .dog-card-actions button {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 6px 8px;
+    background: none;
+    border: none;
     cursor: pointer;
-    font-size: 0.9em;
-    color: #333;
-    transition: all 0.2s ease;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    color: #666;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dog-card-actions button:hover {
-    background-color: #4EA685;
-    color: #fff;
-    border-color: #4EA685;
+    background: #f5f5f5;
+    color: #333;
+}
+
+.dog-card-actions .edit-btn:hover {
+    color: var(--primary-color);
+}
+
+.dog-card-actions .delete-btn:hover {
+    color: #e74c3c;
+}
+
+/* 다크 모드에서 dog-card-actions 버튼 스타일 (다른 페이지와 일관되게) */
+[data-theme="dark"] .dog-card-actions button {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dog-card-actions button:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dog-card-actions .edit-btn:hover {
+    color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .dog-card-actions .delete-btn:hover {
+    color: #e74c3c !important;
 }
 
 .empty-card {
@@ -1621,16 +3613,912 @@ html, body {
     height: 150px;
     font-size: 1.1em;
     color: #999;
-    background-color: #f4f4f4;
+    background-color: #fff;
     border-radius: 12px;
 }
 
-.dogModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index: 9999; }
-.dogModal-content { background:#fff; padding:25px; border-radius:12px; width:360px; box-shadow:0 8px 25px rgba(0,0,0,0.15); }
-.dogModal-content h3 { margin-bottom:20px; color: var(--primary-color); font-weight:600; }
+.dogModal { 
+    display:none; 
+    position:fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    background: rgba(0,0,0,0.5); 
+    justify-content:center; 
+    align-items:center; 
+    z-index: 9999; 
+    overflow-y: auto;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+}
+.dogModal-content { 
+    background:#fff; 
+    padding:0; 
+    border-radius:16px; 
+    width:100%; 
+    max-width:420px; 
+    box-shadow:0 8px 24px rgba(0, 0, 0, 0.15); 
+    max-height:90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+.dog-modal-content-wide {
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* 모달 헤더 */
+.dogModal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 25px 15px 25px;
+    border-bottom: none;
+    position: relative;
+}
+
+.dog-modal-content-wide .dogModal-header {
+    padding: 25px 40px 20px 40px;
+}
+
+.dogModal-back-btn {
+    position: absolute;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dogModal-back-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.dogModal-back-btn i {
+    font-size: 1.2em;
+}
+
+.dogModal-content h3 {
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.3em;
+    text-align: center;
+    flex: 1;
+}
+
+/* 설명 텍스트 */
+.dogModal-description {
+    padding: 10px 20px 20px 20px;
+    color: #666;
+    font-size: 0.95em;
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
+}
+
+/* 프로필 이미지 섹션 */
+.dogModal-profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    gap: 10px;
+}
+
+.dog-modal-content-wide .dogModal-profile-section {
+    padding: 0;
+}
+
+.dogModal-profile-image-wrapper {
+    position: relative;
+    width: 180px;
+    height: 180px;
+}
+
+.dogModal-profile-image-wrapper .image-preview {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: none;
+    background-color: #f5f5f5 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+}
+
+.dogModal-profile-image-wrapper .image-preview #previewIcon {
+    font-size: 4em;
+    color: #ccc !important;
+    z-index: 1;
+}
+
+/* 다크 모드에서 프로필 이미지 미리보기 (이미지가 표시되지 않을 때도 동일한 스타일 유지) */
+[data-theme="dark"] .dogModal-profile-image-wrapper .image-preview {
+    background-color: #3a3a3a !important;
+}
+
+[data-theme="dark"] .dogModal-profile-image-wrapper .image-preview #previewIcon {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dogModal-profile-edit-btn {
+    background-color: var(--background-card) !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .dogModal-profile-edit-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dogModal-profile-image-wrapper .image-preview #previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.dogModal-profile-edit-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border: none;
+    color: #333;
+    font-size: 0.9em;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dogModal-profile-edit-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* 필드 섹션 */
+.dogModal-fields {
+    padding: 0 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 산책/병원 모달 전용 스타일 */
+.schedule-modal-content {
+    max-width: 650px !important;
+    width: 90%;
+}
+
+.schedule-modal-content .dogModal-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.schedule-modal-content .dogModal-field-full {
+    grid-column: 1 / -1;
+}
+
+/* 반려견 모달 전용 스타일 */
+.dog-modal-content-wide {
+    max-width: 800px !important;
+    width: 90%;
+}
+
+.dog-modal-content-wide .dogModal-body-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    padding: 35px 40px;
+    align-items: center;
+    min-height: auto;
+}
+
+.dog-modal-content-wide .dogModal-profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.dog-modal-content-wide .dogModal-fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dog-modal-content-wide .dogModal-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+}
+
+.dog-modal-content-wide .dogModal-field-full {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+/* 성별 선택 버튼 */
+.gender-selector {
+    display: flex;
+    gap: 10px;
+    margin-top: 0;
+    width: 100%;
+}
+
+.gender-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #666;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+.gender-btn span {
+    font-size: 0.9em;
+}
+
+.gender-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background-color: rgba(78, 166, 133, 0.05);
+}
+
+.gender-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.gender-btn.active i {
+    color: #fff;
+}
+
+.gender-btn i {
+    font-size: 1.1em;
+}
+
+.gender-btn[data-gender="MALE"] i {
+    color: #4A90E2;
+}
+
+.gender-btn[data-gender="FEMALE"] i {
+    color: #E91E63;
+}
+
+.gender-btn.active[data-gender="MALE"] i,
+.gender-btn.active[data-gender="FEMALE"] i {
+    color: #fff;
+}
+
+/* 나이 입력 컨테이너 */
+.age-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.age-unit-selector {
+    display: flex;
+    gap: 8px;
+    margin-top: 0;
+}
+
+.age-unit-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    color: #666;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.age-unit-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background-color: rgba(78, 166, 133, 0.05);
+}
+
+.age-unit-btn.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6BC4A4 100%);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.age-unit-display {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.9em;
+    pointer-events: none;
+    font-weight: 500;
+    z-index: 2;
+}
+
+/* 나이 input의 spinner 숨기기 */
+.dog-modal-content-wide #dogAge::-webkit-inner-spin-button,
+.dog-modal-content-wide #dogAge::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.dog-modal-content-wide #dogAge[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* 나이 라벨 옆 단위 선택 버튼 */
+.dogModal-label-with-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.dogModal-label-with-buttons label {
+    margin: 0;
+    flex-shrink: 0;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+    padding-bottom: 4px;
+}
+
+.age-unit-selector-inline {
+    display: inline-flex;
+    gap: 0;
+    background-color: #f0f0f0;
+    padding: 3px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.age-unit-selector-inline .age-unit-btn {
+    padding: 7px 16px;
+    font-size: 0.8em;
+    min-width: 50px;
+    flex: none;
+    border: none;
+    background-color: transparent;
+    border-radius: 8px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    color: #666;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.age-unit-selector-inline .age-unit-btn:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: var(--primary-color);
+}
+
+.age-unit-selector-inline .age-unit-btn.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6BC4A4 100%);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(78, 166, 133, 0.25), 0 1px 2px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+/* 반려견 이름과 성별 아이콘 */
+.dog-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 다크 모드에서 dog-name-wrapper border-bottom 색상 */
+[data-theme="dark"] .dog-name-wrapper {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+
+.default-dog-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    margin-left: 8px;
+    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+    min-width: 32px;
+    min-height: 32px;
+}
+
+.default-dog-badge i {
+    font-size: 1.1em;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-theme="dark"] .default-dog-badge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #333;
+    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.4);
+}
+
+.dog-gender-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e8f5f0;
+    font-size: 1.2em;
+    margin-top: 0;
+    transition: all 0.3s ease;
+}
+
+/* 다크 모드에서 dog-gender-icon 배경 색상 */
+[data-theme="dark"] .dog-gender-icon {
+    background: #3c3c3c !important;
+}
+
+.dog-gender-icon i[class*="fa-venus"] {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* 다크 모드에서 dog-gender-icon i[class*="fa-venus"] 배경 색상 */
+[data-theme="dark"] .dog-gender-icon i[class*="fa-venus"] {
+    background: #3c3c3c !important;
+}
+
+/* 반려견 정보 그리드 (품종/나이/몸무게) */
+.dog-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 0;
+    background: #f8f9fa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(78, 166, 133, 0.08);
+}
+
+.dog-info-grid-item {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+    text-align: center;
+    border-right: 1px solid rgba(78, 166, 133, 0.1);
+    background: transparent;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.dog-info-grid-item:last-child {
+    border-right: none;
+}
+
+.dog-info-grid-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #4EA685, #6BC4A4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dog-info-grid-item:hover {
+    background: linear-gradient(135deg, rgba(78, 166, 133, 0.03) 0%, rgba(78, 166, 133, 0.01) 100%);
+    transform: translateY(-2px);
+}
+
+.dog-info-grid-item:hover::before {
+    opacity: 1;
+}
+
+.dog-info-grid-label {
+    font-size: 0.8em;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    font-weight: 600;
+    padding-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 다크 모드에서 dog-info-grid-label border-bottom 색상 */
+[data-theme="dark"] .dog-info-grid-label {
+    border-bottom: 2px solid #3c3c3c !important;
+}
+
+.dog-info-grid-value {
+    font-size: 1.25em;
+    color: #2c3e50;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.dogModal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dog-modal-content-wide .dogModal-field {
+    gap: 10px;
+}
+
+.dogModal-field label {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+    padding-bottom: 4px;
+}
+
+.dog-modal-content-wide .dogModal-field label {
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.dogModal-field-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dogModal-field-wrapper input,
+.dogModal-field-wrapper select,
+.dogModal-field-wrapper textarea {
+    flex: 1;
+    padding: 12px 40px 12px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1em;
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    min-width: 0;
+    height: 48px;
+}
+
+.dog-modal-content-wide .dogModal-field-wrapper input[type="number"] {
+    padding-right: 50px;
+}
+
+.dog-modal-content-wide .dogModal-field-full .dogModal-field-wrapper {
+    width: 100%;
+}
+
+.dog-modal-content-wide .dogModal-field-full .dogModal-field-wrapper input {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.dogModal-field-wrapper textarea {
+    padding-right: 12px;
+    line-height: 1.5;
+}
+
+.dogModal-field-wrapper input:focus,
+.dogModal-field-wrapper select:focus,
+.dogModal-field-wrapper textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+.dogModal-field-wrapper input::placeholder {
+    color: #999;
+}
+
+.dogModal-field-wrapper select {
+    cursor: pointer;
+}
+
+.dogModal-field-wrapper select option {
+    padding: 8px;
+}
+
+/* 산책 시간 선택 버튼 */
+.duration-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.duration-btn {
+    padding: 10px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #666;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.duration-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background-color: rgba(78, 166, 133, 0.05);
+}
+
+.duration-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(78, 166, 133, 0.3);
+}
+
+/* 날씨 선택 버튼 */
+.weather-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.weather-btn {
+    padding: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #666;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.weather-btn i {
+    font-size: 1.1em;
+}
+
+.weather-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background-color: rgba(78, 166, 133, 0.05);
+}
+
+.weather-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(78, 166, 133, 0.3);
+}
+
+.weather-btn.active i {
+    color: #fff;
+}
+
+/* 다크 모드에서 스케줄 버튼 스타일 */
+[data-theme="dark"] .duration-btn {
+    background-color: #3a3a3a !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .duration-btn:hover {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    background-color: rgba(78, 166, 133, 0.2) !important;
+}
+
+[data-theme="dark"] .duration-btn.active {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .weather-btn {
+    background-color: #3a3a3a !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .weather-btn:hover {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    background-color: rgba(78, 166, 133, 0.2) !important;
+}
+
+[data-theme="dark"] .weather-btn.active {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .weather-btn.active i {
+    color: #fff !important;
+}
+
+.dogModal-field-wrapper .fas.fa-chevron-right {
+    position: absolute;
+    right: 12px;
+    color: #999;
+    font-size: 0.9em;
+    pointer-events: none;
+}
+
+.dog-modal-content-wide #dogName {
+    padding-right: 12px;
+}
+
+.dog-modal-content-wide .dogModal-field:has(#dogName) .dogModal-field-wrapper .fas.fa-chevron-right {
+    display: none;
+}
+
+/* 액션 버튼 */
+.dogModal-action-buttons {
+    padding: 25px 40px 30px 40px;
+    padding-top: 10px;
+}
+
+.dog-modal-content-wide .dogModal-action-buttons {
+    padding: 25px 40px 30px 40px;
+    padding-top: 10px;
+}
+
+.dogModal-save-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light-color));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(78, 166, 133, 0.3);
+}
+
+.dogModal-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(78, 166, 133, 0.4);
+    background: linear-gradient(135deg, var(--primary-light-color), var(--primary-color));
+}
+
+.dogModal-save-btn:active {
+    transform: translateY(0);
+}
+
+/* 기존 스타일 유지 (하위 호환성) */
 .dogModal-item { margin-bottom:15px; display:flex; flex-direction:column; }
 .dogModal-item label { margin-bottom:5px; font-weight:500; color:#333; }
 .dogModal-item input, .dogModal-item select { padding:8px 10px; border-radius:8px; border:1px solid #ccc; font-size:0.95em; }
+
+/* 이미지 업로드 컨테이너 */
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-preview #previewIcon {
+    font-size: 3em;
+    color: #999;
+}
+
+.image-preview #previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.image-upload-container input[type="file"] {
+    padding: 5px;
+    font-size: 0.9em;
+}
+
+.image-remove-btn {
+    padding: 6px 12px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.image-remove-btn:hover {
+    background-color: #cc0000;
+}
 
 /* 설정 페이지 */
 .settings-page {
@@ -1694,16 +4582,32 @@ html, body {
 .settings-item input[type="email"],
 .settings-item select {
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     font-size: 0.95em;
     transition: border-color 0.2s ease;
+    background-color: #fff;
+    color: var(--text-dark);
 }
 
 .settings-item input:focus,
 .settings-item select:focus {
     border-color: #4EA685;
     outline: none;
+}
+
+/* 다크 모드 스타일 */
+[data-theme="dark"] .settings-item input[type="text"],
+[data-theme="dark"] .settings-item input[type="email"],
+[data-theme="dark"] .settings-item select {
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--background-card) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .settings-item input:focus,
+[data-theme="dark"] .settings-item select:focus {
+    border-color: var(--primary-color) !important;
 }
 
 /* --- 체크박스 스타일 --- */
@@ -1737,76 +4641,1113 @@ html, body {
     transform: translateY(0);
 }
 
-/* 프로필 */
-.profile-body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f8f9fb;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-.profile-card {
-    max-width: 400px;
-    margin: 100px auto;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    padding: 40px 50px;
-    transition: all 0.3s ease-in-out;
-}
-
-.profile-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.profile-card h3 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.profile-item {
+/* 토글 스위치 스타일 */
+.toggle-label {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
 }
 
-.profile-item label {
-    margin-bottom: 8px;
+.toggle-switch {
+    width: 48px;
+    height: 26px;
+    appearance: none;
+    background-color: #ccc;
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+    border: none;
+    outline: none;
+}
+
+.toggle-switch:checked {
+    background-color: var(--primary-color);
+}
+
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.toggle-switch:checked::before {
+    transform: translateX(22px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.toggle-text {
     font-weight: 500;
     color: #555;
 }
 
-.profile-item input {
-    padding: 12px 14px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
-    transition: all 0.2s ease-in-out;
+/* 알림 설정 토글 그룹 */
+.settings-toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 8px;
 }
 
-.profile-item input:focus {
-    border-color: #4EA685;
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.2);
+.settings-toggle-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+    padding: 8px 0 !important;
+    width: 100% !important;
 }
 
-.profile-save-btn {
-    width: 100%;
-    padding: 13px;
+.settings-toggle-item .toggle-text {
+    flex: 0 1 auto;
+    font-weight: 500;
+    color: #555;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block !important;
+    text-align: left;
+    line-height: 1.5;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.settings-toggle-item .toggle-label {
+    margin: 0 !important;
+    padding: 2px !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50px !important;
+    height: 30px !important;
+    flex: 0 0 auto;
+    background-color: #808080;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.settings-toggle-item .toggle-label:has(.toggle-switch:checked) {
     background-color: var(--primary-color);
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.25s ease;
 }
 
-.profile-save-btn:hover {
+.settings-toggle-item .toggle-label .toggle-switch {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 2px) !important;
+    height: calc(100% - 2px) !important;
+    margin: 0;
+    background-color: transparent;
+    border-radius: 13px;
+}
+
+.settings-toggle-item .toggle-label .toggle-switch:checked {
+    background-color: transparent;
+}
+
+/* 다크 모드 스타일 */
+[data-theme="dark"] .settings-toggle-item .toggle-text {
+    color: var(--text-secondary) !important;
+}
+
+/* 설정 액션 버튼 */
+.settings-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.settings-action-btn {
+    padding: 10px 16px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9em;
+}
+
+.settings-action-btn:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-1px);
+}
+
+.settings-action-btn.export-btn {
+    background-color: #4EA685;
+    color: white;
+    border-color: #4EA685;
+}
+
+.settings-action-btn.export-btn:hover {
+    background-color: #57B894;
+}
+
+.settings-action-btn.danger-btn {
+    background-color: #fff;
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.settings-action-btn.danger-btn:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* 정보 표시 아이템 */
+.settings-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.info-value {
+    color: #333;
+    font-weight: 600;
+}
+
+/* 설정 카드 아이콘 */
+.settings-card h3 i {
+    margin-right: 8px;
+    color: #4EA685;
+}
+
+/* ====================== 프로필 페이지 ====================== */
+.profile-body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+}
+
+.profile-page-wrapper {
+    min-height: calc(100vh - var(--header-height) - var(--footer-height) - 50px);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    background-color: var(--background-light);
+}
+
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-card {
+    background: var(--background-card);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-top: 70px;
+}
+
+.profile-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 프로필 헤더 섹션 */
+.profile-header-section {
+    padding: 50px 30px 30px;
+    text-align: center;
+    background: linear-gradient(135deg, var(--background-light) 0%, var(--background-card) 100%);
+}
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: var(--spacing-lg);
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light-color) 100%);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    font-weight: normal;
+    border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-picture::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-picture:hover {
+    transform: scale(1.05);
+}
+
+.profile-picture:hover::before {
+    opacity: 1;
+}
+
+.profile-picture i {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    border: 3px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-indicator.online {
+    background-color: #4CAF50;
+}
+
+.profile-name-section {
+    margin-top: var(--spacing-lg);
+}
+
+.name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: var(--spacing-xs);
+}
+
+.display-name {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+.badge-new {
+    background-color: #FF6B9D;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.username-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.username-text {
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.edit-name-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-name-btn:hover {
+    color: var(--primary-color);
+    background-color: #f0f0f0;
+}
+
+/* 액션 버튼 */
+.action-buttons {
+    padding: 0 30px var(--spacing-lg);
+}
+
+.preview-profile-btn {
+    width: 100%;
+    background-color: #f5f5f5;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    padding: 14px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.preview-profile-btn:hover {
+    background-color: #e8e8e8;
+    border-color: #d0d0d0;
+}
+
+/* 구분선 */
+.profile-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-color), transparent);
+    margin: 0 30px;
+}
+
+/* 프로필 정보 섹션 */
+.profile-info-section {
+    padding: 30px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.info-label .icon {
+    width: 20px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.info-value {
+    color: var(--text-dark);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.change-password-link {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 0;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.change-password-link:hover {
+    color: var(--primary-dark-color);
+    text-decoration: underline;
+}
+
+/* 하단 Edit 버튼 */
+.footer-actions {
+    padding: var(--spacing-lg) 30px 30px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.edit-profile-btn {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.edit-profile-btn:hover {
     background-color: var(--primary-dark-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(78, 166, 133, 0.3);
+}
+
+/* 프로필 모달 스타일 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+}
+
+.modal-container {
+    background-color: var(--background-card);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: var(--text-dark);
+    background-color: #f0f0f0;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.form-field {
+    margin-bottom: 24px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+.form-field input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn-cancel {
+    background-color: #f5f5f5;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #e8e8e8;
+}
+
+.btn-save {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-save:hover {
+    background-color: var(--primary-dark-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(78, 166, 133, 0.3);
+}
+
+/* 알림 모달 */
+.notification-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: modalSlideIn 0.3s ease;
+}
+
+.notification-modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    animation: modalSlideIn 0.3s ease;
+}
+
+.notification-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.notification-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notification-modal-header h3 i {
+    color: var(--primary-color);
+}
+
+.notification-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.notification-modal-close:hover {
+    color: var(--text-dark);
+    background-color: #f0f0f0;
+}
+
+.notification-modal-body {
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.notification-list {
+    padding: 0;
+}
+
+.notification-item {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.unread {
+    background-color: #f0f7ff;
+}
+
+.notification-item.unread:hover {
+    background-color: #e6f2ff;
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+    color: white;
+}
+
+.notification-icon.info {
+    background: linear-gradient(135deg, #4EA685 0%, #57B894 100%);
+}
+
+.notification-icon.warning {
+    background: linear-gradient(135deg, #FFC107 0%, #FFD54F 100%);
+}
+
+.notification-icon.error {
+    background: linear-gradient(135deg, #F44336 0%, #E57373 100%);
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.notification-message {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+}
+
+.notification-time {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.notification-empty {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.notification-empty i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.notification-empty p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* 다크 모드 스타일 */
+[data-theme="dark"] .notification-modal-content {
+    background: var(--background-card) !important;
+}
+
+[data-theme="dark"] .notification-modal-header {
+    border-bottom: 1px solid #3c3c3c;
+}
+
+[data-theme="dark"] .notification-modal-header h3 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .notification-modal-close {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .notification-modal-close:hover {
+    color: var(--text-dark);
+    background-color: #3c3c3c;
+}
+
+[data-theme="dark"] .notification-item {
+    border-bottom: 1px solid #3c3c3c;
+}
+
+[data-theme="dark"] .notification-item:hover {
+    background-color: #3c3c3c;
+}
+
+[data-theme="dark"] .notification-item.unread {
+    background-color: rgba(78, 166, 133, 0.1);
+}
+
+[data-theme="dark"] .notification-item.unread:hover {
+    background-color: rgba(78, 166, 133, 0.15);
+}
+
+[data-theme="dark"] .notification-title {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .notification-message {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .notification-time {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .notification-empty {
+    color: var(--text-muted) !important;
+}
+
+/* 프로필 페이지 반응형 디자인 */
+@media (max-width: 768px) {
+    .profile-page-wrapper {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .profile-header-section {
+        padding: 30px var(--spacing-lg) var(--spacing-lg);
+    }
+
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+    }
+
+    .display-name {
+        font-size: 24px;
+    }
+
+    .profile-info-section {
+        padding: var(--spacing-lg);
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+
+    .info-value {
+        text-align: left;
+    }
+
+    .modal-container {
+        width: 95%;
+        margin: var(--spacing-lg);
+    }
+
+    .modal-body {
+        padding: var(--spacing-lg);
+    }
+}
+
+/* Dashboard 모달 리스트 스타일 */
+.dashboard-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dashboard-modal-item {
+    width: 98%;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    border-left: 4px solid;
+    border-top: 1px solid rgb(246 246 246);
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.dashboard-modal-item:hover {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.dashboard-modal-item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.dashboard-modal-item-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white !important;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+[data-theme="dark"] .dashboard-modal-item-icon {
+    color: white !important;
+}
+
+.dashboard-modal-item-info {
+    flex: 1;
+}
+
+.dashboard-modal-item-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.dashboard-modal-item-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+}
+
+.dashboard-modal-item-date {
+    color: #666;
+    font-size: 13px;
+}
+
+.dashboard-modal-item-content {
+    color: #333;
+    line-height: 1.6;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.dashboard-modal-item-content-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dashboard-modal-item-content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dashboard-modal-item-content-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-modal-item-content-item i {
+    width: 16px;
+}
+
+.dashboard-modal-item-content-item-start {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.dashboard-modal-item-content-item-start i {
+    width: 16px;
+    margin-top: 2px;
+}
+
+.dashboard-modal-item-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 17px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid;
+}
+
+.dashboard-modal-item-weather-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 17px;
+    background: rgba(245, 127, 23, 0.1);
+}
+
+.dashboard-modal-item-weather-badge i {
+    font-size: 18px;
+}
+
+.dashboard-modal-item-weather-badge span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dashboard-modal-item-content-item-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dashboard-modal-empty {
+    text-align: center;
+    color: #999;
+    padding: 40px;
+}
+
+.dashboard-modal-container {
+    max-width: 600px;
+}
+
+.dashboard-modal-content {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* 다크 모드 스타일 */
+[data-theme="dark"] .dashboard-modal-item {
+    width: 98%;
+    background: rgba(60, 60, 60, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .dashboard-modal-item:hover {
+    background: rgba(60, 60, 60, 0.75) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .dashboard-modal-item-name {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dashboard-modal-item-date {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .dashboard-modal-item-content {
+    color: var(--text-secondary) !important;
+    border-top-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .dashboard-modal-empty {
+    color: var(--text-muted) !important;
 }

@@ -9,10 +9,75 @@
         <h1 class="header-page-title" th:text="${title != null ? title : '펫케어 시스템 관리'}">펫케어 시스템 관리</h1>
     </div>
     <nav class="header-nav"> <!-- navigation 메뉴를 묶는 컨테이너 -->
-        <a href="#"><i class="fas fa-bell"></i> 알림</a>
+        <a href="javascript:void(0)" id="notificationBtn" onclick="window.openNotificationModal(); return false;"><i class="fas fa-bell"></i> 알림</a>
         <a th:href="@{/profile}"><i class="fas fa-user-circle"></i> 프로필</a>
         <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
     </nav>
 </header>
+<script>
+    (function() {
+        console.log('알림 모달 초기화 시작');
+        
+        function initNotificationModal() {
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationModal = document.getElementById('notificationModal');
+            const closeNotificationModal = document.getElementById('closeNotificationModal');
+
+            if (!notificationBtn || !notificationModal) {
+                console.warn('알림 모달 요소를 찾을 수 없습니다.');
+                return;
+            }
+
+            console.log('알림 모달 요소 찾음');
+
+            // 알림 버튼 클릭 이벤트 (onclick이 있으므로 중복 방지)
+            notificationBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.openNotificationModal();
+            });
+
+            // 닫기 버튼 클릭 이벤트
+            if (closeNotificationModal) {
+                closeNotificationModal.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.closeNotificationModal();
+                });
+            }
+
+            // 모달 외부 클릭 시 닫기
+            notificationModal.addEventListener('click', function(e) {
+                if (e.target === notificationModal) {
+                    window.closeNotificationModal();
+                }
+            });
+
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && notificationModal && notificationModal.style.display === 'flex') {
+                    window.closeNotificationModal();
+                }
+            });
+        }
+
+        // 여러 방법으로 실행 시도
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initNotificationModal);
+        } else {
+            initNotificationModal();
+        }
+
+        // 추가 안전장치: window.onload
+        window.addEventListener('load', function() {
+            const btn = document.getElementById('notificationBtn');
+            if (btn && !btn.hasAttribute('data-initialized')) {
+                console.log('window.onload에서 알림 모달 초기화');
+                initNotificationModal();
+                btn.setAttribute('data-initialized', 'true');
+            }
+        });
+    })();
+</script>
 </body>
 </html>

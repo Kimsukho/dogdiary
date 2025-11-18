@@ -9,25 +9,97 @@
         <result property="username" column="username"/>
         <result property="password" column="password"/>
         <result property="email" column="email"/>
-        <collection property="roles" ofType="com.project.model.Role">
-            <id property="id" column="role_id"/>
-            <result property="roleName" column="role_name"/>
-        </collection>
+        <result property="role" column="role"/>
     </resultMap>
 
     <!-- username으로 사용자 조회 -->
-    <select id="findByUsername" parameterType="string" resultMap="userResultMap">
+    <select id="findUserByUsername" parameterType="string" resultMap="userResultMap">
         SELECT 
-            u.id,
-            u.username,
-            u.password,
-            u.email,
-            r.id as role_id,
-            r.role_name
-        FROM users u
-        LEFT JOIN user_roles ur ON u.id = ur.user_id
-        LEFT JOIN roles r ON ur.role_id = r.id
-        WHERE u.username = #{username}
+            id,
+            username,
+            password,
+            email,
+            role
+        FROM users
+        WHERE username = #{username}
     </select>
+
+    <!-- getUserByName: findUserByUsername과 동일한 쿼리 -->
+    <select id="getUserByName" parameterType="string" resultMap="userResultMap">
+        SELECT 
+            id,
+            username,
+            password,
+            email,
+            role
+        FROM users
+        WHERE username = #{username}
+    </select>
+
+    <!-- 사용자 등록 -->
+    <insert id="register" parameterType="java.util.HashMap">
+        INSERT INTO users (username, password, email, role)
+        VALUES (#{username}, #{password}, #{email}, COALESCE(#{role}, 'USER'))
+    </insert>
+
+    <!-- 사용자 정보 수정 -->
+    <update id="update" parameterType="java.util.HashMap">
+        UPDATE users
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="role != null and role != ''">
+                role = #{role},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 사용자 삭제 -->
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+    <!-- 모든 사용자 조회 -->
+    <select id="getUserList" resultType="java.util.HashMap">
+        SELECT 
+            id,
+            username,
+            password,
+            email,
+            role,
+            regdate,
+            last_updated
+        FROM users
+        ORDER BY regdate DESC
+    </select>
+
+    <!-- 사용자 정보 조회 (HashMap 반환) -->
+    <select id="getUserInfo" parameterType="string" resultType="java.util.HashMap">
+        SELECT 
+            id,
+            username,
+            password,
+            email,
+            role,
+            regdate,
+            last_updated
+        FROM users
+        WHERE username = #{username}
+    </select>
+
+    <!-- 비밀번호 변경 -->
+    <update id="resetPassword" parameterType="java.util.HashMap">
+        UPDATE users
+        SET password = #{password}
+        WHERE username = #{username}
+    </update>
 
 </mapper>

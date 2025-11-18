@@ -10,8 +10,11 @@
 		    <title th:text="${pageTitle} ?: '펫케어 시스템'">펫케어 시스템</title>
 		    
             <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-            <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
-            <link th:href="@{/bootstrap/css/sb-admin-2.min.css}" rel="stylesheet" />
+            <!-- Font Awesome 아이콘 사용을 위한 CDN (bootstrap 폴더가 없으므로 CDN 사용) -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+            <!-- Bootstrap CSS (CDN 사용) -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <!-- SB Admin 2 CSS는 main.css와 style.css로 대체 -->
 			<link rel="stylesheet" th:href="@{/css/style.css}">
 			<link rel="stylesheet" th:href="@{/css/main.css}">
             <!-- Toastr -->
@@ -22,9 +25,8 @@
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
-            
-    <!-- Font Awesome 아이콘 사용을 위한 CDN -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+            <!-- Bootstrap JS (CDN 사용) -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
             
     </head>
     </th:block>

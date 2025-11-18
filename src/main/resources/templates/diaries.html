@@ -19,14 +19,41 @@
 
         <div class="diary-content">
             <div class="summary-container">
-                <div class="summary-item">
+                <div class="summary-item total-item">
+                    <div class="summary-icon-circle total-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
                     <div class="summary-value" id="currentMonthTotalCount">0</div>
                     <div class="summary-label" id="currentMonthLabel">0월 총 일지</div>
                 </div>
-                <div class="summary-item"><div class="summary-value" id="happyCount">0</div><div class="summary-label">😊 행복</div></div>
-                <div class="summary-item"><div class="summary-value" id="sadCount">0</div><div class="summary-label">😢 슬픔</div></div>
-                <div class="summary-item"><div class="summary-value" id="angryCount">0</div><div class="summary-label">😡 화남</div></div>
-                <div class="summary-item"><div class="summary-value" id="excitedCount">0</div><div class="summary-label">🤩 신남</div></div>
+                <div class="summary-item mood-item mood-happy">
+                    <div class="summary-icon-circle happy-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <div class="summary-value" id="happyCount">0</div>
+                    <div class="summary-label">행복</div>
+                </div>
+                <div class="summary-item mood-item mood-sad">
+                    <div class="summary-icon-circle sad-icon">
+                        <i class="fas fa-frown"></i>
+                    </div>
+                    <div class="summary-value" id="sadCount">0</div>
+                    <div class="summary-label">슬픔</div>
+                </div>
+                <div class="summary-item mood-item mood-angry">
+                    <div class="summary-icon-circle angry-icon">
+                        <i class="fas fa-angry"></i>
+                    </div>
+                    <div class="summary-value" id="angryCount">0</div>
+                    <div class="summary-label">화남</div>
+                </div>
+                <div class="summary-item mood-item mood-excited">
+                    <div class="summary-icon-circle excited-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="summary-value" id="excitedCount">0</div>
+                    <div class="summary-label">신남</div>
+                </div>
             </div>
 
             <div class="diary-cards" id="diaryCards">
@@ -42,22 +69,55 @@
     <!-- 각각의 모달 -->    
     <div id="diaryModal" class="diaryModal hidden">
         <div class="modal-content">
-            <h3 id="modalTitle">일지 작성</h3>
+            <div class="dogModal-header">
+                <h3 id="modalTitle">
+                    <i class="fas fa-book-open" style="margin-right: 8px; color: #666;"></i>
+                    일지 작성
+                </h3>
+                <button class="dogModal-back-btn" id="closeModalBtn" title="닫기">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <input type="hidden" id="diaryId" name="diaryId" />
-            <select id="diaryDogSelect" required="required">
-                <option value="" selected hidden>반려견 선택</option>
-            </select>
-            <select id="diaryMood" required="required">
-                <option value="" selected hidden>기분 선택</option>
-                <option value="HAPPY">행복</option>
-                <option value="SAD">슬픔</option>
-                <option value="ANGRY">화남</option>
-                <option value="EXCITED">신남</option>
-            </select>
-            <textarea id="diaryContent" placeholder="내용"></textarea>
-            <div class="modal-buttons">
-                <button class="button save-button" id="saveDiaryBtn">저장</button>
-                <button class="button close-button" id="closeModalBtn">닫기</button>
+            <div class="dogModal-fields">
+                <div class="dogModal-field">
+                    <label>날짜</label>
+                    <div class="dogModal-field-wrapper">
+                        <input type="date" id="diaryDate" required="required" />
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>반려견</label>
+                    <div class="dogModal-field-wrapper">
+                        <select id="diaryDogSelect" required="required">
+                            <option value="" selected>반려견 선택</option>
+                        </select>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>기분</label>
+                    <div class="dogModal-field-wrapper">
+                        <select id="diaryMood" required="required">
+                            <option value="" selected hidden>기분 선택</option>
+                            <option value="HAPPY">행복</option>
+                            <option value="SAD">슬픔</option>
+                            <option value="ANGRY">화남</option>
+                            <option value="EXCITED">신남</option>
+                        </select>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="dogModal-field">
+                    <label>내용</label>
+                    <div class="dogModal-field-wrapper">
+                        <textarea id="diaryContent" placeholder="내용" style="resize: vertical; min-height: 100px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="dogModal-action-buttons">
+                <button class="dogModal-save-btn" id="saveDiaryBtn">저장하기</button>
             </div>
         </div>
     </div>
@@ -97,6 +157,7 @@
 
                 const modalTitle = document.getElementById('modalTitle');
                 const diaryId = document.getElementById('diaryId');
+                const diaryDate = document.getElementById('diaryDate');
                 const diarySelect = document.getElementById('diaryDogSelect');
                 const diaryContent = document.getElementById('diaryContent');
                 const diaryMood = document.getElementById('diaryMood');
@@ -113,12 +174,23 @@
                 let diaries = [];
                 let editingId = null;
 
+                const summaryElements = {
+                    currentMonthTotalCountEl: currentMonthTotalCountEl,
+                    currentMonthLabel: cuurentMonthLabel,
+                    happyCountEl: happyCountEl,
+                    sadCountEl: sadCountEl,
+                    angryCountEl: angryCountEl,
+                    excitedCountEl: excitedCountEl
+                };
+
                 const moodClassMap = { 'HAPPY':'mood-Happy','SAD':'mood-Sad','ANGRY':'mood-Angry','EXCITED':'mood-Excited' };
+                const moodLabelMap = { 'HAPPY':'행복','SAD':'슬픔','ANGRY':'화남','EXCITED':'신남' };
 
                 // 닫기 버튼
                 closeModalBtn.onclick = () => { 
                     modal.style.display='none';
                     diaryId.value=''; 
+                    diaryDate.value=''; 
                     diarySelect.value=''; 
                     diaryMood.value=''; 
                     diaryContent.value=''; 
@@ -132,20 +204,61 @@
 
                 // 저장 버튼
                 saveDiaryBtn.onclick = async () => {
-                    const data = { 
-                        id: diaryId.value, 
-                        dog_id: diarySelect.value, 
-                        mood: diaryMood.value,
-                        content: diaryContent.value
-                    };
-                    
-                    const response = await axios.post(saveDiaryBtn.textContent == "저장"? "/api/saveDogDiaryByDogId" : "/api/updateDogDiaryByDogId", data);
-                    if (response.data.returnCode === "SUCCESS") {
-                        modal.style.display='none';
-                        await loadDiaries();
-                        renderCalendar(selectedDate);
-                        renderDiaryList();
-                        renderSummary(selectedDate);
+                    try {
+                        // 필수 필드 검증
+                        if (!diaryDate.value) {
+                            alert('날짜를 선택해주세요.');
+                            return;
+                        }
+                        if (!diarySelect.value) {
+                            alert('반려견을 선택해주세요.');
+                            return;
+                        }
+                        if (!diaryMood.value) {
+                            alert('기분을 선택해주세요.');
+                            return;
+                        }
+                        
+                        // 모달에서 선택한 날짜 사용
+                        const selectedDateFromModal = new Date(diaryDate.value);
+                        
+                        const isUpdate = saveDiaryBtn.textContent === "수정하기";
+                        const data = { 
+                            dog_id: diarySelect.value, 
+                            mood: diaryMood.value,
+                            content: diaryContent.value,
+                            created_at: diaryDate.value
+                        };
+                        
+                        // 수정 시에만 id 추가
+                        if (isUpdate && diaryId.value) {
+                            data.id = diaryId.value;
+                        }
+                        
+                        const apiUrl = isUpdate ? "/api/updateDogDiaryByDogId" : "/api/saveDogDiaryByDogId";
+                        const response = await axios.post(apiUrl, data);
+                        
+                        if (response.data.returnCode === "SUCCESS") {
+                            modal.style.display='none';
+                            diaries = await ApiCommon.loadDiaries();
+                            // 모달에서 선택한 날짜로 selectedDate 업데이트
+                            selectedDate = selectedDateFromModal;
+                            renderCalendar(selectedDate);
+                            renderDiaryList();
+                            
+                            // 기본 반려견 필터링된 일지 배열 생성
+                            const defaultDogId = localStorage.getItem('defaultDogId');
+                            let filteredDiaries = diaries;
+                            if (defaultDogId && defaultDogId !== '') {
+                                filteredDiaries = diaries.filter(d => d.dog_id == defaultDogId);
+                            }
+                            ApiCommon.renderSummary(selectedDate, filteredDiaries, summaryElements);
+                        } else {
+                            alert('저장 실패: ' + (response.data.errorMessage || '알 수 없는 오류가 발생했습니다.'));
+                        }
+                    } catch (error) {
+                        console.error('일지 저장 중 오류 발생:', error);
+                        alert('일지 저장 중 오류가 발생했습니다: ' + (error.response?.data?.errorMessage || error.message || '알 수 없는 오류'));
                     }
                 };
 
@@ -154,10 +267,17 @@
                     try {
                         const response = await axios.post("/api/deleteDogDiaryById", { id: diaryId.value });
                         if (response.data.returnCode === "SUCCESS") {
-                            await loadDiaries();
+                            diaries = await ApiCommon.loadDiaries();
                             renderDiaryList();
                             renderCalendar(selectedDate);
-                            renderSummary(selectedDate);
+                            
+                            // 기본 반려견 필터링된 일지 배열 생성
+                            const defaultDogId = localStorage.getItem('defaultDogId');
+                            let filteredDiaries = diaries;
+                            if (defaultDogId && defaultDogId !== '') {
+                                filteredDiaries = diaries.filter(d => d.dog_id == defaultDogId);
+                            }
+                            ApiCommon.renderSummary(selectedDate, filteredDiaries, summaryElements);
                         } else {
                             alert("삭제 실패: " + response.data.errorMessage);
                         }
@@ -177,9 +297,14 @@
                     modal.classList.remove("hidden");
                     modal.style.display = "flex";
                     editingId=null; 
-                    modalTitle.textContent='일지 작성';
-                    saveDiaryBtn.textContent='저장';
+                    modalTitle.innerHTML='<i class="fas fa-book-open" style="margin-right: 8px; color: #666;"></i>일지 작성';
+                    saveDiaryBtn.textContent='저장하기';
                     diaryId.value=''; 
+                    // 현재 선택한 날짜를 모달의 날짜 필드에 설정
+                    const year = selectedDate.getFullYear();
+                    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(selectedDate.getDate()).padStart(2, '0');
+                    diaryDate.value = `${year}-${month}-${day}`;
                     diarySelect.value=''; 
                     diaryMood.value=''; 
                     diaryContent.value=''; 
@@ -189,16 +314,40 @@
                     try {
                     const response = await axios.get("/api/getDogsByUserId");
                     if (response.data.returnCode === "SUCCESS") {
-                        const dogs = response.data.resultData;
+                        const dogs = response.data.resultData || [];
 
-                        diarySelect.innerHTML = '<option selected hidden value="">반려견 선택</option>';
+                        // 기존 옵션 초기화
+                        diarySelect.innerHTML = '';
 
-                        dogs.forEach(dog => {
+                        // 강아지 목록이 있으면 "반려견 선택" 옵션을 유지하고 첫 번째 강아지를 기본값으로 설정
+                        if (dogs.length > 0) {
+                            // "반려견 선택" 옵션 추가 (기본 선택)
+                            const defaultOption = document.createElement("option");
+                            defaultOption.value = "";
+                            defaultOption.textContent = "반려견 선택";
+                            defaultOption.selected = true;
+                            diarySelect.appendChild(defaultOption);
+                            
+                            // 강아지 목록 추가
+                            dogs.forEach((dog, index) => {
+                                const option = document.createElement("option");
+                                option.value = dog.id;
+                                option.textContent = dog.name;
+                                diarySelect.appendChild(option);
+                            });
+                            
+                            // 첫 번째 강아지를 기본 선택
+                            if (dogs.length > 0) {
+                                diarySelect.value = dogs[0].id;
+                            }
+                        } else {
+                            // 강아지가 없으면 "반려견 선택" 옵션만 표시
                             const option = document.createElement("option");
-                            option.value = dog.id;
-                            option.textContent = dog.name;
+                            option.value = "";
+                            option.textContent = "반려견 선택";
+                            option.selected = true;
                             diarySelect.appendChild(option);
-                        });
+                        }
                     } else {
                         console.warn("반려견 목록 불러오기 실패:", response.data.message);
                     }
@@ -207,33 +356,23 @@
                     }
                 }
 
-                async function loadDiaries() {
-                    try { 
-                        const res = await axios.get('/api/getAllDiaries'); 
-                        if(res.data.returnCode==='SUCCESS') diaries=res.data.resultData; 
-                    } 
-                    catch(e){ 
-                        console.error(e); 
-                    }
-                }
-
-                function renderSummary(referenceDate){
-                    const now = selectedDate;
-                    const monthDiaries = diaries.filter(d => {
-                        const dd = new Date(d.created_at);
-                        return dd.getFullYear() === now.getFullYear() && dd.getMonth() === now.getMonth();
-                    });
-                    currentMonthTotalCountEl.textContent = monthDiaries.length;
-                    cuurentMonthLabel.textContent = `${now.getMonth() + 1}월 총 일지`;
-
-                    happyCountEl.textContent = monthDiaries.filter(d => d.mood === 'HAPPY').length;
-                    sadCountEl.textContent = monthDiaries.filter(d => d.mood === 'SAD').length;
-                    angryCountEl.textContent = monthDiaries.filter(d=>d.mood==='ANGRY').length;
-                    excitedCountEl.textContent = monthDiaries.filter(d=>d.mood==='EXCITED').length;
-                }
-
                 function renderDiaryList() {
-                    const filtered = diaries.filter(d=>new Date(d.created_at).toDateString()===selectedDate.toDateString());
+                    // localStorage에서 기본 반려견 ID 읽기
+                    const defaultDogId = localStorage.getItem('defaultDogId');
+                    
+                    let filtered = diaries.filter(d=>new Date(d.created_at).toDateString()===selectedDate.toDateString());
+                    
+                    // 기본 반려견이 설정되어 있으면 해당 강아지의 일지만 필터링
+                    if (defaultDogId && defaultDogId !== '') {
+                        filtered = filtered.filter(d => d.dog_id == defaultDogId);
+                    }
+                    
+                    filtered = filtered.sort((a, b) => {
+                        // 최신순 정렬: last_updated가 있으면 그것을 기준으로, 없으면 created_at 기준
+                        const dateA = a.last_updated ? new Date(a.last_updated) : new Date(a.created_at);
+                        const dateB = b.last_updated ? new Date(b.last_updated) : new Date(b.created_at);
+                        return dateB - dateA;
+                    });
                     diaryCards.innerHTML='';
                     if(filtered.length===0){ 
                         diaryCards.appendChild(emptyCard); 
@@ -241,18 +380,60 @@
                     } else {
                         filtered.forEach(d=>{
                             const moodClass=moodClassMap[d.mood]||'';
+                            const moodLabel=moodLabelMap[d.mood]||(d.mood||'-');
+                            // 일지의 날짜는 created_at 기준으로 표시
+                            const dateObj = new Date(d.created_at);
+                            const formattedDate = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`;
+                            
+                            // 기분에 따른 아이콘 색상 설정 (다크 모드 감지)
+                            const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+                            let iconColor = 'var(--primary-color)';
+                            if (isDarkMode) {
+                                // 다크 모드일 때는 연한 회색 사용
+                                iconColor = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim() || '#b0b0b0';
+                            } else {
+                                // 라이트 모드일 때는 기분에 따른 색상 사용
+                                if (d.mood === 'HAPPY') {
+                                    iconColor = '#FF6B9D';
+                                } else if (d.mood === 'SAD') {
+                                    iconColor = '#1976D2';
+                                } else if (d.mood === 'ANGRY') {
+                                    iconColor = '#C62828';
+                                } else if (d.mood === 'EXCITED') {
+                                    iconColor = '#7B1FA2';
+                                }
+                            }
+                            
                             const card=document.createElement('div');
                             card.className='diary-card';
                             card.innerHTML=`
-                                <div class="diary-card-header">${d.name}</div>
-                                <div class="diary-card-content">${d.content}</div>
-                                <div class="diary-footer">
-                                    <div class="diary-mood ${moodClass}">${d.mood||'-'}</div>
-                                    <div>${new Date(d.created_at).toLocaleDateString('ko-KR')}</div>
-                                </div>
-                                <div class="dog-card-actions">
-                                    <button class="edit-btn" data-id="${d.id}"><i class="fas fa-edit"></i></button>
-                                    <button class="delete-btn" data-id="${d.id}"><i class="fas fa-trash"></i></button>
+                                <div class="diary-card-left-border ${moodClass}"></div>
+                                <div class="diary-card-body">
+                                    <div class="diary-card-header-section">
+                                        <div class="diary-date-header">
+                                            <i class="fas fa-calendar-alt" style="color: ${iconColor};"></i>
+                                            <span>${formattedDate}</span>
+                                        </div>
+                                        <div class="diary-card-actions">
+                                            <button class="edit-btn" data-id="${d.id}" title="수정"><i class="fas fa-pencil-alt"></i></button>
+                                            <button class="delete-btn" data-id="${d.id}" title="삭제"><i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="diary-profile-section">
+                                        <div class="diary-avatar ${moodClass}">
+                                            <i class="fas ${d.mood === 'HAPPY' ? 'fa-smile' : d.mood === 'SAD' ? 'fa-frown' : d.mood === 'ANGRY' ? 'fa-angry' : 'fa-star'}"></i>
+                                        </div>
+                                        <div class="diary-info">
+                                            <h3 class="diary-dog-name">${d.name}</h3>
+                                        </div>
+                                    </div>
+                                    <div class="diary-content-section">
+                                        <div class="diary-about-title">
+                                            <i class="fas fa-sticky-note" style="color: ${iconColor};"></i>
+                                            <span>메모</span>
+                                        </div>
+                                        <p class="diary-content">${d.content || "내용이 없습니다."}</p>
+                                    </div>
                                 </div>
                             `;
                             diaryCards.appendChild(card);
@@ -261,9 +442,15 @@
                             card.querySelector('.edit-btn').onclick = () => {
                                 modal.classList.remove("hidden");
                                 modal.style.display = "flex";
-                                modalTitle.textContent='일지 수정';
-                                saveDiaryBtn.textContent='수정';
+                                modalTitle.innerHTML='<i class="fas fa-book-open" style="margin-right: 8px; color: #666;"></i>일지 수정';
+                                saveDiaryBtn.textContent='수정하기';
                                 diaryId.value = d.id;
+                                // 기존 일지의 날짜(created_at)를 모달의 날짜 필드에 설정
+                                const dateObj = new Date(d.created_at);
+                                const year = dateObj.getFullYear();
+                                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                                const day = String(dateObj.getDate()).padStart(2, '0');
+                                diaryDate.value = `${year}-${month}-${day}`;
                                 diarySelect.value=d.dog_id; 
                                 diaryMood.value=d.mood; 
                                 diaryContent.value=d.content; 
@@ -283,12 +470,66 @@
                     const firstDay=new Date(year,month,1).getDay();
                     const lastDate=new Date(year,month+1,0).getDate();
                     calendarGrid.innerHTML='';
+                    
+                    // localStorage에서 기본 반려견 ID 읽기
+                    const defaultDogId = localStorage.getItem('defaultDogId');
+                    
+                    // 요일 헤더 추가
+                    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+                    weekdays.forEach(day => {
+                        const dayHeader = document.createElement('div');
+                        dayHeader.className = 'calendar-weekday';
+                        dayHeader.textContent = day;
+                        calendarGrid.appendChild(dayHeader);
+                    });
+                    
                     for(let i=0;i<firstDay;i++) calendarGrid.appendChild(document.createElement('div'));
                     for(let day=1;day<=lastDate;day++){
-                        const dayEl=document.createElement('div'); dayEl.className='calendar-day'; dayEl.textContent=day;
+                        const dayEl=document.createElement('div'); 
+                        dayEl.className='calendar-day';
                         const thisDate=new Date(year,month,day);
-                        const hasDiary=diaries.some(d=>{const dd=new Date(d.created_at); return dd.getFullYear()===year && dd.getMonth()===month && dd.getDate()===day;});
-                        if(hasDiary){ const dot=document.createElement('div'); dot.className='calendar-dot'; dayEl.appendChild(dot); }
+                        const dayOfWeek = thisDate.getDay();
+                        
+                        // 주말 스타일 추가
+                        if(dayOfWeek === 0) dayEl.classList.add('sunday');
+                        if(dayOfWeek === 6) dayEl.classList.add('saturday');
+                        
+                        // 날짜 숫자 컨테이너
+                        const dayNumber = document.createElement('div');
+                        dayNumber.className = 'calendar-day-number';
+                        dayNumber.textContent = day;
+                        dayEl.appendChild(dayNumber);
+                        
+                        // 해당 날짜의 일지들 필터링 (created_at 기준)
+                        let dayDiaries = diaries.filter(d => {
+                            const dd = new Date(d.created_at);
+                            return dd.getFullYear() === year && dd.getMonth() === month && dd.getDate() === day;
+                        });
+                        
+                        // 기본 반려견이 설정되어 있으면 해당 강아지의 일지만 필터링
+                        if (defaultDogId && defaultDogId !== '') {
+                            dayDiaries = dayDiaries.filter(d => d.dog_id == defaultDogId);
+                        }
+                        
+                        if(dayDiaries.length > 0) {
+                            // 작은 원 표시
+                            const dotIndicator = document.createElement('div');
+                            dotIndicator.className = 'calendar-diary-dot';
+                            dayNumber.appendChild(dotIndicator);
+                            
+                            // 일지 개수 표시
+                            const countBadge = document.createElement('div');
+                            countBadge.className = 'calendar-diary-count';
+                            countBadge.textContent = "+" + dayDiaries.length;
+                            dayEl.appendChild(countBadge);
+                        }
+                        
+                        // 오늘 날짜 체크
+                        const today = new Date();
+                        if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                            dayEl.classList.add('today');
+                        }
+                        
                         dayEl.onclick=()=>{ selectedDate=thisDate; renderCalendar(selectedDate); renderDiaryList(); };
                         if(thisDate.toDateString()===selectedDate.toDateString()) dayEl.classList.add('selected');
                         calendarGrid.appendChild(dayEl);
@@ -306,14 +547,28 @@
                     selectedDate.setMonth(selectedDate.getMonth() - 1);
                     renderCalendar(selectedDate);
                     renderDiaryList();
-                    renderSummary(selectedDate);
+                    
+                    // 기본 반려견 필터링된 일지 배열 생성
+                    const defaultDogId = localStorage.getItem('defaultDogId');
+                    let filteredDiaries = diaries;
+                    if (defaultDogId && defaultDogId !== '') {
+                        filteredDiaries = diaries.filter(d => d.dog_id == defaultDogId);
+                    }
+                    ApiCommon.renderSummary(selectedDate, filteredDiaries, summaryElements);
                 };
 
                 document.getElementById('nextMonthBtn').onclick=()=>{ 
                     selectedDate.setMonth(selectedDate.getMonth() + 1);
                     renderCalendar(selectedDate);
                     renderDiaryList();
-                    renderSummary(selectedDate); 
+                    
+                    // 기본 반려견 필터링된 일지 배열 생성
+                    const defaultDogId = localStorage.getItem('defaultDogId');
+                    let filteredDiaries = diaries;
+                    if (defaultDogId && defaultDogId !== '') {
+                        filteredDiaries = diaries.filter(d => d.dog_id == defaultDogId);
+                    }
+                    ApiCommon.renderSummary(selectedDate, filteredDiaries, summaryElements); 
                 };
 
                 document.querySelectorAll(".close-button").forEach(btn => {
@@ -322,11 +577,18 @@
                     });
                 });
 
-                await loadDiaries();
+                diaries = await ApiCommon.loadDiaries();
                 await loadDogs();
                 renderCalendar(selectedDate);
                 renderDiaryList();
-                renderSummary(selectedDate);
+                
+                // 기본 반려견 필터링된 일지 배열 생성
+                const defaultDogId = localStorage.getItem('defaultDogId');
+                let filteredDiaries = diaries;
+                if (defaultDogId && defaultDogId !== '') {
+                    filteredDiaries = diaries.filter(d => d.dog_id == defaultDogId);
+                }
+                ApiCommon.renderSummary(selectedDate, filteredDiaries, summaryElements);
             }
             init();
         });

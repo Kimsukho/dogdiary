@@ -8,6 +8,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RestDao {
 	List<HashMap> getDogsByUserId(HashMap map);
+	int saveDog(HashMap map);
+	int updateDogById(HashMap map);
+	int deleteDogById(HashMap map);
+	
 	List<HashMap> getAllDiaries(HashMap map);
 	int saveDogDiaryByDogId(HashMap map);
 	int updateDogDiaryByDogId(HashMap map);
@@ -21,4 +25,6 @@ public interface RestDao {
 	int insertHospital(HashMap map);
 	int updateHospital(HashMap map);
 	int deleteHospitalById(HashMap map);
+	
+	List<HashMap> getMonthlyStatistics(HashMap map);
 }

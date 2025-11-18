@@ -10,42 +10,117 @@
             name,
             breed,
             age,
+            age_unit,
             gender,
+            weight,
             profile_image,
             created_at,
             updated_at
         FROM dogs
-        WHERE user_id = 3
-        ORDER BY created_at DESC
+        <where>
+        	<if test="user_id != null">
+        		user_id = #{user_id}
+        	</if>
+        </where>
+        ORDER BY id ASC
 	</select>
 	
+	<insert id="saveDog" parameterType="java.util.HashMap">
+		INSERT INTO dogs (user_id, name, breed, age, age_unit, gender, weight, profile_image, created_at, updated_at)
+		VALUES (#{user_id}, #{name}, #{breed}, #{age}, #{age_unit}, #{gender}, #{weight}, #{profile_image}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateDogById" parameterType="java.util.HashMap">
+		UPDATE dogs
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="breed != null and breed != ''">
+				breed = #{breed},
+			</if>
+			<if test="age != null">
+				age = #{age},
+			</if>
+			<if test="age_unit != null and age_unit != ''">
+				age_unit = #{age_unit},
+			</if>
+			<if test="gender != null and gender != ''">
+				gender = #{gender},
+			</if>
+			<if test="weight != null">
+				weight = #{weight},
+			</if>
+			<if test="profile_image != null and profile_image != ''">
+				profile_image = #{profile_image},
+			</if>
+			updated_at = NOW()
+		</set>
+		WHERE id = #{id}
+		<if test="user_id != null">
+			AND user_id = #{user_id}
+		</if>
+	</update>
+	
+	<delete id="deleteDogById" parameterType="java.util.HashMap">
+		DELETE FROM dogs 
+		WHERE id = #{id}
+		<if test="user_id != null">
+			AND user_id = #{user_id}
+		</if>
+	</delete>
+	
 	<select id="getAllDiaries" resultType="java.util.HashMap">
-		select d.id, p.id dog_id, p.name, d.content, d.mood, d.created_at
+		select d.id, p.id dog_id, p.name, d.content, d.mood, d.created_at, d.last_updated, p.user_id
 		from dogs p, diary d
-		where p.id = d.dog_id;
+		where p.id = d.dog_id
+		<if test="user_id != null">
+			AND p.user_id = #{user_id}
+		</if>
+		ORDER BY COALESCE(d.last_updated, d.created_at) DESC, d.created_at DESC
 	</select>
 	
 	<insert id="saveDogDiaryByDogId" parameterType="java.util.HashMap">
-		INSERT INTO diary (dog_id, mood, content)
-    	VALUES (#{dog_id}, #{mood}, #{content})
+		INSERT INTO diary (dog_id, mood, content, created_at)
+    	VALUES (#{dog_id}, #{mood}, #{content}, 
+    	<choose>
+    		<when test="created_at != null and created_at != ''">
+    			#{created_at}
+    		</when>
+    		<otherwise>
+    			NOW()
+    		</otherwise>
+    	</choose>
+    	)
 	</insert>
 	
 	<update id="updateDogDiaryByDogId" parameterType="java.util.HashMap">
-		UPDATE diary 
+		UPDATE diary d
+		INNER JOIN dogs p ON d.dog_id = p.id
 		<set>
-			dog_id=#{dog_id}, 
-			mood=#{mood},
+			<if test="dog_id != null">d.dog_id=#{dog_id},</if>
+			<if test="mood != null">d.mood=#{mood},</if>
 			<if test="content != null and content != ''">
-	            content = #{content},
+	            d.content = #{content},
 	        </if>
-			last_updated=CURRENT_TIMESTAMP
+			<if test="created_at != null and created_at != ''">
+				d.created_at = #{created_at},
+			</if>
+			d.last_updated=CURRENT_TIMESTAMP
 		</set>
-		WHERE id=#{id}
+		WHERE d.id=#{id}
+		<if test="user_id != null">
+			AND p.user_id = #{user_id}
+		</if>
 	</update>
 	
     <delete id="deleteDogDiaryById" parameterType="java.util.HashMap">
-        DELETE FROM diary
-        WHERE id = #{id}
+        DELETE d FROM diary d
+        INNER JOIN dogs p ON d.dog_id = p.id
+        WHERE d.id = #{id}
+        <if test="user_id != null">
+        	AND p.user_id = #{user_id}
+        </if>
     </delete>
     
     <select id="findSchedulesByMonthAndUser" resultType="java.util.HashMap">
@@ -72,10 +147,17 @@
 	        updated_at = NOW()
 	    </set>
 	    WHERE id = #{id}
+	    <if test="user_id != null">
+	    	AND user_id = #{user_id}
+	    </if>
 	</update>
 	
 	<delete id="deleteWalkById" parameterType="java.util.HashMap">
-	    DELETE FROM walk_schedule  WHERE id = #{id}
+	    DELETE FROM walk_schedule  
+	    WHERE id = #{id}
+	    <if test="user_id != null">
+	    	AND user_id = #{user_id}
+	    </if>
 	</delete>
 	
 	<select id="getWalkById" resultType="java.util.HashMap">
@@ -102,10 +184,17 @@
 	        updated_at = NOW()
 	    </set>
 	    WHERE id = #{id}
+	    <if test="user_id != null">
+	    	AND user_id = #{user_id}
+	    </if>
 	</update>
 	
 	<delete id="deleteHospitalById" parameterType="java.util.HashMap">
-	    DELETE FROM hospital_schedule WHERE id = #{id}
+	    DELETE FROM hospital_schedule 
+	    WHERE id = #{id}
+	    <if test="user_id != null">
+	    	AND user_id = #{user_id}
+	    </if>
 	</delete>
 	
 	<select id="getHospitalById" resultType="java.util.HashMap">
@@ -113,6 +202,19 @@
 	    FROM hospital_schedule h
 	    LEFT JOIN dogs d ON h.dog_id = d.id
 	    WHERE h.id = #{id}
+	</select>
+	
+	<!-- 월별 통계 조회 (최근 6개월) -->
+	<select id="getMonthlyStatistics" resultType="java.util.HashMap">
+	    SELECT 
+	        DATE_FORMAT(date, '%Y-%m') AS month,
+	        type,
+	        COUNT(*) AS count
+	    FROM schedule_view
+	    WHERE user_id = #{user_id}
+	      AND date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+	    GROUP BY DATE_FORMAT(date, '%Y-%m'), type
+	    ORDER BY month ASC, type ASC
 	</select>
 	
 </mapper>

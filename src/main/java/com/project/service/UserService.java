@@ -15,5 +15,6 @@ public interface UserService extends UserDetailsService{
 	public int update(HashMap<?, ?> map);
 	public int deleteById(int id);
 	public List<HashMap> getUserList();
+	public HashMap getUserInfo(String username);
 	public int resetPassword(HashMap map);
 }
