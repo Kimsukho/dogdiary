@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 public interface UserService extends UserDetailsService{
-	public User findUserByUsername(String username);
+	public User getUserByName(String username);
 	public int register(HashMap<?, ?> map);
 	public int update(HashMap<?, ?> map);
 	public int deleteById(int id);

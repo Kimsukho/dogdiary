@@ -47,9 +47,18 @@ public class DefaultController {
 			return "redirect:/login";
 		}
 		
-		// 로그인된 사용자는 대시보드로 리다이렉트
-		logger.debug("인증된 사용자: {} - 대시보드로 리다이렉트", authentication.getName());
-		return "redirect:/dashboard";
+		// 관리자 권한 확인
+		boolean isAdmin = authentication.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		
+		// 관리자는 사용자 관리 페이지로, 일반 사용자는 대시보드로 리다이렉트
+		if (isAdmin) {
+			logger.debug("관리자 사용자: {} - 사용자 관리 페이지로 리다이렉트", authentication.getName());
+			return "redirect:/admin/users";
+		} else {
+			logger.debug("일반 사용자: {} - 대시보드로 리다이렉트", authentication.getName());
+			return "redirect:/dashboard";
+		}
 	}
 	
 	@GetMapping("/error")
@@ -77,23 +86,12 @@ public class DefaultController {
 		}
 		
 	    model.addAttribute("title", "대시보드");
-	    model.addAttribute("todayDiaries", 3);
-	    model.addAttribute("dogCount", 2);
-	    model.addAttribute("walkCount", "5번");
-	    model.addAttribute("hospitalCount", "1건");
-	    model.addAttribute("recentDiaries", List.of(
-	        Map.of("title","2025-08-28 산책 2시간"),
-	        Map.of("title","2025-08-27 목욕 기록")
-	    ));
 	    return "dashboard";
 	}
 	
 	@GetMapping("/dogs")
 	public String dogs(Model model) {
 		model.addAttribute("title", "반려견 관리");
-	    model.addAttribute("dogList", List.of(
-	        Map.of("name","루루"), Map.of("name","몽이")
-	    ));
 	    return "dogs";
 	}
 	
@@ -122,7 +120,7 @@ public class DefaultController {
 		}
 		
 		// 로그인한 사용자 정보 가져오기
-		User loginUser = userService.findUserByUsername(authentication.getName());
+		User loginUser = userService.getUserByName(authentication.getName());
 		if (loginUser != null) {
 			// 사용자 정보를 모델에 추가 (비밀번호는 제외)
 			model.addAttribute("user", loginUser);
@@ -136,18 +134,108 @@ public class DefaultController {
 	}
 	
 	@GetMapping("/settings")
-//	public String settings(Model model, @AuthenticationPrincipal CustomUserDetails principal) {
 	public String settings(Model model) {
-	    // principal 또는 세션에서 사용자 정보 가져오기
-//	    User user = userService.findById(principal.getId());
-//
-//	    // 모델에 user 추가
-//	    model.addAttribute("user", user);theme
-		model.addAttribute("title", "설정");
-		model.addAttribute("name", "홍길동");
-		model.addAttribute("theme", "light");
-		model.addAttribute("email", "test1234@naver.com");
-	    return "settings"; // templates/settings.html
+	    return "settings";
+	}
+	
+	@GetMapping("/admin/users")
+	public String adminUsers(Model model) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
+		// 관리자 권한 확인
+		boolean isAdmin = authentication.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		
+		if (!isAdmin) {
+			logger.warn("관리자 권한이 없는 사용자가 관리자 페이지 접근 시도: {}", authentication.getName());
+			return "redirect:/dashboard";
+		}
+		
+		model.addAttribute("title", "사용자 관리");
+		return "admin/users";
+	}
+	
+	@GetMapping("/admin/diaries")
+	public String adminDiaries(Model model) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
+		// 관리자 권한 확인
+		boolean isAdmin = authentication.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		
+		if (!isAdmin) {
+			logger.warn("관리자 권한이 없는 사용자가 관리자 페이지 접근 시도: {}", authentication.getName());
+			return "redirect:/dashboard";
+		}
+		
+		model.addAttribute("title", "일지 관리");
+		return "admin/diaries";
+	}
+	
+	@GetMapping("/admin/walks")
+	public String adminWalks(Model model) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
+		// 관리자 권한 확인
+		boolean isAdmin = authentication.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		
+		if (!isAdmin) {
+			logger.warn("관리자 권한이 없는 사용자가 관리자 페이지 접근 시도: {}", authentication.getName());
+			return "redirect:/dashboard";
+		}
+		
+		model.addAttribute("title", "산책 관리");
+		return "admin/walks";
+	}
+	
+	@GetMapping("/admin/hospitals")
+	public String adminHospitals(Model model) {
+		// 로그인 상태 확인
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 인증되지 않았거나 anonymousUser인 경우 로그인 페이지로
+		if (authentication == null || !authentication.isAuthenticated() 
+				|| "anonymousUser".equals(authentication.getPrincipal())) {
+			logger.debug("인증되지 않은 사용자 - 로그인 페이지로 리다이렉트");
+			return "redirect:/login";
+		}
+		
+		// 관리자 권한 확인
+		boolean isAdmin = authentication.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		
+		if (!isAdmin) {
+			logger.warn("관리자 권한이 없는 사용자가 관리자 페이지 접근 시도: {}", authentication.getName());
+			return "redirect:/dashboard";
+		}
+		
+		model.addAttribute("title", "병원 관리");
+		return "admin/hospitals";
 	}
 
 }

@@ -73,7 +73,7 @@ public class UserController {
     	
     	try {
             // 사용자 존재 여부 먼저 확인
-            User user = userService.findUserByUsername(username);
+            User user = userService.getUserByName(username);
             if (user == null) {
             	logger.warn("사용자를 찾을 수 없음: {}", username);
             	Map<String, Object> errorResponse = new HashMap<>();
@@ -99,7 +99,7 @@ public class UserController {
   
             HttpSession session = request.getSession();
             session.setAttribute("userDetails", userDetails);
-            User loginUser = userService.findUserByUsername(username);
+            User loginUser = userService.getUserByName(username);
             
             logger.info("로그인 성공: username={}", username);
             return ResponseEntity.ok(loginUser);
@@ -126,22 +126,6 @@ public class UserController {
                     .body(errorResponse);
     	}
     }
-    /*
-    @RequestMapping(value = "/public/isTokenExpired", method = RequestMethod.GET)
-	public ResponseEntity<?> isTokenExpired(HttpServletRequest request, @RequestParam(required = false) String token) throws Exception {
-  	
-    	boolean is_expired = false;
-    	
-    	try {
-    		jwtTokenUtil.isTokenExpired(token);
-    	}catch(Exception e) {
-    		is_expired = true;
-    		logger.debug(e.getMessage());
-    		HttpSession session = request.getSession();
-    		session.setAttribute("userDetails", null);
-    	}    	
-    	return ResponseEntity.ok(is_expired);
-    }*/
     
     // 개발용: 비밀번호 BCrypt 인코딩 유틸리티 (개발 완료 후 제거 권장)
     @RequestMapping(value = "/public/encodePassword", method = RequestMethod.POST)
@@ -198,7 +182,7 @@ public class UserController {
     		}
     		
     		// 사용자 존재 확인
-    		User user = userService.findUserByUsername(username);
+    		User user = userService.getUserByName(username);
     		if (user == null) {
     			return ResponseEntity.badRequest().body(Map.of("error", "사용자를 찾을 수 없습니다: " + username));
     		}
@@ -239,7 +223,7 @@ public class UserController {
     	HashMap rtnVal = new HashMap();
     	//request params 은 되돌려 주지 않는 것으로 api 문서 정의
     	User userInfo = new User();
-    	userInfo = userService.findUserByUsername(map.get("username"));
+    	userInfo = userService.getUserByName(map.get("username"));
     	if(StringUtils.isEmpty(userInfo)) {
     	try {
     		String password = map.get("password");
@@ -296,7 +280,7 @@ public class UserController {
     	
     	// 관리자가 아니면 자신의 정보만 수정 가능
     	if (!isAdmin) {
-    		User loginUser = userService.findUserByUsername(authentication.getName());
+    		User loginUser = userService.getUserByName(authentication.getName());
     		if (loginUser == null) {
     			rtnVal.put("returnCode", "FAILURE");
     			rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -307,6 +291,17 @@ public class UserController {
     	}
     	
     	try {
+    		// 비밀번호가 제공된 경우 암호화
+    		if (map.containsKey("password") && map.get("password") != null && !map.get("password").toString().isEmpty()) {
+    			String plainPassword = map.get("password").toString();
+    			// BCrypt 해시 형식이 아니면 암호화 (관리자가 평문 비밀번호를 입력한 경우)
+    			if (!plainPassword.startsWith("$2")) {
+    				String encodedPassword = passwordEncoder.encode(plainPassword);
+    				map.put("password", encodedPassword);
+    				logger.debug("비밀번호 암호화 완료");
+    			}
+    		}
+    		
         	int val = userService.update(map);
 	        if(val == 0) {
 	        	rtnVal.put("returnCode", "FAILIRE");
@@ -384,7 +379,7 @@ public class UserController {
     	HashMap rtnVal = new HashMap();
     	try {
         	rtnVal.put("returnCode", "SUCCESS");
-	        rtnVal.put("resultData", userService.findUserByUsername(userName));	        
+	        rtnVal.put("resultData", userService.getUserByName(userName));	        
     	} catch (Exception e) {
     		logger.error(e.getMessage());
     		rtnVal.put("returnCode", "FAILURE");
@@ -392,15 +387,6 @@ public class UserController {
     	}
 		return rtnVal;    	
     }
-    
-    /*
-    // 내 정보 조회
-    @GetMapping("/user/getInfo")
-	public ResponseEntity<?> getUserInfo(@RequestParam String token) throws Exception {
-    	String userName = jwtTokenUtil.getUserNameFromJwtToken(token);
-    	UserInfo loginUser = userService.findUserByUsername(userName);
-    	return ResponseEntity.ok(loginUser);
-    }*/
     
     // 내 정보 조회
     @GetMapping("/user/getInfo")
@@ -466,7 +452,7 @@ public class UserController {
 			}
 			
 			// 데이터베이스에서 사용자 정보 조회 (암호화된 비밀번호 포함)
-			User user = userService.findUserByUsername(username);
+			User user = userService.getUserByName(username);
 			if (user == null) {
 				logger.error("사용자를 찾을 수 없음: {}", username);
 				rtnVal.put("returnCode", "FAILURE");

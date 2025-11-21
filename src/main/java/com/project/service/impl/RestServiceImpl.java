@@ -97,4 +97,14 @@ public class RestServiceImpl implements RestService {
 		return restDao.getMonthlyStatistics(map);
 	}
 	
+	@Override
+	public List<HashMap> getAllWalks(HashMap map) {
+		return restDao.getAllWalks(map);
+	}
+	
+	@Override
+	public List<HashMap> getAllHospitals(HashMap map) {
+		return restDao.getAllHospitals(map);
+	}
+	
 }

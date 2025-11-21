@@ -47,7 +47,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -93,7 +93,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -184,7 +184,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -273,7 +273,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -310,7 +310,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -348,7 +348,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -378,7 +378,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -414,7 +414,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -451,7 +451,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -496,7 +496,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -534,7 +534,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -575,7 +575,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -611,7 +611,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -647,7 +647,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -688,7 +688,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -724,7 +724,7 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
-			User loginUser = userService.findUserByUsername(authentication.getName());
+			User loginUser = userService.getUserByName(authentication.getName());
 			if (loginUser == null) {
 				rtnVal.put("returnCode", "FAILURE");
 				rtnVal.put("errorMessage", "사용자 정보를 찾을 수 없습니다.");
@@ -746,5 +746,75 @@ public class DiaryController {
 	        rtnVal.put("errorMessage", e.getMessage());
 	    }
 	    return rtnVal;
+	}
+	
+	// 관리자용 전체 산책 조회
+	@GetMapping("/admin/getAllWalks")
+	public HashMap getAllWalks(@RequestParam HashMap map) {
+		HashMap rtnVal = new HashMap();
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		try {
+			// 로그인한 사용자 정보 가져오기
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "로그인이 필요합니다.");
+				return rtnVal;
+			}
+			
+			// 관리자 권한 확인
+			boolean isAdmin = authentication.getAuthorities().stream()
+					.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+			
+			if (!isAdmin) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "관리자 권한이 필요합니다.");
+				return rtnVal;
+			}
+			
+			// ADMIN인 경우 user_id가 없으면 모든 데이터 조회, 있으면 해당 user_id의 데이터만 조회
+            rtnVal.put("returnCode", "SUCCESS");
+            rtnVal.put("resultData", restService.getAllWalks(map));  
+        } catch (Exception e) {
+        	logger.error("산책 조회 실패: " + e.getMessage(), e);
+            rtnVal.put("returnCode", "FAILURE");
+            rtnVal.put("errorMessage", e.getMessage());
+        }
+        return rtnVal;
+	}
+	
+	// 관리자용 전체 병원 조회
+	@GetMapping("/admin/getAllHospitals")
+	public HashMap getAllHospitals(@RequestParam HashMap map) {
+		HashMap rtnVal = new HashMap();
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		try {
+			// 로그인한 사용자 정보 가져오기
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "로그인이 필요합니다.");
+				return rtnVal;
+			}
+			
+			// 관리자 권한 확인
+			boolean isAdmin = authentication.getAuthorities().stream()
+					.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+			
+			if (!isAdmin) {
+				rtnVal.put("returnCode", "FAILURE");
+				rtnVal.put("errorMessage", "관리자 권한이 필요합니다.");
+				return rtnVal;
+			}
+			
+			// ADMIN인 경우 user_id가 없으면 모든 데이터 조회, 있으면 해당 user_id의 데이터만 조회
+            rtnVal.put("returnCode", "SUCCESS");
+            rtnVal.put("resultData", restService.getAllHospitals(map));  
+        } catch (Exception e) {
+        	logger.error("병원 조회 실패: " + e.getMessage(), e);
+            rtnVal.put("returnCode", "FAILURE");
+            rtnVal.put("errorMessage", e.getMessage());
+        }
+        return rtnVal;
 	}
 }

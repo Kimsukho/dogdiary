@@ -28,4 +28,8 @@ public interface RestService {
 	int deleteHospitalById(HashMap map);
 	
 	List<HashMap> getMonthlyStatistics(HashMap map);
+	
+	// 관리자용 전체 조회
+	List<HashMap> getAllWalks(HashMap map);
+	List<HashMap> getAllHospitals(HashMap map);
 }

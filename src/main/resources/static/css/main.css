@@ -2505,6 +2505,9 @@ transition: all 0.2s ease;
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 10px;
+    height: 36px;
+    box-sizing: border-box;
+    line-height: 1.4;
 }
 
 .styled-select:hover {
@@ -2605,10 +2608,16 @@ transition: all 0.2s ease;
     border: 1px solid #2196f3;
     color: #2196f3;
     border-radius: 8px;
-    padding: 6px 10px;
+    padding: 0;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
+    height: 36px;
+    width: 36px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon-btn:hover {
@@ -2621,13 +2630,17 @@ transition: all 0.2s ease;
     color: white;
     border: none;
     border-radius: 8px;
-    padding: 6px 12px;
+    padding: 0 12px;
     font-weight: 600;
     font-size: 14px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     transition: background-color 0.2s ease, transform 0.1s ease;
+    height: 36px;
+    box-sizing: border-box;
+    line-height: 1.4;
 }
 
 .today-btn:hover {
@@ -3299,6 +3312,34 @@ transition: all 0.2s ease;
 
 .header-nav a.active i {
     color: var(--text-secondary);
+}
+
+/* 헤더 관리자 배지 */
+.admin-badge-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 6px;
+    background: rgba(78, 166, 133, 0.15);
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: var(--spacing-xs);
+}
+
+.admin-badge-header i {
+    color: var(--primary-color);
+    font-size: 1.1em;
+}
+
+[data-theme="dark"] .admin-badge-header {
+    background: rgba(78, 166, 133, 0.2);
+    color: var(--primary-light-color);
+}
+
+[data-theme="dark"] .admin-badge-header i {
+    color: var(--primary-light-color);
 }
 
 
@@ -5750,4 +5791,445 @@ html, body {
 
 [data-theme="dark"] .dashboard-modal-empty {
     color: var(--text-muted) !important;
+}
+
+/* ============================================
+   관리자 페이지 스타일
+   ============================================ */
+
+.admin-users-page {
+    padding: 24px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.admin-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-header h2 i {
+    color: var(--primary-color);
+}
+
+.admin-add-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.admin-add-btn:hover {
+    background: var(--primary-dark-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(78, 166, 133, 0.3);
+}
+
+.admin-search-filter {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 12px 10px 40px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+.filter-box {
+    min-width: 150px;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+.admin-table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table thead {
+    background: #f8f9fa;
+}
+
+.admin-table th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-dark);
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.admin-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: var(--text-dark);
+}
+
+.admin-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.loading-row, .empty-row {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px !important;
+}
+
+.loading-row i {
+    margin-right: 8px;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.admin-badge {
+    background: rgba(78, 166, 133, 0.1);
+    color: var(--primary-color);
+}
+
+.user-badge {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-dark);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    background: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-dark);
+}
+
+.action-btn:hover {
+    background: #f8f9fa;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.view-btn:hover {
+    background: rgba(78, 166, 133, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.edit-btn:hover {
+    background: rgba(33, 150, 243, 0.1);
+    border-color: #2196f3;
+    color: #2196f3;
+}
+
+.delete-btn:hover {
+    background: rgba(244, 67, 54, 0.1);
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+}
+
+.empty-state p {
+    font-size: 16px;
+    margin: 0;
+}
+
+.admin-modal-container {
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-body .form-field {
+    margin-bottom: 20px;
+}
+
+.modal-body .form-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+.modal-body .form-field .required {
+    color: #f44336;
+}
+
+.modal-body .form-field .optional {
+    color: var(--text-secondary);
+    font-weight: normal;
+}
+
+.modal-body .form-field input,
+.modal-body .form-field select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.modal-body .form-field input:focus,
+.modal-body .form-field select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+}
+
+.modal-body .form-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-button {
+    background: #f5f5f5;
+    color: var(--text-dark);
+}
+
+.cancel-button:hover {
+    background: #e0e0e0;
+}
+
+.confirm-button {
+    background: var(--primary-color);
+    color: white;
+}
+
+.confirm-button:hover {
+    background: var(--primary-dark-color);
+}
+
+.user-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-item label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.detail-item span {
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+.warning-text {
+    color: #f44336;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* 다크 모드 스타일 */
+[data-theme="dark"] .admin-header h2 {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .admin-table-container {
+    background: var(--background-card) !important;
+}
+
+[data-theme="dark"] .admin-table thead {
+    background: #3c3c3c !important;
+}
+
+[data-theme="dark"] .admin-table th {
+    color: var(--text-secondary) !important;
+    border-bottom-color: #3c3c3c !important;
+}
+
+[data-theme="dark"] .admin-table td {
+    color: var(--text-secondary) !important;
+    border-bottom-color: #3c3c3c !important;
+}
+
+[data-theme="dark"] .admin-table tbody tr:hover {
+    background: #3c3c3c !important;
+}
+
+[data-theme="dark"] .search-box input,
+[data-theme="dark"] .filter-select {
+    background: var(--background-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .search-box input:focus,
+[data-theme="dark"] .filter-select:focus {
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .action-btn {
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .action-btn:hover {
+    background: #3c3c3c !important;
+}
+
+[data-theme="dark"] .modal-body .form-field input,
+[data-theme="dark"] .modal-body .form-field select {
+    background: var(--background-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .modal-body .form-field input:focus,
+[data-theme="dark"] .modal-body .form-field select:focus {
+    border-color: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .modal-body .form-field label {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .detail-item label {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .detail-item span {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .cancel-button {
+    background: #3c3c3c !important;
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .cancel-button:hover {
+    background: #4a4a4a !important;
+}
+
+[data-theme="dark"] .modal-footer {
+    border-top-color: var(--border-color) !important;
+}
+
+/* 관리자 페이지 기분 배지 스타일 */
+.mood-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
 }

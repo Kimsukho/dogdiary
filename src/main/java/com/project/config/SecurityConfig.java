@@ -100,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, PUBLIC_GET_URI).permitAll() // 등록된 GET요청 리소스는 누구나 접근가능
 				.antMatchers(AUTHENTICATED_API_URI).hasAnyRole("USER", "ADMIN") // 인증이 필요한 API
 				.antMatchers("/api/admin/**").hasRole("ADMIN") // 관리자만 접근 가능한 API
+				.antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지는 관리자만 접근 가능
 				.antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("USER", "ADMIN") // GET API는 인증 필요
         		.anyRequest().authenticated() // 나머지 요청은 인증 필요
         		.and()

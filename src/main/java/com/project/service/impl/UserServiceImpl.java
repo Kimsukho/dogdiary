@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User userInfo = userDao.findUserByUsername(username);
+		User userInfo = userDao.getUserByName(username);
 		if (userInfo == null) {
 			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
 		}
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }    
     
 	@Override
-	public User findUserByUsername(String username) throws UsernameNotFoundException {
+	public User getUserByName(String username) throws UsernameNotFoundException {
 		User userInfo = userDao.getUserByName(username);
 		return userInfo;
 	}

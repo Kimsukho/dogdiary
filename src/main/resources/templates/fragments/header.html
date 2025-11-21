@@ -9,8 +9,11 @@
         <h1 class="header-page-title" th:text="${title != null ? title : '펫케어 시스템 관리'}">펫케어 시스템 관리</h1>
     </div>
     <nav class="header-nav"> <!-- navigation 메뉴를 묶는 컨테이너 -->
-        <a href="javascript:void(0)" id="notificationBtn" onclick="window.openNotificationModal(); return false;"><i class="fas fa-bell"></i> 알림</a>
-        <a th:href="@{/profile}"><i class="fas fa-user-circle"></i> 프로필</a>
+        <span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="admin-badge-header">
+            <i class="fas fa-user-shield"></i> 관리자
+        </span>
+        <a th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="javascript:void(0)" id="notificationBtn" onclick="window.openNotificationModal(); return false;"><i class="fas fa-bell"></i> 알림</a>
+        <a th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/profile}"><i class="fas fa-user-circle"></i> 프로필</a>
         <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> 로그아웃</a>
     </nav>
 </header>

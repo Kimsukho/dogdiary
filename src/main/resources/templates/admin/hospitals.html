@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<head>
+    <title>병원 관리</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="admin-users-page">
+        <div class="admin-header">
+            <h2><i class="fas fa-clinic-medical"></i> 병원 관리</h2>
+        </div>
+
+        <!-- 검색 및 필터 영역 -->
+        <div class="admin-search-filter">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="병원명, 진료 항목, 메모로 검색...">
+            </div>
+            <div class="filter-box">
+                <select id="userFilter" class="filter-select">
+                    <option value="">전체 사용자</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 병원 목록 테이블 -->
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>반려견</th>
+                        <th>날짜</th>
+                        <th>병원명</th>
+                        <th>진료 항목</th>
+                        <th>비용</th>
+                        <th>메모</th>
+                        <th>작성자</th>
+                        <th>작업</th>
+                    </tr>
+                </thead>
+                <tbody id="hospitalTableBody">
+                    <tr>
+                        <td colspan="9" class="loading-row">
+                            <i class="fas fa-spinner fa-spin"></i> 로딩 중...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 빈 상태 -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-clinic-medical"></i>
+            <p>등록된 병원 기록이 없습니다.</p>
+        </div>
+    </div>
+
+    <!-- 병원 상세 정보 모달 -->
+    <div id="hospitalDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container admin-modal-container">
+            <div class="modal-header">
+                <h3>병원 상세 정보</h3>
+                <button class="modal-close" id="closeDetailModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="hospitalDetailContent">
+                    <!-- 병원 상세 정보가 여기에 표시됩니다 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button confirm-button" id="closeDetailBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 병원 수정 모달 -->
+    <div id="hospitalEditModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container admin-modal-container">
+            <div class="modal-header">
+                <h3>병원 수정</h3>
+                <button class="modal-close" id="closeEditModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="hospitalEditForm">
+                    <input type="hidden" id="hospitalId">
+                    <div class="form-field">
+                        <label for="hospitalDate">날짜 <span class="required">*</span></label>
+                        <input type="date" id="hospitalDate" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="hospitalName">병원명</label>
+                        <input type="text" id="hospitalName" placeholder="병원명 입력">
+                    </div>
+                    <div class="form-field">
+                        <label for="hospitalDiagnosis">진료 항목</label>
+                        <input type="text" id="hospitalDiagnosis" placeholder="예: 정기검진, 예방접종 등">
+                    </div>
+                    <div class="form-field">
+                        <label for="hospitalCost">비용 (원)</label>
+                        <input type="number" id="hospitalCost" min="0" placeholder="예: 45000">
+                    </div>
+                    <div class="form-field">
+                        <label for="hospitalMemo">메모</label>
+                        <textarea id="hospitalMemo" rows="5" style="resize: vertical;"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="button cancel-button" id="cancelEditBtn">취소</button>
+                <button class="button confirm-button" id="saveEditBtn">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div id="deleteConfirmModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>삭제 확인</h3>
+                <button class="modal-close" id="closeDeleteModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>정말 이 병원 기록을 삭제하시겠습니까?</p>
+                <p class="warning-text">이 작업은 되돌릴 수 없습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="button cancel-button" id="cancelDeleteBtn">취소</button>
+                <button class="button confirm-button" id="confirmDeleteBtn">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const hospitalTableBody = document.getElementById('hospitalTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const userFilter = document.getElementById('userFilter');
+        const hospitalDetailModal = document.getElementById('hospitalDetailModal');
+        const hospitalEditModal = document.getElementById('hospitalEditModal');
+        const deleteModal = document.getElementById('deleteConfirmModal');
+        
+        let hospitals = [];
+        let users = [];
+        let editingHospitalId = null;
+        let deletingHospitalId = null;
+
+        // 날짜 포맷팅 함수
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
+
+        // 메모 요약 함수
+        function truncateContent(content, maxLength = 50) {
+            if (!content) return '-';
+            if (content.length <= maxLength) return content;
+            return content.substring(0, maxLength) + '...';
+        }
+
+        // 비용 포맷팅
+        function formatCost(cost) {
+            if (!cost) return '-';
+            return parseInt(cost).toLocaleString() + '원';
+        }
+
+        // 사용자 목록 로드 (관리자 제외)
+        async function loadUsers() {
+            try {
+                const response = await axios.get('/api/admin/getUserList');
+                if (response.data.returnCode === 'SUCCESS') {
+                    users = response.data.resultData || [];
+                    userFilter.innerHTML = '<option value="">전체 사용자</option>';
+                    // 관리자(ADMIN) 제외하고 일반 사용자만 필터 목록에 추가
+                    users.filter(user => user.role !== 'ADMIN').forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user.id;
+                        option.textContent = user.username || `사용자 ${user.id}`;
+                        userFilter.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('사용자 목록 조회 오류:', error);
+            }
+        }
+
+        // 병원 목록 로드
+        async function loadHospitals() {
+            try {
+                const response = await axios.get('/api/admin/getAllHospitals');
+                if (response.data.returnCode === 'SUCCESS') {
+                    hospitals = response.data.resultData || [];
+                    renderHospitals();
+                } else {
+                    console.error('병원 목록 조회 실패:', response.data.errorMessage);
+                    showToast('병원 목록을 불러오는데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('병원 목록 조회 중 오류:', error);
+                showToast('병원 목록을 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 병원 목록 렌더링
+        function renderHospitals() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const userFilterValue = userFilter.value;
+
+            let filteredHospitals = hospitals.filter(hospital => {
+                const matchesSearch = !searchTerm || 
+                    (hospital.hospital_name && hospital.hospital_name.toLowerCase().includes(searchTerm)) ||
+                    (hospital.diagnosis && hospital.diagnosis.toLowerCase().includes(searchTerm)) ||
+                    (hospital.memo && hospital.memo.toLowerCase().includes(searchTerm));
+                const matchesUser = !userFilterValue || hospital.user_id == userFilterValue;
+                return matchesSearch && matchesUser;
+            });
+
+            // 최신순 정렬
+            filteredHospitals.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateB - dateA;
+            });
+
+            hospitalTableBody.innerHTML = '';
+
+            if (filteredHospitals.length === 0) {
+                hospitalTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="empty-row">
+                            검색 결과가 없습니다.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filteredHospitals.forEach(hospital => {
+                const row = document.createElement('tr');
+                const user = users.find(u => u.id == hospital.user_id);
+                row.innerHTML = `
+                    <td>${hospital.id}</td>
+                    <td>${hospital.dog_name || '-'}</td>
+                    <td>${formatDate(hospital.date)}</td>
+                    <td>${hospital.hospital_name || '-'}</td>
+                    <td>${hospital.diagnosis || '-'}</td>
+                    <td>${formatCost(hospital.cost)}</td>
+                    <td>${truncateContent(hospital.memo)}</td>
+                    <td>${user ? user.username : `사용자 ${hospital.user_id}`}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" data-id="${hospital.id}" title="상세 보기">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-btn" data-id="${hospital.id}" title="수정">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" data-id="${hospital.id}" title="삭제">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                hospitalTableBody.appendChild(row);
+            });
+
+            // 이벤트 리스너 추가
+            attachEventListeners();
+        }
+
+        // 이벤트 리스너 연결
+        function attachEventListeners() {
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const hospitalId = parseInt(e.currentTarget.dataset.id);
+                    showHospitalDetail(hospitalId);
+                });
+            });
+
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const hospitalId = parseInt(e.currentTarget.dataset.id);
+                    editHospital(hospitalId);
+                });
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const hospitalId = parseInt(e.currentTarget.dataset.id);
+                    deleteHospital(hospitalId);
+                });
+            });
+        }
+
+        // 병원 상세 정보 표시
+        function showHospitalDetail(hospitalId) {
+            const hospital = hospitals.find(h => h.id === hospitalId);
+            if (!hospital) return;
+
+            const user = users.find(u => u.id == hospital.user_id);
+            const detailContent = document.getElementById('hospitalDetailContent');
+            detailContent.innerHTML = `
+                <div class="user-detail-info">
+                    <div class="detail-item">
+                        <label>ID</label>
+                        <span>${hospital.id}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>반려견</label>
+                        <span>${hospital.dog_name || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>날짜</label>
+                        <span>${formatDate(hospital.date)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>병원명</label>
+                        <span>${hospital.hospital_name || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>진료 항목</label>
+                        <span>${hospital.diagnosis || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>비용</label>
+                        <span>${formatCost(hospital.cost)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>메모</label>
+                        <span style="white-space: pre-wrap;">${hospital.memo || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>작성자</label>
+                        <span>${user ? user.username : `사용자 ${hospital.user_id}`}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>작성일</label>
+                        <span>${formatDate(hospital.created_at)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>수정일</label>
+                        <span>${formatDate(hospital.updated_at)}</span>
+                    </div>
+                </div>
+            `;
+            hospitalDetailModal.style.display = 'flex';
+        }
+
+        // 병원 수정
+        function editHospital(hospitalId) {
+            const hospital = hospitals.find(h => h.id === hospitalId);
+            if (!hospital) return;
+
+            editingHospitalId = hospitalId;
+            document.getElementById('hospitalId').value = hospital.id;
+            
+            const dateObj = new Date(hospital.date);
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            document.getElementById('hospitalDate').value = `${year}-${month}-${day}`;
+            document.getElementById('hospitalName').value = hospital.hospital_name || '';
+            document.getElementById('hospitalDiagnosis').value = hospital.diagnosis || '';
+            document.getElementById('hospitalCost').value = hospital.cost || '';
+            document.getElementById('hospitalMemo').value = hospital.memo || '';
+            
+            hospitalEditModal.style.display = 'flex';
+        }
+
+        // 병원 저장
+        document.getElementById('saveEditBtn').addEventListener('click', async () => {
+            const form = document.getElementById('hospitalEditForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const hospital = hospitals.find(h => h.id === editingHospitalId);
+            if (!hospital) return;
+
+            const data = {
+                id: editingHospitalId,
+                dog_id: hospital.dog_id,
+                date: document.getElementById('hospitalDate').value,
+                hospital_name: document.getElementById('hospitalName').value || null,
+                diagnosis: document.getElementById('hospitalDiagnosis').value || null,
+                cost: document.getElementById('hospitalCost').value ? parseInt(document.getElementById('hospitalCost').value) : null,
+                memo: document.getElementById('hospitalMemo').value || null,
+                user_id: hospital.user_id // 관리자 수정을 위해 user_id 포함
+            };
+
+            try {
+                const response = await axios.post('/api/updateHospital', data);
+                if (response.data.returnCode === 'SUCCESS') {
+                    showToast('병원 기록이 수정되었습니다.');
+                    hospitalEditModal.style.display = 'none';
+                    await loadHospitals();
+                } else {
+                    alert('수정 실패: ' + (response.data.errorMessage || '알 수 없는 오류'));
+                }
+            } catch (error) {
+                console.error('병원 수정 오류:', error);
+                alert('병원 수정 중 오류가 발생했습니다: ' + (error.response?.data?.errorMessage || error.message));
+            }
+        });
+
+        // 병원 삭제
+        function deleteHospital(hospitalId) {
+            deletingHospitalId = hospitalId;
+            deleteModal.style.display = 'flex';
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (!deletingHospitalId) return;
+
+            try {
+                const response = await axios.post('/api/deleteHospital', { id: deletingHospitalId });
+                if (response.data.returnCode === 'SUCCESS') {
+                    showToast('병원 기록이 삭제되었습니다.');
+                    deleteModal.style.display = 'none';
+                    deletingHospitalId = null;
+                    await loadHospitals();
+                } else {
+                    alert('삭제 실패: ' + (response.data.errorMessage || '알 수 없는 오류'));
+                }
+            } catch (error) {
+                console.error('병원 삭제 오류:', error);
+                alert('병원 삭제 중 오류가 발생했습니다: ' + (error.response?.data?.errorMessage || error.message));
+            }
+        });
+
+        // 모달 닫기
+        document.getElementById('closeDetailModal').addEventListener('click', () => {
+            hospitalDetailModal.style.display = 'none';
+        });
+
+        document.getElementById('closeDetailBtn').addEventListener('click', () => {
+            hospitalDetailModal.style.display = 'none';
+        });
+
+        document.getElementById('closeEditModal').addEventListener('click', () => {
+            hospitalEditModal.style.display = 'none';
+        });
+
+        document.getElementById('cancelEditBtn').addEventListener('click', () => {
+            hospitalEditModal.style.display = 'none';
+        });
+
+        document.getElementById('closeDeleteModal').addEventListener('click', () => {
+            deleteModal.style.display = 'none';
+            deletingHospitalId = null;
+        });
+
+        document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+            deleteModal.style.display = 'none';
+            deletingHospitalId = null;
+        });
+
+        // 모달 외부 클릭 시 닫기
+        [hospitalDetailModal, hospitalEditModal, deleteModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
+        // ESC 키로 모달 닫기
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hospitalDetailModal.style.display = 'none';
+                hospitalEditModal.style.display = 'none';
+                deleteModal.style.display = 'none';
+            }
+        });
+
+        // 검색 및 필터 이벤트
+        searchInput.addEventListener('input', renderHospitals);
+        userFilter.addEventListener('change', renderHospitals);
+
+        // 초기 로드
+        loadUsers();
+        loadHospitals();
+    });
+</script>
+</th:block>
+</body>
+</html>
+

@@ -204,6 +204,34 @@
 	    WHERE h.id = #{id}
 	</select>
 	
+	<!-- 관리자용 전체 산책 조회 -->
+	<select id="getAllWalks" resultType="java.util.HashMap">
+	    SELECT w.*, d.name AS dog_name, u.username AS user_name
+	    FROM walk_schedule w
+	    LEFT JOIN dogs d ON w.dog_id = d.id
+	    LEFT JOIN users u ON w.user_id = u.id
+	    <where>
+	    	<if test="user_id != null">
+	    		w.user_id = #{user_id}
+	    	</if>
+	    </where>
+	    ORDER BY w.date DESC, w.created_at DESC
+	</select>
+	
+	<!-- 관리자용 전체 병원 조회 -->
+	<select id="getAllHospitals" resultType="java.util.HashMap">
+	    SELECT h.*, d.name AS dog_name, u.username AS user_name
+	    FROM hospital_schedule h
+	    LEFT JOIN dogs d ON h.dog_id = d.id
+	    LEFT JOIN users u ON h.user_id = u.id
+	    <where>
+	    	<if test="user_id != null">
+	    		h.user_id = #{user_id}
+	    	</if>
+	    </where>
+	    ORDER BY h.date DESC, h.created_at DESC
+	</select>
+	
 	<!-- 월별 통계 조회 (최근 6개월) -->
 	<select id="getMonthlyStatistics" resultType="java.util.HashMap">
 	    SELECT 
