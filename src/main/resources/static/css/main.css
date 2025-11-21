@@ -5588,6 +5588,82 @@ html, body {
     color: var(--text-muted) !important;
 }
 
+/* 알림 액션 버튼 */
+.notification-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.notification-mark-read,
+.notification-delete {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.notification-mark-read:hover {
+    background-color: rgba(78, 166, 133, 0.1);
+    color: var(--primary-color);
+}
+
+.notification-delete:hover {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+[data-theme="dark"] .notification-mark-read,
+[data-theme="dark"] .notification-delete {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .notification-mark-read:hover {
+    background-color: rgba(78, 166, 133, 0.2);
+    color: var(--primary-light-color);
+}
+
+[data-theme="dark"] .notification-delete:hover {
+    background-color: rgba(244, 67, 54, 0.2);
+    color: #e57373;
+}
+
+/* 알림 배지 (읽지 않은 알림 개수) */
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #f44336;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.header-nav a {
+    position: relative;
+}
+
+/* 알림 아이템 레이아웃 조정 */
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
 [data-theme="dark"] .notification-time {
     color: var(--text-muted) !important;
 }

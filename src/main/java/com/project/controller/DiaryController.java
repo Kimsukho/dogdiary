@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +23,14 @@ import org.slf4j.LoggerFactory;
 
 import com.project.service.RestService;
 import com.project.service.UserService;
+import com.project.service.NotificationService;
 import com.project.model.User;
 
 @RequestMapping(value = "/api")
 @RestController
 public class DiaryController {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private RestService restService;
@@ -34,10 +38,12 @@ public class DiaryController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private NotificationService notificationService;
+	
 	@GetMapping("/getDogsByUserId")
 	public HashMap getDogsByUserId(@RequestParam HashMap map) {
 		HashMap rtnVal = new HashMap();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -83,7 +89,6 @@ public class DiaryController {
 			@RequestParam(value = "weight", required = false) Double weight,
 			@RequestParam(value = "profile_image", required = false) MultipartFile profileImage) {
 		HashMap rtnVal = new HashMap();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -174,7 +179,6 @@ public class DiaryController {
 			@RequestParam(value = "weight", required = false) Double weight,
 			@RequestParam(value = "profile_image", required = false) MultipartFile profileImage) {
 		HashMap rtnVal = new HashMap();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -300,7 +304,6 @@ public class DiaryController {
 	@GetMapping("/getAllDiaries")
 	public HashMap getAllDiaries(@RequestParam HashMap map) {
 		HashMap rtnVal = new HashMap();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -357,6 +360,38 @@ public class DiaryController {
 			
 			map.put("user_id", loginUser.getId()); // 권한 검증을 위해 user_id 추가
 	        int val = restService.saveDogDiaryByDogId(map);
+	        if (val > 0) {
+	        	// 알림 설정 확인 후 알림 생성
+	        	try {
+	        		HashMap settings = notificationService.getNotificationSettings(loginUser.getId());
+	        		if (settings != null && (settings.get("diary_reminder") == Boolean.TRUE || 
+	        				(settings.get("diary_reminder") instanceof Number && ((Number)settings.get("diary_reminder")).intValue() == 1))) {
+	        			// 강아지 이름 조회
+	        			HashMap dogMap = new HashMap();
+	        			dogMap.put("user_id", loginUser.getId());
+	        			List<HashMap> dogs = restService.getDogsByUserId(dogMap);
+	        			String dogName = "반려견";
+	        			if (dogs != null && !dogs.isEmpty() && map.get("dog_id") != null) {
+	        				for (HashMap dog : dogs) {
+	        					if (dog.get("id").toString().equals(map.get("dog_id").toString())) {
+	        						dogName = dog.get("name") != null ? dog.get("name").toString() : "반려견";
+	        						break;
+	        					}
+	        				}
+	        			}
+	        			String mood = map.get("mood") != null ? map.get("mood").toString() : "";
+	        			String moodLabel = mood.equals("HAPPY") ? "행복" : mood.equals("SAD") ? "슬픔" : mood.equals("ANGRY") ? "화남" : mood.equals("EXCITED") ? "신남" : "";
+	        			notificationService.createNotification(
+	        				loginUser.getId(),
+	        				"DIARY",
+	        				"일지가 작성되었습니다",
+	        				dogName + "의 " + moodLabel + " 일지가 작성되었습니다."
+	        			);
+	        		}
+	        	} catch (Exception e) {
+	        		logger.warn("알림 생성 실패 (일지): " + e.getMessage());
+	        	}
+	        }
 	        rtnVal.put("returnCode", val == 0 ? "FAILURE" : "SUCCESS");
 	        rtnVal.put(val == 0 ? "errorMessage" : "resultData", val);
 	    } catch (Exception e) {
@@ -441,7 +476,6 @@ public class DiaryController {
 	@GetMapping("/getSchedulesByMonth")
     public HashMap getSchedulesByMonth(@RequestParam HashMap map) {
 		HashMap rtnVal = new HashMap<>();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 	    try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -486,7 +520,6 @@ public class DiaryController {
 	@GetMapping("/getMonthlyStatistics")
 	public HashMap getMonthlyStatistics(@RequestParam HashMap map) {
 		HashMap rtnVal = new HashMap<>();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -552,6 +585,35 @@ public class DiaryController {
             int val = restService.insertWalk(map);
             rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
             if (val > 0) {
+                // 알림 설정 확인 후 알림 생성
+                try {
+                    HashMap settings = notificationService.getNotificationSettings(loginUser.getId());
+                    if (settings != null && (settings.get("schedule_notification") == Boolean.TRUE || 
+                            (settings.get("schedule_notification") instanceof Number && ((Number)settings.get("schedule_notification")).intValue() == 1))) {
+                        // 강아지 이름 조회
+                        HashMap dogMap = new HashMap();
+                        dogMap.put("user_id", loginUser.getId());
+                        List<HashMap> dogs = restService.getDogsByUserId(dogMap);
+                        String dogName = "반려견";
+                        if (dogs != null && !dogs.isEmpty() && map.get("dog_id") != null) {
+                            for (HashMap dog : dogs) {
+                                if (dog.get("id").toString().equals(map.get("dog_id").toString())) {
+                                    dogName = dog.get("name") != null ? dog.get("name").toString() : "반려견";
+                                    break;
+                                }
+                            }
+                        }
+                        String date = map.get("date") != null ? map.get("date").toString() : "";
+                        notificationService.createNotification(
+                            loginUser.getId(),
+                            "SCHEDULE",
+                            "산책 일정이 등록되었습니다",
+                            dogName + "의 산책 일정이 " + date + "에 등록되었습니다."
+                        );
+                    }
+                } catch (Exception e) {
+                    logger.warn("알림 생성 실패 (산책): " + e.getMessage());
+                }
                 rtnVal.put("resultData", val);
             } else {
                 rtnVal.put("errorMessage", "산책 일정 저장에 실패했습니다.");
@@ -665,6 +727,36 @@ public class DiaryController {
             int val = restService.insertHospital(map);
             rtnVal.put("returnCode", val > 0 ? "SUCCESS" : "FAILURE");
             if (val > 0) {
+            	// 알림 설정 확인 후 알림 생성
+            	try {
+            		HashMap settings = notificationService.getNotificationSettings(loginUser.getId());
+            		if (settings != null && (settings.get("schedule_notification") == Boolean.TRUE || 
+            				(settings.get("schedule_notification") instanceof Number && ((Number)settings.get("schedule_notification")).intValue() == 1))) {
+            			// 강아지 이름 조회
+            			HashMap dogMap = new HashMap();
+            			dogMap.put("user_id", loginUser.getId());
+            			List<HashMap> dogs = restService.getDogsByUserId(dogMap);
+            			String dogName = "반려견";
+            			if (dogs != null && !dogs.isEmpty() && map.get("dog_id") != null) {
+            				for (HashMap dog : dogs) {
+            					if (dog.get("id").toString().equals(map.get("dog_id").toString())) {
+            						dogName = dog.get("name") != null ? dog.get("name").toString() : "반려견";
+            						break;
+            					}
+            				}
+            			}
+            			String date = map.get("date") != null ? map.get("date").toString() : "";
+            			String hospitalName = map.get("hospital_name") != null ? map.get("hospital_name").toString() : "";
+            			notificationService.createNotification(
+            				loginUser.getId(),
+            				"SCHEDULE",
+            				"병원 일정이 등록되었습니다",
+            				dogName + "의 병원 일정이 " + date + (hospitalName != null && !hospitalName.isEmpty() ? " (" + hospitalName + ")" : "") + "에 등록되었습니다."
+            			);
+            		}
+            	} catch (Exception e) {
+            		logger.warn("알림 생성 실패 (병원): " + e.getMessage());
+            	}
                 rtnVal.put("resultData", val);
             } else {
                 rtnVal.put("errorMessage", "병원 일정 저장에 실패했습니다.");
@@ -752,7 +844,6 @@ public class DiaryController {
 	@GetMapping("/admin/getAllWalks")
 	public HashMap getAllWalks(@RequestParam HashMap map) {
 		HashMap rtnVal = new HashMap();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -787,7 +878,6 @@ public class DiaryController {
 	@GetMapping("/admin/getAllHospitals")
 	public HashMap getAllHospitals(@RequestParam HashMap map) {
 		HashMap rtnVal = new HashMap();
-		Logger logger = LoggerFactory.getLogger(this.getClass());
 		try {
 			// 로그인한 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

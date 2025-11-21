@@ -138,6 +138,61 @@
             localStorage.setItem('animations', enabled ? 'true' : 'false');
         }
 
+        // 알림 설정 로드 함수
+        async function loadNotificationSettings() {
+            try {
+                const response = await axios.get('/api/notification-settings');
+                if (response.data.returnCode === 'SUCCESS') {
+                    const settings = response.data.resultData;
+                    if (settings) {
+                        const scheduleNotification = document.getElementById('scheduleNotification');
+                        const diaryReminder = document.getElementById('diaryReminder');
+                        const notificationTime = document.getElementById('notificationTime');
+                        
+                        if (scheduleNotification) {
+                            scheduleNotification.checked = settings.schedule_notification == 1 || settings.schedule_notification === true;
+                        }
+                        if (diaryReminder) {
+                            diaryReminder.checked = settings.diary_reminder == 1 || settings.diary_reminder === true;
+                        }
+                        if (notificationTime && settings.notification_time) {
+                            // TIME 형식을 HH:MM 형식으로 변환
+                            const timeStr = settings.notification_time;
+                            const timeValue = timeStr.length === 8 ? timeStr.substring(0, 5) : timeStr;
+                            notificationTime.value = timeValue;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('알림 설정 조회 오류:', error);
+            }
+        }
+
+        // 알림 설정 저장 함수
+        async function saveNotificationSettings() {
+            try {
+                const scheduleNotification = document.getElementById('scheduleNotification');
+                const diaryReminder = document.getElementById('diaryReminder');
+                const notificationTime = document.getElementById('notificationTime');
+                
+                const data = {
+                    schedule_notification: scheduleNotification ? scheduleNotification.checked : true,
+                    diary_reminder: diaryReminder ? diaryReminder.checked : false,
+                    notification_time: notificationTime ? notificationTime.value : '09:00'
+                };
+                
+                const response = await axios.post('/api/notification-settings', data);
+                if (response.data.returnCode === 'SUCCESS') {
+                    showToast('알림 설정이 저장되었습니다.', 'success');
+                } else {
+                    showToast('알림 설정 저장에 실패했습니다.', 'error');
+                }
+            } catch (error) {
+                console.error('알림 설정 저장 오류:', error);
+                showToast('알림 설정 저장 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
         // 강아지 목록 로드 함수
         async function loadDogs() {
             try {
@@ -195,6 +250,9 @@
 
             // 애니메이션 효과 초기화
             initAnimations();
+
+            // 알림 설정 로드
+            loadNotificationSettings();
 
             // 강아지 목록 로드
             loadDogs();
@@ -257,7 +315,7 @@
             // 저장 버튼 클릭 이벤트 (테마 제외)
             const saveButtons = document.querySelectorAll('.settings-save-btn');
             saveButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', async function() {
                     const card = this.closest('.settings-card');
                     const cardTitle = card.querySelector('h3').textContent.trim();
                     // 테마 설정은 위에서 처리하므로 제외
@@ -273,6 +331,11 @@
                                     localStorage.removeItem('defaultDogId');
                                 }
                             }
+                        }
+                        // 알림 설정인 경우
+                        if (cardTitle.includes('알림')) {
+                            await saveNotificationSettings();
+                            return; // saveNotificationSettings에서 이미 toast 표시
                         }
                         // 접근성 설정인 경우 폰트 크기 및 애니메이션 저장
                         if (cardTitle.includes('접근성')) {

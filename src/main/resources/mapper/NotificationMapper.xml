@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.dao.NotificationDao">
+
+    <!-- 사용자별 알림 조회 -->
+    <select id="getNotificationsByUserId" resultType="java.util.HashMap">
+        SELECT 
+            id,
+            user_id,
+            type,
+            title,
+            message,
+            is_read,
+            created_at
+        FROM notifications
+        WHERE user_id = #{user_id}
+        ORDER BY created_at DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!-- 읽지 않은 알림 개수 조회 -->
+    <select id="getUnreadCountByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM notifications
+        WHERE user_id = #{userId} AND is_read = 0
+    </select>
+
+    <!-- 알림 생성 -->
+    <insert id="insertNotification" parameterType="java.util.HashMap">
+        INSERT INTO notifications (user_id, type, title, message, is_read, created_at)
+        VALUES (#{user_id}, #{type}, #{title}, #{message}, 0, NOW())
+    </insert>
+
+    <!-- 알림 읽음 처리 -->
+    <update id="markAsRead" parameterType="java.util.HashMap">
+        UPDATE notifications
+        SET is_read = 1
+        WHERE id = #{id}
+        <if test="user_id != null">
+            AND user_id = #{user_id}
+        </if>
+    </update>
+
+    <!-- 알림 삭제 -->
+    <delete id="deleteNotification" parameterType="java.util.HashMap">
+        DELETE FROM notifications
+        WHERE id = #{id}
+        <if test="user_id != null">
+            AND user_id = #{user_id}
+        </if>
+    </delete>
+
+    <!-- 알림 설정 조회 -->
+    <select id="getNotificationSettingsByUserId" resultType="java.util.HashMap">
+        SELECT 
+            id,
+            user_id,
+            schedule_notification,
+            diary_reminder,
+            notification_time,
+            created_at,
+            updated_at
+        FROM user_notification_settings
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 알림 설정 저장/업데이트 (INSERT ... ON DUPLICATE KEY UPDATE) -->
+    <insert id="upsertNotificationSettings" parameterType="java.util.HashMap">
+        INSERT INTO user_notification_settings (user_id, schedule_notification, diary_reminder, notification_time, created_at, updated_at)
+        VALUES (#{user_id}, 
+                COALESCE(#{schedule_notification}, 1), 
+                COALESCE(#{diary_reminder}, 0), 
+                COALESCE(#{notification_time}, '09:00:00'), 
+                NOW(), 
+                NOW())
+        ON DUPLICATE KEY UPDATE
+            schedule_notification = COALESCE(#{schedule_notification}, schedule_notification),
+            diary_reminder = COALESCE(#{diary_reminder}, diary_reminder),
+            notification_time = COALESCE(#{notification_time}, notification_time),
+            updated_at = NOW()
+    </insert>
+
+</mapper>
+
