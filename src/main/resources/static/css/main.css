@@ -42,6 +42,10 @@
     --spacing-lg: 15px;
     --spacing-xl: 32px;
     --spacing-xxl: 48px;
+
+    /* 폰트 크기 변수 */
+    --font-size-base: 16px; /* 기본 폰트 크기 */
+    --font-size-multiplier: 1; /* 폰트 크기 배율 */
 }
 
 /* 다크 모드 CSS 변수 - 어두운 회색 계열 */
@@ -58,6 +62,48 @@
 
     --border-color: #444;
     --shadow-color: rgba(0,0,0,0.4);
+}
+
+/* 폰트 크기 설정 */
+[data-font-size="small"] {
+    --font-size-multiplier: 0.875; /* 14px (16px * 0.875) */
+}
+
+[data-font-size="medium"] {
+    --font-size-multiplier: 1; /* 16px (기본) */
+}
+
+[data-font-size="large"] {
+    --font-size-multiplier: 1.125; /* 18px (16px * 1.125) */
+}
+/* 폰트 크기 적용 */
+body {
+    font-size: calc(var(--font-size-base) * var(--font-size-multiplier));
+}
+
+/* 주요 텍스트 요소에 폰트 크기 적용 */
+h1, h2, h3, h4, h5, h6 {
+    font-size: calc(1em * var(--font-size-multiplier));
+}
+
+p, span, div, a, button, input, select, textarea, label {
+    font-size: calc(1em * var(--font-size-multiplier));
+}
+
+/* 아이콘 크기도 조절 (일부 요소) */
+.fas, .far, .fab {
+    font-size: calc(1em * var(--font-size-multiplier));
+}
+
+/* 애니메이션 효과 제어 */
+[data-animations="false"] *,
+[data-animations="false"] *::before,
+[data-animations="false"] *::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
 }
 
 /* 다크 모드 적용 시 body 배경색 */

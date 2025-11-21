@@ -68,7 +68,6 @@
                         <option value="small">작게</option>
                         <option value="medium" selected>보통</option>
                         <option value="large">크게</option>
-                        <option value="xlarge">매우 크게</option>
                     </select>
                 </div>
                 <div class="settings-item settings-toggle-item">
@@ -101,6 +100,42 @@
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
+        }
+
+        // 폰트 크기 관리 함수
+        function initFontSize() {
+            const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+            applyFontSize(savedFontSize);
+            
+            // 폰트 크기 선택 박스에 현재 폰트 크기 설정
+            const fontSizeSelect = document.getElementById('fontSize');
+            if (fontSizeSelect) {
+                fontSizeSelect.value = savedFontSize;
+            }
+        }
+
+        function applyFontSize(fontSize) {
+            document.documentElement.setAttribute('data-font-size', fontSize);
+            localStorage.setItem('fontSize', fontSize);
+        }
+
+        // 애니메이션 효과 관리 함수
+        function initAnimations() {
+            const savedAnimations = localStorage.getItem('animations');
+            // 저장된 값이 없으면 기본값은 true (켜짐)
+            const animationsEnabled = savedAnimations === null ? true : savedAnimations === 'true';
+            applyAnimations(animationsEnabled);
+            
+            // 애니메이션 토글 스위치에 현재 상태 설정
+            const animationsToggle = document.getElementById('animations');
+            if (animationsToggle) {
+                animationsToggle.checked = animationsEnabled;
+            }
+        }
+
+        function applyAnimations(enabled) {
+            document.documentElement.setAttribute('data-animations', enabled ? 'true' : 'false');
+            localStorage.setItem('animations', enabled ? 'true' : 'false');
         }
 
         // 강아지 목록 로드 함수
@@ -155,6 +190,12 @@
             // 테마 초기화
             initTheme();
 
+            // 폰트 크기 초기화
+            initFontSize();
+
+            // 애니메이션 효과 초기화
+            initAnimations();
+
             // 강아지 목록 로드
             loadDogs();
 
@@ -181,13 +222,37 @@
                 });
             }
 
-            // 토글 스위치 스타일 적용
-            const toggleSwitches = document.querySelectorAll('.toggle-switch');
+            // 애니메이션 효과 토글 스위치
+            const animationsToggle = document.getElementById('animations');
+            if (animationsToggle) {
+                animationsToggle.addEventListener('change', function() {
+                    applyAnimations(this.checked);
+                    showToast(`애니메이션 효과가 ${this.checked ? '켜졌습니다' : '꺼졌습니다'}.`, 'success');
+                });
+            }
+
+            // 토글 스위치 스타일 적용 (애니메이션 제외)
+            const toggleSwitches = document.querySelectorAll('.toggle-switch:not(#animations)');
             toggleSwitches.forEach(toggle => {
                 toggle.addEventListener('change', function() {
                     console.log(`${this.id}: ${this.checked}`);
                 });
             });
+
+            // 폰트 크기 선택 변경 이벤트
+            const fontSizeSelect = document.getElementById('fontSize');
+            if (fontSizeSelect) {
+                fontSizeSelect.addEventListener('change', function() {
+                    const selectedFontSize = this.value;
+                    applyFontSize(selectedFontSize);
+                    const fontSizeLabels = {
+                        'small': '작게',
+                        'medium': '보통',
+                        'large': '크게',
+                    };
+                    showToast(`폰트 크기가 ${fontSizeLabels[selectedFontSize]}로 변경되었습니다.`, 'success');
+                });
+            }
 
             // 저장 버튼 클릭 이벤트 (테마 제외)
             const saveButtons = document.querySelectorAll('.settings-save-btn');
@@ -207,6 +272,18 @@
                                 } else {
                                     localStorage.removeItem('defaultDogId');
                                 }
+                            }
+                        }
+                        // 접근성 설정인 경우 폰트 크기 및 애니메이션 저장
+                        if (cardTitle.includes('접근성')) {
+                            const fontSizeSelect = document.getElementById('fontSize');
+                            if (fontSizeSelect) {
+                                const selectedFontSize = fontSizeSelect.value;
+                                applyFontSize(selectedFontSize);
+                            }
+                            const animationsToggle = document.getElementById('animations');
+                            if (animationsToggle) {
+                                applyAnimations(animationsToggle.checked);
                             }
                         }
                         showToast(`${cardTitle} 설정이 저장되었습니다.`, 'success');
