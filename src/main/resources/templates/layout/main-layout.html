@@ -100,10 +100,18 @@
             });
         });
 
-        // 페이지 로드 시 테마, 폰트 크기, 애니메이션 효과 적용 (다른 스크립트보다 먼저 실행)
+        // 페이지 로드 시 테마, 폰트 크기, 애니메이션 효과 적용
         (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
+            // 관리자 모드인지 확인
+            const isAdminMode = window.location.pathname.startsWith('/admin/');
+            
+            // 관리자 모드일 때는 항상 라이트 테마 강제 적용
+            if (isAdminMode) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
             
             const savedFontSize = localStorage.getItem('fontSize') || 'medium';
             document.documentElement.setAttribute('data-font-size', savedFontSize);
