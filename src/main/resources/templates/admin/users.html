@@ -59,6 +59,13 @@
             <i class="fas fa-users"></i>
             <p>등록된 사용자가 없습니다.</p>
         </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination-container" id="paginationContainer" style="display: none;">
+            <div class="pagination" id="pagination">
+                <!-- 페이지네이션 버튼이 여기에 동적으로 생성됩니다 -->
+            </div>
+        </div>
     </div>
 
     <!-- 사용자 추가/수정 모달 -->
@@ -184,13 +191,23 @@
             });
         }
 
+        // 페이지네이션 변수
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalPages = 1;
+        let totalCount = 0;
+
         // 사용자 목록 로드
-        async function loadUsers() {
+        async function loadUsers(page = 1) {
             try {
-                const response = await axios.get('/api/admin/getUserList');
+                currentPage = page;
+                // 전체 데이터를 받아오기 위해 큰 페이지 크기 사용 (또는 페이지네이션 없이)
+                const response = await axios.get(`/api/admin/getUserList?page=1&size=10000`);
                 if (response.data.returnCode === 'SUCCESS') {
-                    users = response.data.resultData.reverse() || [];
+                    const result = response.data.resultData;
+                    users = result.list || [];
                     renderUsers();
+                    renderPagination();
                 } else {
                     console.error('사용자 목록 조회 실패:', response.data.errorMessage);
                     showToast('사용자 목록을 불러오는데 실패했습니다.');
@@ -200,6 +217,9 @@
                 showToast('사용자 목록을 불러오는 중 오류가 발생했습니다.');
             }
         }
+
+        // 전역 함수로 노출 (페이지네이션 버튼에서 사용)
+        window.loadUsers = loadUsers;
 
         // 사용자 목록 렌더링
         function renderUsers() {
@@ -214,9 +234,24 @@
                 return matchesSearch && matchesRole;
             });
 
+            // 필터링된 결과 기준으로 페이지네이션 재계산
+            const filteredCount = filteredUsers.length;
+            totalCount = filteredCount;
+            totalPages = Math.ceil(filteredCount / pageSize);
+            
+            // 현재 페이지가 필터링된 결과의 페이지 수를 초과하면 첫 페이지로 이동
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = 1;
+            }
+
+            // 현재 페이지에 해당하는 데이터만 표시
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
             userTableBody.innerHTML = '';
 
-            if (filteredUsers.length === 0) {
+            if (paginatedUsers.length === 0) {
                 userTableBody.innerHTML = `
                     <tr>
                         <td colspan="7" class="empty-row">
@@ -224,10 +259,17 @@
                         </td>
                     </tr>
                 `;
+                document.getElementById('paginationContainer').style.display = 'none';
                 return;
             }
 
-            filteredUsers.forEach(user => {
+            if (totalPages > 1) {
+                document.getElementById('paginationContainer').style.display = 'flex';
+            } else {
+                document.getElementById('paginationContainer').style.display = 'none';
+            }
+
+            paginatedUsers.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${user.id}</td>
@@ -505,11 +547,81 @@
         });
 
         // 검색 및 필터 이벤트
-        searchInput.addEventListener('input', renderUsers);
-        roleFilter.addEventListener('change', renderUsers);
+        // 페이지네이션 렌더링
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+
+            // 이전 버튼
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        ${currentPage === 1 ? 'disabled' : `onclick="loadUsers(${currentPage - 1})"`}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+
+            // 페이지 번호 버튼
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            if (startPage > 1) {
+                paginationHTML += `<button class="pagination-btn" onclick="loadUsers(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="loadUsers(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+                }
+                paginationHTML += `<button class="pagination-btn" onclick="loadUsers(${totalPages})">${totalPages}</button>`;
+            }
+
+            // 다음 버튼
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        ${currentPage === totalPages ? 'disabled' : `onclick="loadUsers(${currentPage + 1})"`}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            renderUsers();
+            renderPagination();
+        });
+        roleFilter.addEventListener('change', () => {
+            currentPage = 1;
+            renderUsers();
+            renderPagination();
+        });
 
         // 초기 로드
-        loadUsers();
+        loadUsers(1);
     });
 </script>
 </th:block>

@@ -106,5 +106,21 @@ public class RestServiceImpl implements RestService {
 	public List<HashMap> getAllHospitals(HashMap map) {
 		return restDao.getAllHospitals(map);
 	}
+
+	@Override
+	public int getAllDiariesCount(HashMap map) {
+		return restDao.getAllDiariesCount(map);
+	}
+	
+	@Override
+	public int getAllWalksCount(HashMap map) {
+		return restDao.getAllWalksCount(map);
+	}
+
+	@Override
+	public int getAllHospitalsCount(HashMap map) {
+		return restDao.getAllHospitalsCount(map);
+	}
+
 	
 }

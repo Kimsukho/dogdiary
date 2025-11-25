@@ -327,10 +327,31 @@ public class DiaryController {
 			if (!isAdmin) {
 				map.put("user_id", loginUser.getId());
 			}
-			// ADMIN인 경우 user_id가 없으면 모든 데이터 조회, 있으면 해당 user_id의 데이터만 조회
 			
+			// 페이지네이션 파라미터 설정 (기본값: page=1, size=10)
+			Integer page = map.get("page") != null ? Integer.parseInt(map.get("page").toString()) : null;
+			Integer size = map.get("size") != null ? Integer.parseInt(map.get("size").toString()) : null;
+			int currentPage = (page != null && page > 0) ? page : 1;
+			int pageSize = (size != null && size > 0) ? size : 10;
+			int offset = (currentPage - 1) * pageSize;
+			
+			map.put("limit", pageSize);
+			map.put("offset", offset);
+			
+			List<HashMap> diaryList = restService.getAllDiaries(map);
+			int totalCount = restService.getAllDiariesCount(map);
+			int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+			
+			HashMap result = new HashMap();
+			result.put("list", diaryList);
+			result.put("totalCount", totalCount);
+			result.put("totalPages", totalPages);
+			result.put("currentPage", currentPage);
+			result.put("pageSize", pageSize);
+			
+			// ADMIN인 경우 user_id가 없으면 모든 데이터 조회, 있으면 해당 user_id의 데이터만 조회
             rtnVal.put("returnCode", "SUCCESS");
-            rtnVal.put("resultData", restService.getAllDiaries(map));  
+            rtnVal.put("resultData", result);  
         } catch (Exception e) {
         	logger.error("일지 조회 실패: " + e.getMessage(), e);
             rtnVal.put("returnCode", "FAILURE");
@@ -863,9 +884,30 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
+			// 페이지네이션 파라미터 설정 (기본값: page=1, size=10)
+			Integer page = map.get("page") != null ? Integer.parseInt(map.get("page").toString()) : null;
+			Integer size = map.get("size") != null ? Integer.parseInt(map.get("size").toString()) : null;
+			int currentPage = (page != null && page > 0) ? page : 1;
+			int pageSize = (size != null && size > 0) ? size : 10;
+			int offset = (currentPage - 1) * pageSize;
+			
+			map.put("limit", pageSize);
+			map.put("offset", offset);
+			
+			List<HashMap> walkList = restService.getAllWalks(map);
+			int totalCount = restService.getAllWalksCount(map);
+			int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+			
+			HashMap result = new HashMap();
+			result.put("list", walkList);
+			result.put("totalCount", totalCount);
+			result.put("totalPages", totalPages);
+			result.put("currentPage", currentPage);
+			result.put("pageSize", pageSize);
+			
 			// ADMIN인 경우 user_id가 없으면 모든 데이터 조회, 있으면 해당 user_id의 데이터만 조회
             rtnVal.put("returnCode", "SUCCESS");
-            rtnVal.put("resultData", restService.getAllWalks(map));  
+            rtnVal.put("resultData", result);  
         } catch (Exception e) {
         	logger.error("산책 조회 실패: " + e.getMessage(), e);
             rtnVal.put("returnCode", "FAILURE");
@@ -897,9 +939,30 @@ public class DiaryController {
 				return rtnVal;
 			}
 			
+			// 페이지네이션 파라미터 설정 (기본값: page=1, size=10)
+			Integer page = map.get("page") != null ? Integer.parseInt(map.get("page").toString()) : null;
+			Integer size = map.get("size") != null ? Integer.parseInt(map.get("size").toString()) : null;
+			int currentPage = (page != null && page > 0) ? page : 1;
+			int pageSize = (size != null && size > 0) ? size : 10;
+			int offset = (currentPage - 1) * pageSize;
+			
+			map.put("limit", pageSize);
+			map.put("offset", offset);
+			
+			List<HashMap> hospitalList = restService.getAllHospitals(map);
+			int totalCount = restService.getAllHospitalsCount(map);
+			int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+			
+			HashMap result = new HashMap();
+			result.put("list", hospitalList);
+			result.put("totalCount", totalCount);
+			result.put("totalPages", totalPages);
+			result.put("currentPage", currentPage);
+			result.put("pageSize", pageSize);
+			
 			// ADMIN인 경우 user_id가 없으면 모든 데이터 조회, 있으면 해당 user_id의 데이터만 조회
             rtnVal.put("returnCode", "SUCCESS");
-            rtnVal.put("resultData", restService.getAllHospitals(map));  
+            rtnVal.put("resultData", result);  
         } catch (Exception e) {
         	logger.error("병원 조회 실패: " + e.getMessage(), e);
             rtnVal.put("returnCode", "FAILURE");

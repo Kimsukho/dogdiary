@@ -78,6 +78,19 @@
 			AND p.user_id = #{user_id}
 		</if>
 		ORDER BY COALESCE(d.last_updated, d.created_at) DESC, d.created_at DESC
+		<if test="limit != null and offset != null">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
+	</select>
+	
+	<!-- 일지 총 개수 조회 -->
+	<select id="getAllDiariesCount" resultType="int">
+		SELECT COUNT(*)
+		FROM dogs p, diary d
+		WHERE p.id = d.dog_id
+		<if test="user_id != null">
+			AND p.user_id = #{user_id}
+		</if>
 	</select>
 	
 	<insert id="saveDogDiaryByDogId" parameterType="java.util.HashMap">
@@ -216,6 +229,22 @@
 	    	</if>
 	    </where>
 	    ORDER BY w.date DESC, w.created_at DESC
+	    <if test="limit != null and offset != null">
+	    	LIMIT #{limit} OFFSET #{offset}
+	    </if>
+	</select>
+	
+	<!-- 산책 총 개수 조회 -->
+	<select id="getAllWalksCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM walk_schedule w
+	    LEFT JOIN dogs d ON w.dog_id = d.id
+	    LEFT JOIN users u ON w.user_id = u.id
+	    <where>
+	    	<if test="user_id != null">
+	    		w.user_id = #{user_id}
+	    	</if>
+	    </where>
 	</select>
 	
 	<!-- 관리자용 전체 병원 조회 -->
@@ -230,6 +259,22 @@
 	    	</if>
 	    </where>
 	    ORDER BY h.date DESC, h.created_at DESC
+	    <if test="limit != null and offset != null">
+	    	LIMIT #{limit} OFFSET #{offset}
+	    </if>
+	</select>
+	
+	<!-- 병원 총 개수 조회 -->
+	<select id="getAllHospitalsCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM hospital_schedule h
+	    LEFT JOIN dogs d ON h.dog_id = d.id
+	    LEFT JOIN users u ON h.user_id = u.id
+	    <where>
+	    	<if test="user_id != null">
+	    		h.user_id = #{user_id}
+	    	</if>
+	    </where>
 	</select>
 	
 	<!-- 월별 통계 조회 (최근 6개월) -->

@@ -60,7 +60,7 @@
     </delete>
 
     <!-- 모든 사용자 조회 (비밀번호 제외) -->
-    <select id="getUserList" resultType="java.util.HashMap">
+    <select id="getUserList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         SELECT 
             id,
             username,
@@ -70,6 +70,14 @@
             last_updated
         FROM users
         ORDER BY regdate DESC
+        <if test="limit != null and offset != null">
+            LIMIT #{limit} OFFSET #{offset}
+        </if>
+    </select>
+    
+    <!-- 사용자 총 개수 조회 -->
+    <select id="getUserListCount" resultType="int">
+        SELECT COUNT(*) FROM users
     </select>
 
     <!-- 사용자 정보 조회 (HashMap 반환) -->

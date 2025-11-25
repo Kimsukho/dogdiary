@@ -360,11 +360,31 @@ public class UserController {
     
     // 모든 사용자 조회
     @GetMapping("/admin/getUserList")
-	public HashMap getUserList(){
+	public HashMap getUserList(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size){
     	HashMap rtnVal = new HashMap();
     	try {
+    		// 페이지네이션 파라미터 설정 (기본값: page=1, size=10)
+    		int currentPage = (page != null && page > 0) ? page : 1;
+    		int pageSize = (size != null && size > 0) ? size : 10;
+    		int offset = (currentPage - 1) * pageSize;
+    		
+    		HashMap map = new HashMap();
+    		map.put("limit", pageSize);
+    		map.put("offset", offset);
+    		
+    		List<HashMap> userList = userService.getUserList(map);
+    		int totalCount = userService.getUserListCount();
+    		int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+    		
+    		HashMap result = new HashMap();
+    		result.put("list", userList);
+    		result.put("totalCount", totalCount);
+    		result.put("totalPages", totalPages);
+    		result.put("currentPage", currentPage);
+    		result.put("pageSize", pageSize);
+    		
         	rtnVal.put("returnCode", "SUCCESS");
-	        rtnVal.put("resultData", userService.getUserList());	        
+	        rtnVal.put("resultData", result);	        
     	} catch (Exception e) {
     		logger.error(e.getMessage());
     		rtnVal.put("returnCode", "FAILURE");

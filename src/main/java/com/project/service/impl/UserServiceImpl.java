@@ -84,8 +84,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<HashMap> getUserList() {
-		return userDao.getUserList();
+	public List<HashMap> getUserList(HashMap map) {
+		return userDao.getUserList(map);
+	}
+
+	@Override
+	public int getUserListCount() {
+		return userDao.getUserListCount();
 	}
 
 	@Override
