@@ -382,16 +382,7 @@ p, span, div, a, button, input, select, textarea, label {
     background-color: var(--primary-light-color);
 }
 
-[data-theme="dark"] .cancel-button {
-    color: var(--text-secondary) !important;
-    background-color: transparent;
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .cancel-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--text-secondary);
-}
+/* 다크 모드 cancel-button 스타일은 아래 관리자 페이지 섹션에 통합됨 */
 
 /* 다크 모드 적용 시 모달 버튼들 */
 [data-theme="dark"] .gender-btn {
@@ -949,56 +940,7 @@ ul {
 
 
 /* ====================== 헤더 ====================== */
-.header {
-    width: 100%;
-    height: var(--header-height);
-    background-color: var(--background-header);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 1px 4px var(--shadow-color);
-    display: flex;
-    align-items: center;
-    padding: 0 var(--spacing-md);
-    box-sizing: border-box;
-    z-index: 998;
-    flex-shrink: 0;
-}
-
-.header .sidebar-toggle-button {
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    border: none;
-    border-radius: 6px;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    margin-right: var(--spacing-md);
-}
-
-.header .sidebar-toggle-button:hover {
-    background-color: var(--primary-light-color);
-    transform: translateY(-1px);
-}
-
-.header .sidebar-toggle-button:active {
-    background-color: var(--primary-dark-color);
-    transform: translateY(0);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-/* 토글 버튼 내부 아이콘 색상 (버튼의 color 속성을 상속받아 자동으로 흰색이 됩니다) */
-.header .sidebar-toggle-button i {
-    color: inherit;
-    font-size: 1.2em;
-    margin: 0;
-}
-
-.header-title {
-    font-size: 1.2em;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-left: var(--spacing-sm);
-}
+/* 헤더 스타일은 아래 "헤더 스타일" 섹션에 통합됨 */
 
 /* --- 메인 콘텐츠 영역 (스크롤 기능의 핵심!) --- */
 main {
@@ -2257,15 +2199,7 @@ transition: all 0.2s ease;
     align-items: center;
 }
 
-.button {
-    padding: 12px 24px;
-    border-radius: 5px;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
+/* 구형 버튼 스타일 (사용되지 않음 - 관리자 페이지용 버튼 스타일로 대체됨) */
 .save-button {
     background-color: var(--primary-color);
     color: white;
@@ -2285,17 +2219,6 @@ transition: all 0.2s ease;
 
 .close-button:hover {
     background-color: #f0f0f0;
-}
-
-.confirm-button { 
-    background-color: #e74c3c; 
-    color: #fff;
-    border-color: rgba(78, 166, 133,0);
-}
-.cancel-button {
-    background-color: #bdc3c7; 
-    color: #555 !important; /* 다크 그레이 색상 */
-    border-color: rgba(78, 166, 133,0);
 }
 
 .openModalBtn {
@@ -3202,9 +3125,7 @@ transition: all 0.2s ease;
 @media (max-width: 1024px) {
     /* 사이드바는 JS에서 처리되므로, 여기서 CSS로 직접 접는 로직은 불필요 */
     /* 단, 토글 버튼 위치나 메인 콘텐츠 마진 등의 조정은 필요할 수 있음 */
-    .header .sidebar-toggle-button {
-        /* 필요시 크기나 위치 조정 */
-    }
+    /* 필요시 .header .sidebar-toggle-button 스타일 추가 */
 }
 
 @media (max-width: 768px) {
@@ -3242,11 +3163,10 @@ transition: all 0.2s ease;
         font-size: 0.9em;
         padding: var(--spacing-xs) var(--spacing-sm);
     }
-    .sidebar {
-        /* 작은 화면에서 사이드바가 모바일 메뉴처럼 overlay 될 경우 */
-        /* position: absolute; height: 100%; width: 100%; top: 0; left: 0; transform: translateX(-100%); */
-        /* JS로 제어될 경우, 여기에 transition과 transform 등의 설정 필요 */
-    }
+    /* 작은 화면에서 사이드바가 모바일 메뉴처럼 overlay 될 경우 */
+    /* 필요시 .sidebar 스타일 추가 */
+    /* position: absolute; height: 100%; width: 100%; top: 0; left: 0; transform: translateX(-100%); */
+    /* JS로 제어될 경우, 여기에 transition과 transform 등의 설정 필요 */
 }
 
 /* main.css */
@@ -3323,6 +3243,7 @@ transition: all 0.2s ease;
 }
 
 .header-nav a {
+    position: relative;
     color: var(--text-secondary);
     font-weight: 500;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -3389,36 +3310,7 @@ transition: all 0.2s ease;
 }
 
 
-.pagination {
-    margin-top: 5px;
-    text-align: center;
-}
-
-.pagination ul {
-    list-style: none;
-    padding: 0;
-    display: inline-flex;
-    gap: 5px;
-}
-
-.pagination ul li {
-    display: inline;
-}
-
-.pagination ul li a {
-    display: block;
-    padding: 6px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #f9f9f9;
-    color: #333;
-}
-
-.pagination ul li.active a {
-    background: #4CAF50;
-    color: white;
-    border: 1px solid #4CAF50;
-}
+/* 구형 페이지네이션 스타일 (사용되지 않음 - 관리자 페이지용 페이지네이션으로 대체됨) */
 
 html, body {
     height: 100%;
@@ -5667,9 +5559,7 @@ html, body {
     line-height: 1.4;
 }
 
-.header-nav a {
-    position: relative;
-}
+/* header-nav a position은 이미 위에서 정의됨 */
 
 /* 알림 아이템 레이아웃 조정 */
 

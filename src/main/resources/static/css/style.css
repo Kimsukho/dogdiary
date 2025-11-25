@@ -83,6 +83,7 @@ a:hover {
     font-size: var(--font-size-xl); /* 헤더 제목 크기 키움 */
     font-weight: 600; /* 폰트 굵기 조정 */
     letter-spacing: -0.5px; /* 약간의 자간 조정 */
+    margin-left: 10px;
 }
 
 .header nav a {

@@ -3,7 +3,7 @@ async function loadDiaries() {
     try {
         const res = await axios.get('/api/getAllDiaries');
         if (res.data.returnCode === 'SUCCESS') {
-            return res.data.resultData || [];
+            return res.data.resultData.list || [];
         }
         return [];
     } catch (e) {
