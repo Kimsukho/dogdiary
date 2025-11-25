@@ -6421,6 +6421,58 @@ html, body {
     color: var(--text-muted) !important;
 }
 
+/* 관리자 모달 textarea 스타일 */
+.admin-modal-container .form-field textarea,
+.admin-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: #fff;
+    resize: vertical;
+    min-height: 100px;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.admin-modal-container .form-field textarea:focus,
+.admin-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.1);
+    background-color: #fff;
+}
+
+.admin-modal-container .form-field textarea::placeholder,
+.admin-textarea::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* 다크 모드 관리자 모달 textarea */
+[data-theme="dark"] .admin-modal-container .form-field textarea,
+[data-theme="dark"] .admin-textarea {
+    background-color: var(--background-card) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .admin-modal-container .form-field textarea:focus,
+[data-theme="dark"] .admin-textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(78, 166, 133, 0.2) !important;
+    background-color: var(--background-card) !important;
+}
+
+[data-theme="dark"] .admin-modal-container .form-field textarea::placeholder,
+[data-theme="dark"] .admin-textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
 [data-theme="dark"] .detail-item span {
     color: var(--text-secondary) !important;
 }
