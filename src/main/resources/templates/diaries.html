@@ -305,7 +305,9 @@
                     const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
                     const day = String(selectedDate.getDate()).padStart(2, '0');
                     diaryDate.value = `${year}-${month}-${day}`;
-                    diarySelect.value=''; 
+                    // 로컬 스토리지에 defaultDogId가 있으면 자동 선택, 없으면 빈 값
+                    const defaultDogId = localStorage.getItem('defaultDogId');
+                    diarySelect.value = (defaultDogId && defaultDogId !== '') ? defaultDogId : ''; 
                     diaryMood.value=''; 
                     diaryContent.value=''; 
                 });
@@ -319,13 +321,15 @@
                         // 기존 옵션 초기화
                         diarySelect.innerHTML = '';
 
-                        // 강아지 목록이 있으면 "반려견 선택" 옵션을 유지하고 첫 번째 강아지를 기본값으로 설정
+                        // 로컬 스토리지에서 기본 반려견 ID 읽기
+                        const defaultDogId = localStorage.getItem('defaultDogId');
+
+                        // 강아지 목록이 있으면 "반려견 선택" 옵션을 유지하고 기본 반려견을 선택
                         if (dogs.length > 0) {
-                            // "반려견 선택" 옵션 추가 (기본 선택)
+                            // "반려견 선택" 옵션 추가
                             const defaultOption = document.createElement("option");
                             defaultOption.value = "";
                             defaultOption.textContent = "반려견 선택";
-                            defaultOption.selected = true;
                             diarySelect.appendChild(defaultOption);
                             
                             // 강아지 목록 추가
@@ -336,8 +340,17 @@
                                 diarySelect.appendChild(option);
                             });
                             
-                            // 첫 번째 강아지를 기본 선택
-                            if (dogs.length > 0) {
+                            // 로컬 스토리지에 defaultDogId가 있고 목록에 해당 강아지가 있으면 선택
+                            if (defaultDogId && defaultDogId !== '') {
+                                const foundDog = dogs.find(dog => dog.id == defaultDogId);
+                                if (foundDog) {
+                                    diarySelect.value = defaultDogId;
+                                } else {
+                                    // 저장된 defaultDogId가 목록에 없으면 첫 번째 강아지 선택
+                                    diarySelect.value = dogs[0].id;
+                                }
+                            } else {
+                                // defaultDogId가 없으면 첫 번째 강아지 선택
                                 diarySelect.value = dogs[0].id;
                             }
                         } else {

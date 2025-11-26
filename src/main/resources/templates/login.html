@@ -2,87 +2,84 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<!-- <link rel="icon" href="/asset/favicon.ico"/> -->
 	<link rel="icon" href="/favicon.png" type="image/png">
-	 <!-- <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"> -->
-	<title th:text="${pageTitle} ?: '댕댕이 일지'">댕댕이 일지</title>
-	<!-- <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css"> -->
+	<title th:text="${pageTitle} ?: '펫케어 시스템'">펫케어 시스템</title>
 	<link rel="stylesheet" th:href="@{/css/loginStyle.css}" type="text/css">
 	<script src="http://code.jquery.com/jquery-latest.js"></script> 
 </head>
 <body>
 	<div id="container" class="container">
 	    <div class="row">	      
-	      <!-- 회원가입 -->
-	      <div id="signUp" class="col align-items-center flex-col sign-up">
-					<h1 style="margin-bottom: 3%; color: #4EA685">
+			<!-- 회원가입 -->
+			<div id="signUp" class="col align-items-center flex-col sign-up">
+				<h1 style="margin-bottom: 3%; color: #4EA685">
+					회원가입
+				</h1>
+				<div class="form-wrapper align-items-center">
+					<div class="form sign-up">
+						<div class="input-group">
+						<i class='bx bxs-user'></i>
+						<input type="text" placeholder="아이디">
+						</div>
+						<div class="input-group">
+						<i class='bx bx-mail-send'></i>
+						<input type="email" placeholder="이메일">
+						</div>
+						<div class="input-group">
+						<i class='bx bxs-lock-alt'></i>
+						<input type="password" placeholder="비밀번호">
+						</div>
+						<div class="input-group">
+						<i class='bx bxs-lock-alt'></i>
+						<input type="password" placeholder="비밀번호 재확인">
+						</div>
+						<button>
 						회원가입
-					</h1>
-					<div class="form-wrapper align-items-center">
-	          <div class="form sign-up">
-	            <div class="input-group">
-	              <i class='bx bxs-user'></i>
-	              <input type="text" placeholder="아이디">
-	            </div>
-	            <div class="input-group">
-	              <i class='bx bx-mail-send'></i>
-	              <input type="email" placeholder="이메일">
-	            </div>
-	            <div class="input-group">
-	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="비밀번호">
-	            </div>
-	            <div class="input-group">
-	              <i class='bx bxs-lock-alt'></i>
-	              <input type="password" placeholder="비밀번호 재확인">
-	            </div>
-	            <button>
-	              회원가입
-	            </button>
-	            <p>
-	              <span>
-	                이미 계정이 있으신가요?
-	              </span>
-	              <b onclick="backToLogin()" class="pointer">
-	                로그인
-	              </b>
-								<div id="toast"></div>
-	            </p>
-	          </div>
-	        </div>
-	      </div>
-
-				<!--  비밀번호변경 -->
-				<div id="forgotPwd" class="col align-items-center flex-col forgot-pwd">
-					<h1 style="margin-bottom: 3%; color: #4EA685">
-						비밀번호 재설정
-					</h1>
-					<div class="form-wrapper align-items-center">
-					<div class="form forgot-pwd">
-						<div class="input-group">
-							<i class='bx bxs-user'></i>
-							<input type="text" placeholder="아이디">
-						</div>
-						<div class="input-group">
-							<i class='bx bxs-lock-alt'></i>
-							<input type="password" placeholder="현재 비밀번호">
-						</div>
-						<div class="input-group">
-							<i class='bx bxs-lock-alt'></i>
-							<input type="password" placeholder="새 비밀번호">
-						</div>
-						<div class="input-group">
-							<i class='bx bxs-lock-alt'></i>
-							<input type="password" placeholder="새 비밀번호 확인">
-						</div>
-						<button>비밀번호 변경하기</button>
+						</button>
 						<p>
-							<span>이미 계정이 있으신가요?</span>
-							<b onclick="backToLogin()" class="pointer">로그인</b>
+						<span>
+							이미 계정이 있으신가요?
+						</span>
+						<b onclick="backToLogin()" class="pointer">
+							로그인
+						</b>
+										<div id="toast"></div>
 						</p>
 					</div>
 				</div>
 			</div>
+
+			<!--  비밀번호변경 -->
+			<div id="forgotPwd" class="col align-items-center flex-col forgot-pwd">
+				<h1 style="margin-bottom: 7%; color: #4EA685">
+					비밀번호 재설정
+				</h1>
+				<div class="form-wrapper align-items-center">
+				<div class="form forgot-pwd">
+					<div class="input-group">
+						<i class='bx bxs-user'></i>
+						<input type="text" placeholder="아이디">
+					</div>
+					<div class="input-group">
+						<i class='bx bxs-lock-alt'></i>
+						<input type="password" placeholder="현재 비밀번호">
+					</div>
+					<div class="input-group">
+						<i class='bx bxs-lock-alt'></i>
+						<input type="password" placeholder="새 비밀번호">
+					</div>
+					<div class="input-group">
+						<i class='bx bxs-lock-alt'></i>
+						<input type="password" placeholder="새 비밀번호 확인">
+					</div>
+					<button>비밀번호 변경하기</button>
+					<p>
+						<span>이미 계정이 있으신가요?</span>
+						<b onclick="backToLogin()" class="pointer">로그인</b>
+					</p>
+				</div>
+			</div>
+		</div>
 		
 		  <!-- 로그인 -->
 			<div id="signIn" class="col align-items-center flex-col sign-in">
@@ -123,7 +120,7 @@
 	      </div>
 	    </div>
 
-			<!-- 초록색 부분 -->
+		<!-- 초록색 부분 -->
 	    <div class="row content-row">
 	      <!-- SIGN IN CONTENT -->
 	      <div class="col align-items-center flex-col">

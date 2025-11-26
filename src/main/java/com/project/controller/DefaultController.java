@@ -69,7 +69,7 @@ public class DefaultController {
 	
 	@GetMapping("/login")
 	public String login(Model model) {
-		model.addAttribute("pageTitle", "댕댕이 일지");
+		model.addAttribute("pageTitle", "펫케어 시스템");
 		return "login";
 	}
 	

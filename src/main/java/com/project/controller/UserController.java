@@ -237,11 +237,12 @@ public class UserController {
 	        }
 	        
 	        int val = userService.register(map);
-				// 가장 최근에 생성된 사용자의 id 가져오기 위함 
-		        List<HashMap> list = userService.getUserList();
-				HashMap CreatedUser = null;
-				if( !list.isEmpty() )
-					CreatedUser = list.get(list.size() - 1);
+			// 가장 최근에 생성된 사용자의 id 가져오기 위함 
+		        HashMap queryMap = new HashMap();
+		        List<HashMap> list = userService.getUserList(queryMap);
+			HashMap CreatedUser = null;
+			if( !list.isEmpty() )
+				CreatedUser = list.get(list.size() - 1);
 		        if(val == 0) {
 		        	rtnVal.put("returnCode", "FAILIRE");
 			        rtnVal.put("errorMessage", val);
